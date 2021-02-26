@@ -11,3 +11,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+img{
+  width:  100%;
+  display:  block;
+  max-height : 20rem;
+}
+
+.courseList{
+  width: 70vw;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+.course{
+  margin: 2rem 0;
+}
+.img-container{
+  position: relative;
+  
+}

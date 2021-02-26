@@ -16,7 +16,23 @@ const title_group = titles.map(title => {
     )
 })
 
-function Header(props) {
+function HeaderLogout(props) {
+
+    const [count, setCount] = useState(0)
+
+    const handleLogoutChange = useCallback( event => {
+        //onLogoutChange(false);
+        props.onLogoutChange(false);
+        setCount(previous => previous+1)
+        //localStorage.setItem(3, false);
+        alert(`You are Loged Out !!!`);
+        console.log(`"headlo update",${props.isLogin}`)
+        //window.location.href = "/";
+    }, [props.onLogoutChange])
+    
+    const [isLogin2, setIsLogin2] = useState(props.isLogin)
+    
+    console.log(`"start headlo",${count}`)
 
     return(
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -39,12 +55,10 @@ function Header(props) {
 
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
-                            {<a class="nav-link active"  href="/login">Login</a>} {/*สู้ ๆ นะ*/}
-                        </li>
-
-                        <li class="nav-item">
-                            {<a class="nav-link active"  href="/register">Register</a>}
-                            {/*<a class="nav-link active"  href="/register">{isLogin2 ? isLogin2 : `Reg,${props.isLogin}`}</a>*/}
+                            {console.log(`"before headlo",${isLogin2}`)}
+                            {<a class="nav-link active" onClick = {handleLogoutChange}>LogOut</a>}
+                            {/*<a class="nav-link active" onClick = {handleLogoutChange}> {isLogin2 ? `Out,${isLogin2}` : isLogin2} </a>*/}
+                            
                         </li>
                     </ul>
                 </div>
@@ -53,7 +67,7 @@ function Header(props) {
     );
 }
 
-export default Header
+export default HeaderLogout
 
 // export default class Header extends Component {
     
