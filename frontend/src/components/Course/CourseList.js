@@ -1,14 +1,14 @@
 import React , { Component, useState } from "react";
 import Course from './Course'
-import {CourseData} from '../Course/CourseData'
+import { CourseData } from './CourseData'
 
 export default class CourseList extends Component{
+
     state = {
         courses:CourseData
     }
     
-
-    render(){
+    render() {
         const {courses}=this.state;
         
         return(
@@ -20,5 +20,4 @@ export default class CourseList extends Component{
                     
         )
     }
-
 }
