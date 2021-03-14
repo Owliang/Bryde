@@ -1,10 +1,9 @@
-import React, { Component, createContext, useState, useContext, useEffect, useCallback  } from "react"
+import React, { Component, createContext, useState, useContext, useEffect, useCallback } from "react"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
-import Navbar from './components/Navbar'
-import Landing from './components/Landing'
-import './index.css';
 import { Container, Box } from '@material-ui/core'
 import CourseList from './components/course/CourseList'
+import Navbar from './components/Navbar'
+import Landing from './components/Landing'
 
 function App() {
   return (
