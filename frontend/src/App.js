@@ -11,7 +11,7 @@ function App() {
       <Navbar />
       <Box bgcolor="background.dark">
         <Container maxWidth="lg">
-          <Box bgcolor="background.main" style={{ height: '100vh' }}>
+          <Box bgcolor="background.dark" height='100vh'> 
             <Router>
               <Switch>
                 <Route path="/courses">
