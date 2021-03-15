@@ -1,74 +1,32 @@
-import logo from './logo.svg';
-import React , { Component } from "react";
-import './App.css';
-import Register from './components/Register'
-import Header from './components/Header'
-import Login from './components/Login'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import React, { Component, createContext, useState, useContext, useEffect, useCallback } from "react"
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { Container, Box } from '@material-ui/core'
+import CourseList from './components/course/CourseList'
+import Navbar from './components/Navbar'
+import Landing from './components/Landing'
 
-class App extends Component {
-  render(){
-    return (
-      <div>
-        <Header/>
-        <div className="container"> 
-          <Router>
-            <Switch>
-              <Route path="/register">
-                <Register/>
-              </Route>
-              <Route path="/login">
-                <Login/>
-              </Route>
-
-              <Route path="/">
-                <h2>Home</h2>
-              </Route>
-
-
-            </Switch>
-          </Router>
-        </div>
-      </div>
-    );
-  }
+function App() {
+  return (
+    <div>
+      <Navbar />
+      <Box bgcolor="background.dark">
+        <Container maxWidth="lg">
+          <Box bgcolor="background.main" style={{ height: '100vh' }}>
+            <Router>
+              <Switch>
+                <Route path="/courses">
+                  <CourseList/>
+                </Route>
+                <Route path="/">
+                  <Landing />
+                </Route>
+              </Switch>
+            </Router>
+          </Box>
+        </Container>
+      </Box>
+    </div>
+  );
 }
 
 export default App;
-
-// export default function App() {
-//   return (
-//     <Router>
-//       <div>
-//           <ul>
-//             <li>
-//               <Link to="/">Home</Link>
-//             </li>
-//             <li>
-//               <Link to="/register">Register</Link>
-//             </li>
-//             <li>
-//               <Link to="/users">Users</Link>
-//             </li>
-//           </ul>
-
-//         <Switch>
-//           <Route path="/about">
-//             <h2>About</h2>
-//           </Route>
-//           <Route path="/register">
-//             <Register/>
-//           </Route>
-//           <Route path="/">
-//             <h2>Home</h2>
-//           </Route>
-//         </Switch>
-//       </div>
-//     </Router>
-//   );
-// }
