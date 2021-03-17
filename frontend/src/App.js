@@ -1,9 +1,10 @@
 import React, { Component, createContext, useState, useContext, useEffect, useCallback } from "react"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 import { Container, Box } from '@material-ui/core'
-import CourseList from './components/course/CourseList'
+import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
+import AddCourse from "./components/AddCourse"
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
               <Switch>
                 <Route path="/courses">
                   <CourseList/>
+                </Route>
+                <Route path="/AddCourse">
+                  <AddCourse />
                 </Route>
                 <Route path="/">
                   <Landing />
