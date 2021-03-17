@@ -20,7 +20,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContentWrapper from './object/SnackbarContentWrapper';
+
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
