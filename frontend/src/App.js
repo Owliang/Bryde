@@ -1,9 +1,11 @@
 import React, { Component, createContext, useState, useContext, useEffect, useCallback } from "react"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 import { Container, Box } from '@material-ui/core'
-import CourseList from './components/course/CourseList'
+import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
+import Home from './components/Home/Home'
+
 
 function App() {
   return (
@@ -17,9 +19,13 @@ function App() {
                 <Route path="/courses">
                   <CourseList/>
                 </Route>
+                <Route path="/home">
+                  <Home />
+                </Route>
                 <Route path="/">
                   <Landing />
                 </Route>
+                
               </Switch>
             </Router>
           </Box>
