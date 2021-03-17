@@ -45,6 +45,7 @@ function App() {
                             <Switch>
                                 <PrivateRoute path='/addcourses' component={AddCourse} />
                                 <PrivateRoute path='/courses' component={CourseList} />
+                                <PrivateRoute path='/home' component={Home}/>
                                 <LoginRoute path="/" component={Landing} />
                                 <Route path='/courses' component={CourseList} />
                             </Switch>
