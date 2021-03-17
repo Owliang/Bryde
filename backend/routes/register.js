@@ -10,6 +10,10 @@ router.get('/', function(req, res, next) {
     res.send('response from register page');
 });
 
+router.post('/course', function(req, res, next) {
+    res.send('response from register course page');
+});
+
 router.post('/',[
         check("username","Please Input your username").not().isEmpty(),
         check("password","Please Input your password").not().isEmpty(),
