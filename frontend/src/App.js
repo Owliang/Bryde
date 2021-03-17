@@ -5,6 +5,8 @@ import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
 import AddCourse from "./components/AddCourse"
+import Home from './components/Home/Home'
+
 
 function App() {
                 <Route path="/AddCourse">
@@ -43,6 +45,7 @@ function App() {
                             <Switch>
                                 <PrivateRoute path='/addcourses' component={AddCourse} />
                                 <PrivateRoute path='/courses' component={CourseList} />
+                                <PrivateRoute path='/home' component={Home}/>
                                 <LoginRoute path="/" component={Landing} />
                                 <Route path='/courses' component={CourseList} />
                             </Switch>
