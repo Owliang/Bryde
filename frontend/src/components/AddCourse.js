@@ -13,6 +13,19 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { useFileUpload } from "use-file-upload";
 import Avatar from '@material-ui/core/Avatar';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContentWrapper from './object/SnackbarContentWrapper';
+
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const initialCourseData = {
+  tutor:"",
   name: "",
   attatch_photo: "",
   subject: "",
@@ -74,13 +88,51 @@ function AddCourse() {
   const classes = useStyles();
   const [courseData, setCourseData] = useState(initialCourseData);
   const [errors, setErrors] = useState({});
+  const [snack, setSnack] = useState({
+    open: false,
+    message:"",
+    variant: ""
+  });
   const [files, selectFiles] = useFileUpload();
+  const [alert, setAlert] = React.useState({
+    open: false,
+    message:"",
+    vertical: 'top',
+    horizontal: 'center',
+  });
+
+  useEffect(() => {
+    try {
+      var user = JSON.parse( localStorage.getItem('user') )
+      if(user.role != 'Tutor'){
+        window.alert('!!!! HOW DID YOU GET IN HERE KIDS !!!!')
+        window.location.href = "/";
+      }
+      setCourseData({
+        ...courseData,
+        tutor: user.username
+      })
+      console.log(JSON.stringify(user))
+    }catch{
+      setAlert({
+        ...alert,
+        message: "Please Login First",
+        open: true,
+      })
+      window.location.href = "/";
+    }
+  }, [1]);
+
+  
+
   const defaultSrc = 
         "https://martialartsplusinc.com/wp-content/uploads/2017/04/default-image-620x600.jpg"
   const validate = (fieldValues = courseData) => {
     let temp = { ...errors }
     if ('name' in fieldValues)
       temp.name = fieldValues.name ? "" : "This field is required."
+    if ('tutor' in fieldValues)
+      temp.tutor = fieldValues.tutor ? "" : "Please Login First"
     if ('subject' in fieldValues)
       temp.subject = fieldValues.subject ? "" : "This field is required."
     if ('price' in fieldValues){
@@ -92,7 +144,7 @@ function AddCourse() {
     if ('link' in fieldValues)
       temp.link = (/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/).test(fieldValues.link) || !fieldValues.link ? "" : "URL is not valid."
     if ('attatch_photo' in fieldValues)
-      temp.attatch_photo = files ? "" : "This field is required."
+      temp.attatch_photo = files ? "" : "Course's Image is required."
     setErrors({
         ...temp
     })
@@ -115,13 +167,27 @@ function AddCourse() {
     validate({ [name]: value })
   }
 
+  const handleClose = () => {
+    setAlert({ ...alert, open: false });
+  };
+
+  const handleSnackClose = () => {
+    setSnack({ ...snack, open: false });
+  };
+
+
   const handleSubmit = e => {
 
     e.preventDefault()
+
+    if(errors.tutor){
+      window.alert(errors.tutor);
+      window.location.href = "/";
+    }
     
     if(validate()){
       //await new Promise(resolve => setTimeout(resolve, 2000));
-      window.alert(JSON.stringify({context:'Creating Course',courseData: courseData, attatch_photo:files }, null, 2));
+      //window.alert(JSON.stringify({context:'Creating Course',courseData: courseData, attatch_photo:files }, null, 2));
       axios
           .post("http://localhost:4000/register/course", {courseData: courseData, attatch_photo:files }, { crossdomain: true })
           .then(response => {
@@ -133,13 +199,33 @@ function AddCourse() {
               }else{
                alert(`Register Failed\n${response.data.error}`);
               }*/
-              alert(JSON.stringify(response, null, 2));
+              setAlert({
+                ...alert,
+                title:"Create Course Success!" ,
+                open : true,
+                message : "Create Success !!",
+                optionButton:"Add another course"
+              });
           })
           .catch(err => {
-              console.error(err)
+            setAlert({
+              ...alert,
+              title:"Create Course Failed" ,
+              open : true,
+              message : "An Error Occured, Please try again later.",
+              optionButton:"Try Again"
+            });
+            console.error(err)
           })
       }else{
-        window.alert('Information not valid', JSON.stringify(courseData, null, 2));
+        setAlert({
+          ...alert,
+          title:"Create Course Failed" ,
+          open : true,
+          message : "Some Fields Are Not Valid",
+          optionButton: ""
+        });
+        //window.alert('Information not valid', JSON.stringify(courseData, null, 2));
       }
   }
 
@@ -150,6 +236,35 @@ function AddCourse() {
       justify="flex-start"
       alignItems="flex-start"
     >
+      <Dialog
+        open = {alert.open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-labelledby = "alert-dialog-slide-title"
+        aria-describedby = "alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">{alert.title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            {alert.message}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => window.location.href = "/courses"} color="primary">
+            Go Home
+          </Button>
+          
+          {alert.optionButton == "" ? 
+          <Button onClick={handleClose} color="primary">
+            Continue
+          </Button> : 
+          <Button onClick={() => window.location.reload()} color="primary">
+            {alert.optionButton}
+          </Button>}
+        </DialogActions>
+      </Dialog>
+
       <Grid item xs={12}>
         <Typography variant="h2" color='primary' gutterBottom>
           Create Course
@@ -194,7 +309,8 @@ function AddCourse() {
                       <Grid item>
                         <TextField 
                         disabled
-                        label = {errors.attatch_photo ? "Error" : ""}
+                        fullWidth
+                        label = {errors.attatch_photo ? "!!    Please Upload Image    !!" : ""}
                         {...(errors.attatch_photo && {error:true,helperText:errors.attatch_photo})}
                         />
                       </Grid>
