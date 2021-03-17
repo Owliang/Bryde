@@ -1,1 +1,0 @@
-# sec33_BrydeTech
