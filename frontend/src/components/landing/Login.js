@@ -22,7 +22,7 @@ export default function Login(props) {
 
     const handleLogin = async () => {
         // not connect to db, just allow any username&password
-        localStorage.setItem('username', loginData.username)
+        localStorage.setItem('user', JSON.stringify({username: loginData.username, role:'Tutor'}))
         localStorage.setItem('auth', true)
         history.push("/courses")
         window.location.reload();

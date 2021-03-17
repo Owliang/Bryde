@@ -95,7 +95,7 @@ export default function Navbar() {
                     <Typography variant="h6" color="secondary">OffDemand</Typography>
                     <Box display={desktop}>
                         <Button color="secondary">Home</Button>
-                        <Button color="secondary">Course</Button>
+                        <Button color="secondary" href="/courses">Course</Button>
                         <Button color="secondary">Livestream</Button>
                         <Button color="secondary">Q&A</Button>
                         <Button color="secondary">Account</Button>
