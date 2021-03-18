@@ -19,8 +19,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContentWrapper from './object/SnackbarContentWrapper';
+
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -267,7 +266,9 @@ function AddCourse() {
 
       <Grid item xs={12}>
         <Typography variant="h2" color='primary' gutterBottom>
-          Create Course
+          <Box fontWeight="fontWeightBold" m={1}>
+            Create Course
+          </Box>
         </Typography>
       </Grid>
       <Grid item xs={10}>
