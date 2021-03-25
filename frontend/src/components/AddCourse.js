@@ -19,8 +19,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContentWrapper from './object/SnackbarContentWrapper';
+
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -187,9 +186,10 @@ function AddCourse() {
     
     if(validate()){
       //await new Promise(resolve => setTimeout(resolve, 2000));
-      //window.alert(JSON.stringify({context:'Creating Course',courseData: courseData, attatch_photo:files }, null, 2));
+      window.alert(JSON.stringify({context:'Creating Course',data:{...courseData, attatch_photo : files.file }}, null, 2));
+      console.log(files.file)
       axios
-          .post("http://localhost:4000/register/course", {courseData: courseData, attatch_photo:files }, { crossdomain: true })
+          .post("http://localhost:4000/create_course", {...courseData, attatch_photo : files.file }, { crossdomain: true })
           .then(response => {
               /*console.log("response: ", response)
               var isSuccess = response.data.result;
@@ -267,7 +267,9 @@ function AddCourse() {
 
       <Grid item xs={12}>
         <Typography variant="h2" color='primary' gutterBottom>
-          Create Course
+          <Box fontWeight="fontWeightBold" m={1}>
+            Create Course
+          </Box>
         </Typography>
       </Grid>
       <Grid item xs={10}>
@@ -289,7 +291,7 @@ function AddCourse() {
                           id="icon-button-file" 
                           type="file" 
                           value={courseData.attatch_photo} 
-                          onChange = { () => { validate({ attatch_photo : files })} }
+                          onChange = { () => { console.log('image input activated') }} 
                         />
                         <label htmlFor="icon-button-file" color="primary" >
                           <IconButton color="primary" aria-label="upload picture" component="span" variant="contained" 
