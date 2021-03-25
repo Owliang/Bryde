@@ -22,8 +22,9 @@ var upload = multer({
 })
 /* GET home page. */
 
-router.post('/', function(req, res, next) {
-    res.send('responce');
+router.post('/test', function(req, res, next) {
+    res.json('responce');
+});
 
 router.get('/', function(req, res, next) {
     res.render('upload');
