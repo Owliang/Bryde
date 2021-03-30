@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose')
+var cors = require('cors')
 
 //
 var indexRouter = require('./routes/index');
@@ -27,9 +28,14 @@ var tutor_courseRouter = require('./routes/tutor_course');
 
 var app = express();
 
-var fs = require('fs');
-var path = require('path');
-require('dotenv/config');
+app.use(cors());
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+  res.header('Access-Control-Allow-Methods','POST, GET, PUT, PATCH, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers','Content-Type, Option, Authorization')
+  next()
+})
 
 
 // view engine setup
@@ -60,8 +66,9 @@ app.use('/edit_course',edit_courseRouter);
 app.use('/student_course',student_courseRouter);
 app.use('/tutor_course',tutor_courseRouter);
 
-//app.use(bodyParser.urlencoded({ extended: false }))
-//app.use(bodyParser.json())
+/*var corsOptions = {
+  origin: "http://localhost:4000"
+};*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
