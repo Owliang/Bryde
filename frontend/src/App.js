@@ -5,13 +5,11 @@ import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
 import AddCourse from "./components/AddCourse"
+import EditCourse from "./components/EditCourse"
 import Home from './components/Home/Home'
 
 
 function App() {
-                <Route path="/AddCourse">
-                  <AddCourse />
-                </Route>
 
     const auth = localStorage.getItem('auth') == 'true' ? true : false
 
@@ -44,6 +42,7 @@ function App() {
                         <Router>
                             <Switch>
                                 <PrivateRoute path='/addcourses' component={AddCourse} />
+                                <PrivateRoute path='/editcourses' component={EditCourse} />
                                 <PrivateRoute path='/courses' component={CourseList} />
                                 <PrivateRoute path='/home' component={Home}/>
                                 <LoginRoute path="/" component={Landing} />
