@@ -1,6 +1,6 @@
 import React from "react"
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Container, Grid, ListItem, Paper, Typography } from '@material-ui/core'
+import { Box, Container, Grid, ListItem, Paper, Typography , Button } from '@material-ui/core'
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -30,12 +30,14 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
         margin: 'auto',
-        background : '#4f4f4f'
+        background : '#4f4f4f',
+        
         
     },
     courseofweek: {
-        height: 250,
-        background: '#9f9f9f'
+        height: 220,
+        background: '#9f9f9f',
+
     },
     courseImage:{
         margin: 'auto',
@@ -48,6 +50,17 @@ const useStyles = makeStyles((theme) => ({
     },
     courseText:{
         align: 'center'
+    },
+    detailButton:{
+        backgroundColor :'#212121',
+        border:'1.5px solid',
+        bordercolor:'#0EED0E',
+        padding: '3px',
+        color:'primary',
+        '&:hover': {
+            backgroundColor: '#212121',
+            boxShadow: 'none',
+          },
     }
 }));
 
@@ -90,49 +103,38 @@ export default function Home() {
                     <Grid item xs={3}>
                         <Paper className={classes.courseofweek}>
                         <img src="https://image.freepik.com/free-vector/math-background_23-2148146270.jpg" className={classes.courseImage}/>
-                        <Typography align='center' variant="subtitle1" > Course1 </Typography>
-                        <Typography align='center' variant="subtitle2" > Course1 short description </Typography>
-                        <Grid item>
-                            <Typography align='center' gutterBottom variant="body2" style={{ cursor: 'pointer' }}>
-                            see detail
-                            </Typography>
-                        </Grid>
+                        <Typography align='center' variant="subtitle1" className={classes.typography}> Course1 </Typography>
+                        <Container>
+                            <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > see detail </Button>
+                        </Container>
                         </Paper>
                     </Grid>
                     <Grid item xs={3}>
                         <Paper className={classes.courseofweek}>
                         <img src="https://thetechtheories.com/wp-content/uploads/2020/01/Factors-of-Science.png" className={classes.courseImage}/>
-                        <Typography align='center' variant="subtitle1" > Course2 </Typography>
-                        <Typography align='center' variant="subtitle2" > Course2 short description </Typography>
-                        <Grid item>
-                            <Typography align='center' gutterBottom='true' variant="body2" style={{ cursor: 'pointer' }}>
-                            see detail
-                            </Typography>
-                        </Grid>
+                        <Typography align='center' variant="subtitle1" className={classes.typography}> Course2 </Typography>
+                        <Container>
+                            <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > see detail </Button>
+                        </Container>
                         </Paper>
                     </Grid>
                     <Grid item xs={3}>
                         <Paper className={classes.courseofweek}>
                         <img src="http://images.shiksha.com/mediadata/images/articles/1538985491phpKctLgx.jpeg" className={classes.courseImage}/>
-                        <Typography align='center' variant="subtitle1" > Course3 </Typography>
-                        <Typography align='center' variant="subtitle2" > Course3 short description </Typography>
-                        <Grid item>
-                            <Typography align='center' gutterBottom='true' variant="body2" style={{ cursor: 'pointer' }}>
-                            see detail
-                            </Typography>
-                        </Grid>
+                        <Typography align='center' variant="subtitle1" className={classes.typography}> Course3 </Typography>
+                        <Container>
+                            <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > see detail </Button>
+                        </Container>
                         </Paper>
                     </Grid>
                     <Grid item xs={3} direction = "column">
                         <Paper className={classes.courseofweek}>
                         <img src="https://image.freepik.com/free-vector/english-word-education-banner_66675-157.jpg" className={classes.courseImage}/>
-                        <Typography align='center' variant="subtitle1" > Course4 </Typography>
-                        <Typography align='center' variant="subtitle2" > Course4 short description </Typography>
-                        <Grid item >
-                            <Typography align='center' variant="body2" style={{ cursor: 'pointer' }}>
-                            see detail
-                            </Typography>
-                        </Grid>
+                        <Typography align='center' variant="subtitle1" className={classes.typography}> Course4 </Typography>
+                        <Container>
+                            <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > see detail </Button>
+                        </Container>
+                        
                         </Paper>
                     </Grid>
 
@@ -140,70 +142,6 @@ export default function Home() {
                 </Grid>
             </Paper>
         </Box>
-        <Box p={2}>
-            <Typography variant="h4" className={classes.typography}>
-                Trending topic
-            </Typography>
-            <Paper className={classes.paper}>
-                <List>
-                    <ListItem button>
-                        <ListItemAvatar>
-                            <Avatar>
-                            W
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText className={classes.typography} primary="topic 1 "/>
-                        <ListItemText className={classes.typography} primary="by user1 " align='center'/>
-                        <ListItemText className={classes.typography} primary="600 Followers 999 Answers " align='right'/>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemAvatar>
-                            <Avatar>
-                            W
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText className={classes.typography} primary="topic 2 "/>
-                        <ListItemText className={classes.typography} primary="by user2 " align='center'/>
-                        <ListItemText className={classes.typography} primary="500 Followers   400 Answers " align='right'/>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemAvatar>
-                            <Avatar>
-                            W
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText className={classes.typography} primary="topic 3 "/>
-                        <ListItemText className={classes.typography} primary="by user3 " align='center'/>
-                        <ListItemText className={classes.typography} primary="200 Followers 500 Answers " align='right'/>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemAvatar>
-                            <Avatar>
-                            W
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText className={classes.typography} primary="topic 4 "/>
-                        <ListItemText className={classes.typography} primary="by user4 " align='center'/>
-                        <ListItemText className={classes.typography} primary="999 Followers 100 Answers " align='right'/>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemAvatar>
-                            <Avatar>
-                            W
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText className={classes.typography} primary="topic 5 "/>
-                        <ListItemText className={classes.typography} primary="by user5 " align='center'/>
-                        <ListItemText className={classes.typography} primary="100  Followers 300   Answers " align='right'/>
-                    </ListItem>
-                </List>
-            </Paper>
-
-        </Box>
-                
-
-    
-          
          
       </Container>
     )
