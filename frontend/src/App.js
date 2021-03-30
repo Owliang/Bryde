@@ -24,10 +24,11 @@ function App() {
         />
     )
 
+    // if already login, redirect to home. if not, show login page
     const LoginRoute = ({ component: Component, ...rest }) => (
         <Route
             render={(props) => (
-                auth ? <Redirect to='/courses' /> : <Component {...props} />
+                auth ? <Redirect to='/home' /> : <Component {...props} />
             )}
             {...rest}
         />
@@ -36,22 +37,20 @@ function App() {
     return (
         <div>
             {auth && <Navbar />}
-            <Box bgcolor="background.dark">
-                <Container maxWidth="lg">
-                    <Box bgcolor="background.dark" height='100vh'> 
-                        <Router>
-                            <Switch>
-                                <PrivateRoute path='/addcourses' component={AddCourse} />
-                                <PrivateRoute path='/editcourses' component={EditCourse} />
-                                <PrivateRoute path='/courses' component={CourseList} />
-                                <PrivateRoute path='/home' component={Home}/>
-                                <LoginRoute path="/" component={Landing} />
-                                <Route path='/courses' component={CourseList} />
-                            </Switch>
-                        </Router>
-                    </Box>
-                </Container>
-            </Box>
+            <Container maxWidth="lg">
+                <Box height='100vh'> 
+                    <Router>
+                        <Switch>
+                            <PrivateRoute path='/addcourses' component={AddCourse} />
+                            <PrivateRoute path='/editcourses' component={EditCourse} />
+                            <PrivateRoute path='/courses' component={CourseList} />
+                            <PrivateRoute path='/home' component={Home}/>
+                            <LoginRoute path="/" component={Landing} />
+                            <Route path='/courses' component={CourseList} />
+                        </Switch>
+                    </Router>
+                </Box>
+            </Container>
         </div>
     );
 }

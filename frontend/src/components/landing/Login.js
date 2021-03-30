@@ -21,31 +21,32 @@ export default function Login(props) {
     }
 
     const handleLogin = async () => {
-        // not connect to db, just allow any username&password
-        localStorage.setItem('user', JSON.stringify({username: loginData.username, role:'Tutor'}))
-        localStorage.setItem('auth', true)
-        history.push("/courses")
-        window.location.reload();
-        // axios.post("/login", {
-        //         username: loginData.username,
-        //         password: loginData.password
-        //     },{
-        //         params: {
-        //             username: loginData.username
-        //         }
-        //     }).then(response => {
-        //         console.log(response.data.result)
-        //         const result = response.data.result
-        //         if (result) {
-        //             localStorage.setItem('username', loginData.username)
-        //             localStorage.setItem('auth', true)
-        //         } else {
-        //             localStorage.setItem('username', '')
-        //             localStorage.setItem('auth', false)
-        //         }
-        //     }).catch(err => {
-        //         console.error(err)
-        //     })
+        axios.post("/login", {
+                username: loginData.username,
+                password: loginData.password
+            },{
+                params: {
+                    username: loginData.username
+                }
+            }).then(response => {
+                console.log(response.data)
+                const result = response.data.result
+                if (result) {
+                    localStorage.setItem('username', loginData.username)
+                    localStorage.setItem('auth', true)
+                    localStorage.setItem('role','Tutor')
+                    history.push("/home")
+                    window.location.reload();
+                    console.log(response.data)
+                } else {
+                    localStorage.setItem('username', '')
+                    localStorage.setItem('auth', false)
+                    localStorage.setItem('role','')
+                    console.log(response.data)
+                }
+            }).catch(err => {
+                console.error(err)
+            })
     }
 
     return (
