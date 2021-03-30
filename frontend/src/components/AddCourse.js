@@ -19,6 +19,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import InfoIcon from '@material-ui/icons/Info';
 
 
 
@@ -65,7 +70,21 @@ const useStyles = makeStyles((theme) => ({
     icon: {
       marginLeft : theme.spacing(2),
       marginRight : theme.spacing(2),
-    }
+    },
+    gridroot: {
+      margin : theme.spacing(3),
+      width: '95%',
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      backgroundColor: '#424242',
+      borderRadius: 20
+    },
+    gridList: {
+      width: 500,
+      height: 450,
+    },
 }));
 
 const initialCourseData = {
@@ -448,18 +467,31 @@ function AddCourse() {
                       <Typography component="div"> Upload Course Video </Typography>
                       <CloudUploadOutlinedIcon className={classes.icon}></CloudUploadOutlinedIcon>
                     </Button>
+                  </Grid>
+                  <Grid item xs={12}>
                     {videos ? (
-                      videos.map((video) => (
-                        <div>
-                          <br/>
-                          <Avatar className = {classes.image} src={video.source} alt='preview' />
-                          <Typography variant="caption" display="block" gutterBottom color='primary'>
-                            <Box m={1}>
-                              Name: {video.name}
-                            </Box>
-                          </Typography>
-                        </div>
-                      ))
+                      <div className={classes.gridroot}>
+                      <br/><br/>
+                      <GridList cellHeight={180} className={classes.gridList}>
+                        <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
+                          <ListSubheader component="div" color="primary">Video List</ListSubheader>
+                        </GridListTile>
+                        {videos.map((video) => (
+                          <GridListTile key={video.source}>
+                            <img src={video.source} alt={video.name} />
+                            <GridListTileBar
+                            title={video.name}
+                            subtitle={<span>size: {video.size}</span>}
+                            /*actionIcon={
+                              <IconButton aria-label={`info about ${video.name}`} className={classes.icon}>
+                                <InfoIcon />
+                              </IconButton>
+                            }*/
+                            />
+                          </GridListTile>
+                          ))}
+                      </GridList>
+                      </div>
                     ) : (
                       <Typography variant="caption" display="block" gutterBottom color='primary'>
                         <Box m={1}>
@@ -469,8 +501,9 @@ function AddCourse() {
                       </Typography>
           
                     )}
-                  </Grid>
-                  <Grid item xs={3}>
+                  
+                  {//<Grid item xs={3}>
+                  }
 
                   </Grid>
                   <Grid item xs={4}>
