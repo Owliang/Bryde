@@ -12,9 +12,71 @@ const { body, validationResult, check } = require('express-validator');
 router.get('/', function(req, res, next) {
   res.render('blog');
 });
+
+router.get('/showallblog', function(req, res, next) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
+            throw err;
+        }
+        else{
+            var dbo = db.db("TutorialDB");
+            var sname = req.body.searchname;
+            dbo.collection("blogs").find({}, { projection: { _id: 0, name: 1 ,description:1,author:1} }).toArray(function(err, result) {
+                if (err) throw err
+                //res.json({result:result});
+                res.render('showallblog',{param:result});
+                db.close();
+            })
+        }
+    });
+});
+
 router.get('/add', function(req, res, next) {
     res.render('addblog');
 });
+
+router.get('/search', function(req, res, next) {
+    res.render('searchblog');
+});
+
+router.post('/search',[check("searchname","Please enter blog name").not().isEmpty()]
+,function(req, res, next) {
+    const result = validationResult(req);
+    var errors = result.errors;
+    if (!result.isEmpty()) {
+        res.render('searchblog',{errors:errors});
+    }else{
+        MongoClient.connect(url, function(err, db) {
+            if (err) {
+                res.send(err);
+            }
+            else{
+                var dbo = db.db("TutorialDB");
+                var sname = req.body.searchname;
+                dbo.collection("blogs").find({name:sname}, { projection: { _id: 0, name: 1 ,description:1,author:1} }).toArray(function(err, result) {
+                    if (err) throw err
+                    //res.send(result)
+                    console.log("ok")
+                    /*for(i=0;i<result.length;i++){
+                        console.log(result[i]);
+                    } 
+                    res.send("ok")*/
+                    console.log(result)
+                    res.render('showblog',{param:result});//,{name:result[0].name,desc:result[0].description,auth:result[0].author});
+                    db.close();
+                })
+                /*dbo.collection("blogs").find({"name":sname}, { projection: { _id: 0, name: 1 ,description:1,author:1} }).toArray(function(err, result) {
+                    if (err) throw err
+                    res.render('showblog',{name:result[0].name,desc:result[0].description,auth:result[0].author});
+                    db.close();
+                });*/
+            }
+            /*res.location('/blog/add');
+            res.redirect('/blog/add');*/
+        });
+    }
+});
+
 router.post('/add',[
   check("name","Please Input your name").not().isEmpty(),
   check("description","Please Input your Description").not().isEmpty(),
@@ -24,23 +86,7 @@ router.post('/add',[
     var errors = result.errors;
     if (!result.isEmpty()) {
         res.render('addblog',{errors:errors});
-      //return res.status(400).json({ errors: errors.array() });
     }
-    /*else{
-        var ct = db.get('blogs');
-        ct.insert({
-            name:req.body.name,
-            description:req.body.description,
-            autor:req.body.author,
-        }),function(err,blog){
-            if(err){
-                res.send(err);
-            }else{
-                res.location('/blog/add');
-                res.redirect('/blog/add');
-            }
-        }
-    }*/
     else{
         MongoClient.connect(url, function(err, db) {
             if (err) {
@@ -60,4 +106,5 @@ router.post('/add',[
         });
     }
 });
+
 module.exports = router;

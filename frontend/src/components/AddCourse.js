@@ -1,4 +1,4 @@
-import React ,{ useState ,useEffect  } from 'react'
+import React ,{ useState ,useEffect, useRef,  } from 'react'
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -19,7 +19,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import Snackbar from '@material-ui/core/Snackbar';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import InfoIcon from '@material-ui/icons/Info';
 
 
 
@@ -53,6 +57,11 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(30),
       height: theme.spacing(30),
     },
+    video: {
+      margin : theme.spacing(3),
+      width: theme.spacing(30),
+      height: theme.spacing(30),
+    },
     button: {
       margin : theme.spacing(3),
       width: theme.spacing(20),
@@ -61,13 +70,26 @@ const useStyles = makeStyles((theme) => ({
     icon: {
       marginLeft : theme.spacing(2),
       marginRight : theme.spacing(2),
-    }
+    },
+    gridroot: {
+      margin : theme.spacing(3),
+      width: '95%',
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      backgroundColor: '#424242',
+      borderRadius: 20
+    },
+    gridList: {
+      width: 500,
+      height: 450,
+    },
 }));
 
 const initialCourseData = {
   tutor:"",
   name: "",
-  attatch_photo: "",
   subject: "",
   description: "",
   price: "",
@@ -87,6 +109,7 @@ function AddCourse() {
 
   const classes = useStyles();
   const [courseData, setCourseData] = useState(initialCourseData);
+  const form = useRef(null)
   const [errors, setErrors] = useState({});
   const [snack, setSnack] = useState({
     open: false,
@@ -94,6 +117,7 @@ function AddCourse() {
     variant: ""
   });
   const [files, selectFiles] = useFileUpload();
+  const [videos, selectVideos] = useFileUpload();
   const [alert, setAlert] = React.useState({
     open: false,
     message:"",
@@ -187,9 +211,29 @@ function AddCourse() {
     
     if(validate()){
       //await new Promise(resolve => setTimeout(resolve, 2000));
-      //window.alert(JSON.stringify({context:'Creating Course',courseData: courseData, attatch_photo:files }, null, 2));
+      let formData = new FormData();
+      for(let key in courseData){
+        formData.append(key,courseData[key]);
+      }
+      let attatch_videos = [];
+      // for(let video in videos){
+      //   attatch_video.push(video.file)
+      //   formData.append('attatch_video[]', video.file)
+      // }
+      var nVideo = videos.length;
+      for(var i=0; i<nVideo ;i++){
+        formData.append('attatch_video_'+i, videos[i].file);
+      }
+      formData.append('attatch_photo', files.file)
+      formData.append('attatch_photo_src', files.source)
+      formData.append('attatch_video', videos);
+      formData.append('total_video', nVideo);
+      //window.alert(JSON.stringify({context:'Creating Course',data:{...courseData, attatch_photo : files.file }}, null, 2));
+      console.log(attatch_videos)
+      console.log([...formData])
       axios
-          .post("http://localhost:4000/register/course", {courseData: courseData, attatch_photo:files }, { crossdomain: true })
+          .post("http://localhost:4000/create_course", formData, { 
+            crossdomain: true, })
           .then(response => {
               /*console.log("response: ", response)
               var isSuccess = response.data.result;
@@ -212,7 +256,7 @@ function AddCourse() {
               ...alert,
               title:"Create Course Failed" ,
               open : true,
-              message : "An Error Occured, Please try again later.",
+              message : "An Error Occured, Please try again later.\n" + err,
               optionButton:"Try Again"
             });
             console.error(err)
@@ -267,12 +311,14 @@ function AddCourse() {
 
       <Grid item xs={12}>
         <Typography variant="h2" color='primary' gutterBottom>
-          Create Course
+          <Box fontWeight="fontWeightBold" m={1}>
+            Create Course
+          </Box>
         </Typography>
       </Grid>
       <Grid item xs={10}>
         <Paper className = {classes.paper} variant="outlined" component='div' elevation={3}>
-          <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
+          <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit} >
                 <Grid container justify="space-around" alignItems="center">
                   <Grid item xs={12} md={6}>
                     <Avatar 
@@ -289,7 +335,7 @@ function AddCourse() {
                           id="icon-button-file" 
                           type="file" 
                           value={courseData.attatch_photo} 
-                          onChange = { () => { validate({ attatch_photo : files })} }
+                          onChange = { () => { console.log('image input activated') }} 
                         />
                         <label htmlFor="icon-button-file" color="primary" >
                           <IconButton color="primary" aria-label="upload picture" component="span" variant="contained" 
@@ -374,12 +420,12 @@ function AddCourse() {
                     variant="filled"
                     label = "Course Description"
                     placeholder="Course Description"
-                    name = "desc"
+                    name = "description"
                     onChange={handleChangeInput}
                     value = {courseData.description}
                     rowsMax={5}
                     fullWidth
-                    {...(errors.desc && {error:true,helperText:errors.desc})}
+                    {...(errors.description && {error:true,helperText:errors.description})}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -406,12 +452,58 @@ function AddCourse() {
                       variant="contained"
                       color="primary"
                       size="large"
+                      onClick = { () => { 
+                        selectVideos({ multiple: true }, (videos) => {
+                          // Note callback return an array
+                          videos.map(({ source, name, size, file }) =>{
+                            console.log({ source, name, size, file })
+                          })
+                          // Todo: Upload to cloud.
+                        })
+                        //.then( () => {validate({ attatch_photo : files })} )
+
+                      }}
                     >
                       <Typography component="div"> Upload Course Video </Typography>
                       <CloudUploadOutlinedIcon className={classes.icon}></CloudUploadOutlinedIcon>
                     </Button>
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={12}>
+                    {videos ? (
+                      <div className={classes.gridroot}>
+                      <br/><br/>
+                      <GridList cellHeight={180} className={classes.gridList}>
+                        <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
+                          <ListSubheader component="div" color="primary">Video List</ListSubheader>
+                        </GridListTile>
+                        {videos.map((video) => (
+                          <GridListTile key={video.source}>
+                            <img src={video.source} alt={video.name} />
+                            <GridListTileBar
+                            title={video.name}
+                            subtitle={<span>size: {video.size}</span>}
+                            /*actionIcon={
+                              <IconButton aria-label={`info about ${video.name}`} className={classes.icon}>
+                                <InfoIcon />
+                              </IconButton>
+                            }*/
+                            />
+                          </GridListTile>
+                          ))}
+                      </GridList>
+                      </div>
+                    ) : (
+                      <Typography variant="caption" display="block" gutterBottom color='primary'>
+                        <Box m={1}>
+                        <br/>
+                          No File Uploaded.
+                        </Box>
+                      </Typography>
+          
+                    )}
+                  
+                  {//<Grid item xs={3}>
+                  }
 
                   </Grid>
                   <Grid item xs={4}>
