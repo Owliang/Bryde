@@ -22,6 +22,10 @@ var upload = multer({
 })
 /* GET home page. */
 
+router.post('/test', function(req, res, next) {
+    res.json('responce');
+});
+
 router.get('/', function(req, res, next) {
     res.render('upload');
     //res.json({result:'Response from create course page'})

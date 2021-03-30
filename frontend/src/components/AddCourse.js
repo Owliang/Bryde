@@ -189,7 +189,7 @@ function AddCourse() {
       window.alert(JSON.stringify({context:'Creating Course',data:{...courseData, attatch_photo : files.file }}, null, 2));
       console.log(files.file)
       axios
-          .post("http://localhost:4000/create_course", {...courseData, attatch_photo : files.file }, { crossdomain: true })
+          .post("http://localhost:4000/create_course/test", {...courseData, attatch_photo : files.file }, { crossdomain: true })
           .then(response => {
               /*console.log("response: ", response)
               var isSuccess = response.data.result;
@@ -212,7 +212,7 @@ function AddCourse() {
               ...alert,
               title:"Create Course Failed" ,
               open : true,
-              message : "An Error Occured, Please try again later.",
+              message : "An Error Occured, Please try again later.\n" + err,
               optionButton:"Try Again"
             });
             console.error(err)
@@ -376,12 +376,12 @@ function AddCourse() {
                     variant="filled"
                     label = "Course Description"
                     placeholder="Course Description"
-                    name = "desc"
+                    name = "description"
                     onChange={handleChangeInput}
                     value = {courseData.description}
                     rowsMax={5}
                     fullWidth
-                    {...(errors.desc && {error:true,helperText:errors.desc})}
+                    {...(errors.description && {error:true,helperText:errors.description})}
                   />
                 </Grid>
                 <Grid item xs={12}>
