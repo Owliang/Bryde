@@ -1,4 +1,4 @@
-import React ,{ useState ,useEffect  } from 'react'
+import React ,{ useState ,useEffect, useRef,  } from 'react'
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -52,6 +52,11 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(30),
       height: theme.spacing(30),
     },
+    video: {
+      margin : theme.spacing(3),
+      width: theme.spacing(30),
+      height: theme.spacing(30),
+    },
     button: {
       margin : theme.spacing(3),
       width: theme.spacing(20),
@@ -66,7 +71,6 @@ const useStyles = makeStyles((theme) => ({
 const initialCourseData = {
   tutor:"",
   name: "",
-  attatch_photo: "",
   subject: "",
   description: "",
   price: "",
@@ -86,6 +90,7 @@ function AddCourse() {
 
   const classes = useStyles();
   const [courseData, setCourseData] = useState(initialCourseData);
+  const form = useRef(null)
   const [errors, setErrors] = useState({});
   const [snack, setSnack] = useState({
     open: false,
@@ -93,6 +98,7 @@ function AddCourse() {
     variant: ""
   });
   const [files, selectFiles] = useFileUpload();
+  const [videos, selectVideos] = useFileUpload();
   const [alert, setAlert] = React.useState({
     open: false,
     message:"",
@@ -186,10 +192,29 @@ function AddCourse() {
     
     if(validate()){
       //await new Promise(resolve => setTimeout(resolve, 2000));
-      window.alert(JSON.stringify({context:'Creating Course',data:{...courseData, attatch_photo : files.file }}, null, 2));
-      console.log(files.file)
+      let formData = new FormData();
+      for(let key in courseData){
+        formData.append(key,courseData[key]);
+      }
+      let attatch_videos = [];
+      // for(let video in videos){
+      //   attatch_video.push(video.file)
+      //   formData.append('attatch_video[]', video.file)
+      // }
+      var nVideo = videos.length;
+      for(var i=0; i<nVideo ;i++){
+        formData.append('attatch_video_'+i, videos[i].file);
+      }
+      formData.append('attatch_photo', files.file)
+      formData.append('attatch_photo_src', files.source)
+      formData.append('attatch_video', videos);
+      formData.append('total_video', nVideo);
+      //window.alert(JSON.stringify({context:'Creating Course',data:{...courseData, attatch_photo : files.file }}, null, 2));
+      console.log(attatch_videos)
+      console.log([...formData])
       axios
-          .post("http://localhost:4000/create_course/test", {...courseData, attatch_photo : files.file }, { crossdomain: true })
+          .post("http://localhost:4000/create_course", formData, { 
+            crossdomain: true, })
           .then(response => {
               /*console.log("response: ", response)
               var isSuccess = response.data.result;
@@ -274,7 +299,7 @@ function AddCourse() {
       </Grid>
       <Grid item xs={10}>
         <Paper className = {classes.paper} variant="outlined" component='div' elevation={3}>
-          <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
+          <form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit} >
                 <Grid container justify="space-around" alignItems="center">
                   <Grid item xs={12} md={6}>
                     <Avatar 
@@ -408,10 +433,42 @@ function AddCourse() {
                       variant="contained"
                       color="primary"
                       size="large"
+                      onClick = { () => { 
+                        selectVideos({ multiple: true }, (videos) => {
+                          // Note callback return an array
+                          videos.map(({ source, name, size, file }) =>{
+                            console.log({ source, name, size, file })
+                          })
+                          // Todo: Upload to cloud.
+                        })
+                        //.then( () => {validate({ attatch_photo : files })} )
+
+                      }}
                     >
                       <Typography component="div"> Upload Course Video </Typography>
                       <CloudUploadOutlinedIcon className={classes.icon}></CloudUploadOutlinedIcon>
                     </Button>
+                    {videos ? (
+                      videos.map((video) => (
+                        <div>
+                          <br/>
+                          <Avatar className = {classes.image} src={video.source} alt='preview' />
+                          <Typography variant="caption" display="block" gutterBottom color='primary'>
+                            <Box m={1}>
+                              Name: {video.name}
+                            </Box>
+                          </Typography>
+                        </div>
+                      ))
+                    ) : (
+                      <Typography variant="caption" display="block" gutterBottom color='primary'>
+                        <Box m={1}>
+                        <br/>
+                          No File Uploaded.
+                        </Box>
+                      </Typography>
+          
+                    )}
                   </Grid>
                   <Grid item xs={3}>
 
