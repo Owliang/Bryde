@@ -5,6 +5,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import MailIcon from '@material-ui/icons/Mail'
 import NotificationsIcon from '@material-ui/icons/Notifications'
+import ButtonLink from './ButtonLink'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,7 +57,7 @@ export default function Navbar() {
             onKeyDown={toggleDrawer(false)}
         >
             <List>
-                {['Home', 'Course', 'Livestream', 'Q&A', 'Account', 'Help Center', 'Support'].map((text) => (
+                {['home', 'courses', 'livestream', 'qanda', 'account', 'help', 'report'].map((text) => (
                     <ListItem button key={text}>
                         <ListItemText primary={text} />
                     </ListItem>
@@ -94,13 +95,13 @@ export default function Navbar() {
                     </Box>
                     <Typography variant="h6" color="secondary">OffDemand</Typography>
                     <Box display={desktop}>
-                        <Button color="secondary">Home</Button>
-                        <Button color="secondary" href="/courses">Course</Button>
-                        <Button color="secondary">Livestream</Button>
-                        <Button color="secondary">Q&A</Button>
-                        <Button color="secondary">Account</Button>
-                        <Button color="secondary">Help Center</Button>
-                        <Button color="secondary">Report</Button>
+                    <ButtonLink color="secondary" path="/home">Home</ButtonLink>
+                        <ButtonLink color="secondary" path="/courses">Course</ButtonLink>
+                        <ButtonLink color="secondary" path="/livestream">Livestream</ButtonLink>
+                        <ButtonLink color="secondary" path="/qanda">Q&A</ButtonLink>
+                        <ButtonLink color="secondary" path="/account">Account</ButtonLink>
+                        <ButtonLink color="secondary" path="/helpcenter">Help Center</ButtonLink>
+                        <ButtonLink color="secondary" path="/report">Report</ButtonLink>
                     </Box>
                     <div className={classes.grow} />
                     <div>
@@ -119,7 +120,7 @@ export default function Navbar() {
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
                             onClick={handleMenu}
-                            color="inherit"
+                            color="secondary"
                         >
                             {username}
                             <AccountCircle color="secondary"/>
