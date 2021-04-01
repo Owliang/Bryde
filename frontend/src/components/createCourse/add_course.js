@@ -1,4 +1,5 @@
 import React ,{ useState ,useEffect, useRef,  } from 'react'
+
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -109,13 +110,7 @@ function AddCourse() {
 
   const classes = useStyles();
   const [courseData, setCourseData] = useState(initialCourseData);
-  const form = useRef(null)
   const [errors, setErrors] = useState({});
-  const [snack, setSnack] = useState({
-    open: false,
-    message:"",
-    variant: ""
-  });
   const [files, selectFiles] = useFileUpload();
   const [videos, selectVideos] = useFileUpload();
   const [alert, setAlert] = React.useState({
@@ -147,10 +142,8 @@ function AddCourse() {
     }
   }, [1]);
 
-  
+  const defaultSrc = "https://martialartsplusinc.com/wp-content/uploads/2017/04/default-image-620x600.jpg"
 
-  const defaultSrc = 
-        "https://martialartsplusinc.com/wp-content/uploads/2017/04/default-image-620x600.jpg"
   const validate = (fieldValues = courseData) => {
     let temp = { ...errors }
     if ('name' in fieldValues)
@@ -194,11 +187,6 @@ function AddCourse() {
   const handleClose = () => {
     setAlert({ ...alert, open: false });
   };
-
-  const handleSnackClose = () => {
-    setSnack({ ...snack, open: false });
-  };
-
 
   const handleSubmit = e => {
 
@@ -509,15 +497,9 @@ function AddCourse() {
                   <Grid item xs={4}>
                     <Button
                       className={classes.button}
-                      variant="contained"
-                      color="primary"
-                      size="large"
                       text="Submit"
-                      type="submit"
                       onClick={handleSubmit}
-                    >
-                      Submit
-                    </Button>
+                    />
                   </Grid>
                 </Grid>
 
