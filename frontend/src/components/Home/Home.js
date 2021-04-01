@@ -8,6 +8,8 @@ import List from '@material-ui/core/List';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
+import data from './data.js';
+
 
 
 
@@ -15,9 +17,12 @@ const useStyles = makeStyles((theme) => ({
 
     typography: {
         color: '#FFFFFF',
+        marginTop: '1rem',
+        marginBottom:'1rem'
     },
     grid: {
         height: '100%',
+
     },
     textFieldSmall: {
         marginBottom: 8,
@@ -35,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
         
     },
     courseofweek: {
-        height: 220,
+        height: 'auto',
+        padding : theme.spacing(1),
         background: '#9f9f9f',
 
     },
@@ -46,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '260px',
         maxWidth: '260px',
         maxHeight: '150px',
-        padding: theme.spacing(1)
+        
     },
     courseText:{
         align: 'center'
@@ -75,15 +81,12 @@ export default function Home() {
             Up next
             </Typography>
             <GridList className={classes.gridList} cols={1}>
-                <GridListTile >
-                <img src="https://www.persona-oz.com/wp-content/uploads/2018/10/school_01-2-1024x404.jpg"/>
-                <GridListTileBar title="ADs 1"/>
+                {data.upnexts.map((upnext) => (
+                    <GridListTile >
+                    <img src={upnext.img} />
+                    <GridListTileBar title={upnext.title} />
                 </GridListTile>
-
-                <GridListTile >
-                <img src="https://d3jlwjv6gmyigl.cloudfront.net/images/2019/11/school1.jpg"/>
-                <GridListTileBar title="ADs 2"/>
-                </GridListTile>
+                ))}
             </GridList>
         </Box>
         <Box p={2}>
@@ -100,44 +103,16 @@ export default function Home() {
             </Typography>
             <Paper className={classes.paper}>
                 <Grid container spacing={3}>
-                    <Grid item xs={3}>
+                    {data.cows.map((cow) => (
+                        <Grid item xs={3}>
                         <Paper className={classes.courseofweek}>
-                        <img src="https://image.freepik.com/free-vector/math-background_23-2148146270.jpg" className={classes.courseImage}/>
-                        <Typography align='center' variant="subtitle1" className={classes.typography}> Course1 </Typography>
-                        <Container>
-                            <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > see detail </Button>
-                        </Container>
+                        <img src= {cow.img} className={classes.courseImage}/>
+                        <Typography align='center' variant="subtitle1" className={classes.typography}> {cow.cname} </Typography>
+                        <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > see detail </Button>
                         </Paper>
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Paper className={classes.courseofweek}>
-                        <img src="https://thetechtheories.com/wp-content/uploads/2020/01/Factors-of-Science.png" className={classes.courseImage}/>
-                        <Typography align='center' variant="subtitle1" className={classes.typography}> Course2 </Typography>
-                        <Container>
-                            <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > see detail </Button>
-                        </Container>
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Paper className={classes.courseofweek}>
-                        <img src="http://images.shiksha.com/mediadata/images/articles/1538985491phpKctLgx.jpeg" className={classes.courseImage}/>
-                        <Typography align='center' variant="subtitle1" className={classes.typography}> Course3 </Typography>
-                        <Container>
-                            <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > see detail </Button>
-                        </Container>
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={3} direction = "column">
-                        <Paper className={classes.courseofweek}>
-                        <img src="https://image.freepik.com/free-vector/english-word-education-banner_66675-157.jpg" className={classes.courseImage}/>
-                        <Typography align='center' variant="subtitle1" className={classes.typography}> Course4 </Typography>
-                        <Container>
-                            <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > see detail </Button>
-                        </Container>
-                        
-                        </Paper>
-                    </Grid>
+                        </Grid>
 
+                    ))}
                 
                 </Grid>
             </Paper>

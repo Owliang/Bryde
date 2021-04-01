@@ -7,18 +7,22 @@ import Landing from './components/Landing'
 import AddCourse from "./components/AddCourse"
 import EditCourse from "./components/EditCourse"
 import Home from './components/Home/Home'
+import SearchCourse from './components/Search/SearchCourse'
 
 
 function App() {
 
     const auth = localStorage.getItem('auth') == 'true' ? true : false
 
+    // auto login by ford
+    const auth2 = true;
+
     // use this instead of Route
     // if not login (auth is false), PrivateRoute will redirect to Landing page
     const PrivateRoute = ({ component: Component, ...rest }) => (
         <Route
             render={(props) => (
-                auth ? <Component {...props} /> : <Redirect to='/' />
+                auth2 ? <Component {...props} /> : <Redirect to='/' />
             )}
             {...rest}
         />
@@ -28,7 +32,7 @@ function App() {
     const LoginRoute = ({ component: Component, ...rest }) => (
         <Route
             render={(props) => (
-                auth ? <Redirect to='/home' /> : <Component {...props} />
+                auth2 ? <Redirect to='/home' /> : <Component {...props} />
             )}
             {...rest}
         />
@@ -45,6 +49,7 @@ function App() {
                             <PrivateRoute path='/editcourses' component={EditCourse} />
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
+                            <PrivateRoute path='/search' component ={SearchCourse}/>
                             <LoginRoute path="/" component={Landing} />
                             <Route path='/courses' component={CourseList} />
                         </Switch>
