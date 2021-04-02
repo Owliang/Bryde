@@ -1,13 +1,15 @@
 import React, { useState } from "react"
 import { Box, Button, Link } from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
+import { useHistory } from "react-router-dom";
 import axios from 'axios'
 
 export default function Login(props) {
 
+    const history = useHistory()
     const [loginData, setLoginData] = useState({
-        'username': '',
-        'password': '',
+        username: '',
+        password: '',
     })
 
     const handleChangeLogin = (key) => (event) => {
@@ -15,11 +17,36 @@ export default function Login(props) {
             ...loginData,
             [key]: event.target.value,
         })
+        
     }
 
-    const handleLogin = () => {
-        // axios here
-        console.log('LOGIN!')
+    const handleLogin = async () => {
+        axios.post("/login", {
+                username: loginData.username,
+                password: loginData.password
+            },{
+                params: {
+                    username: loginData.username
+                }
+            }).then(response => {
+                console.log(response.data)
+                const result = response.data.result
+                if (result) {
+                    localStorage.setItem('username', loginData.username)
+                    localStorage.setItem('auth', true)
+                    localStorage.setItem('role','Tutor')
+                    history.push("/home")
+                    window.location.reload();
+                    console.log(response.data)
+                } else {
+                    localStorage.setItem('username', '')
+                    localStorage.setItem('auth', false)
+                    localStorage.setItem('role','')
+                    console.log(response.data)
+                }
+            }).catch(err => {
+                console.error(err)
+            })
     }
 
     return (
