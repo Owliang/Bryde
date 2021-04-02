@@ -1,8 +1,8 @@
-import React, { useEffect} from 'react'
+import React, { useEffect, useState} from 'react'
 import FormComponents from "../FormComponents/FormComponents.js";
 import { useFileUpload } from "use-file-upload";
 import {Form, useForm} from '../useForm.js';
-import {Grid, IconButton, Typography, Box, InputAdornment, makeStyles} from '@material-ui/core'
+import {Grid, IconButton, Typography, Box, InputAdornment, makeStyles, Dialog} from '@material-ui/core'
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import axios from 'axios';
 
@@ -61,10 +61,11 @@ const subject = [
 ];
 
 const CourseForm = (props) => {
-    const {tutor:curTutor} = props
+    const {tutor:curTutor, setDialog:setAlert} = props
     const [photo, selectPhoto] = useFileUpload();
     const [videos, selectVideos] = useFileUpload();
     const classes = useStyles();
+    console.log(`cur tutorfrom course Form ${curTutor}`)
 
     useEffect(() => {
         photo ? validate({ 'photo': photo }) : validate({ 'foo' : ""} )
@@ -73,29 +74,30 @@ const CourseForm = (props) => {
     const validate = (fieldValues = {...courseData, photo:photo}) => {
         let temp = { ...errors }
         if ('name' in fieldValues)
-          temp.name = fieldValues.name ? "" : "This field is required."
+          temp.name = fieldValues.name != "" ? "" : "This field is required."
         if ('tutor' in fieldValues)
-          temp.tutor = fieldValues.tutor ? "" : "Please Login First"
+          temp.tutor = fieldValues.tutor != "" ? "" : "Please Login First"
         if ('subject' in fieldValues)
-          temp.subject = fieldValues.subject ? "" : "This field is required."
+          temp.subject = fieldValues.subject != "" ? "" : "This field is required."
         if ('price' in fieldValues){
-          temp.price = temp.price || fieldValues.price ? "" : "This field is required."
+          temp.price = fieldValues.price != "" ? "" : "This field is required."
           temp.price = temp.price || (/^[0-9]{1,10}$/).test(fieldValues.price) ? temp.price : "Price should be integer."
           temp.price = temp.price || fieldValues.price.length < 6 ? temp.price : "Price is too expensive."
-          temp.price = temp.price || fieldValues.price ? temp.price : "This field is required."
         }
         if ('link' in fieldValues)
           temp.link = (/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/).test(fieldValues.link) || !fieldValues.link ? "" : "URL is not valid."
         if ('photo' in fieldValues)
           temp.photo = fieldValues.photo ? "" : "Course's Image is required."
-        setErrors({
-            ...temp
-        })
-        console.log(fieldValues)
+        setErrors((errors) =>({
+          ...temp
+        }));
+        console.log('fieldValues',fieldValues)
         console.log({...courseData, photo:photo})
+        console.log(`errors from validate${JSON.stringify(errors)}`)
+        console.log(`temp from validate${JSON.stringify(temp)}`)
     
         if (fieldValues == {...courseData, photo:photo})
-            console.log(Object.values(temp).every(x => x == ""))
+            console.log("Validate Return", Object.values(temp).every(x => x == ""))
             return Object.values(temp).every(x => x == "")
     }
 
@@ -108,19 +110,26 @@ const CourseForm = (props) => {
         resetForm
     } = useForm(initialCourseData, true, validate);
 
-    useEffect(() => { setCourseData({...courseData,tutor:curTutor })}, [1]);
+    useEffect(() => {
+      console.log('Updated errors', JSON.stringify(errors))
+    }, [errors]);
 
-    const handleSubmit = e => {
-
-        e.preventDefault()
+    useEffect(() => {
+      setCourseData({...courseData , tutor:curTutor })
+    },[curTutor]);
     
-        if(errors.tutor){
-          window.alert(errors.tutor);
-          window.location.href = "/";
-        }
+    useEffect(() => {
+      console.log('Updated courseData', JSON.stringify(courseData))
+    }, [courseData]);
+
+    const handleSubmit = async e => {
+        e.preventDefault()
+        console.log('Sumbit Hit')
+        console.log(`cur tutor from course Form Submit ${curTutor}`)
+        console.log(`Data's tutor from submit ${JSON.stringify(courseData.tutor)}`)
+        console.log(`Data from submit ${JSON.stringify(courseData)}`)
         
         if(validate()){
-          //await new Promise(resolve => setTimeout(resolve, 2000));
           let formData = new FormData();
           for(let key in courseData){
             formData.append(key,courseData[key]);
@@ -145,39 +154,57 @@ const CourseForm = (props) => {
                   console.log("response: ", response)
                   var isSuccess = response.data.result;
                   if(isSuccess){
-                   alert(`Course Registered !!!`);
-                   window.location.href = "/course";
+                    setAlert({
+                      title:"Create Course Success!" ,
+                      open : true,
+                      message : "Create Successfully. Do you want to upload course's video now or later",
+                      optionMessage : "Add Now",
+                      optionRefTo : '/course_video',
+                      mainMessage: "Add Later",
+                      mainRefTo: "/myCourse"
+                    });
                   }else{
-                   alert(`Register Failed\n${response.data.error}`);
+                    setAlert({
+                      title:"Create Course Fail!" ,
+                      open : true,
+                      message : `Create Course Failed`,
+                      submessage : response.data.error,
+                      optionmessage: "Try Again",
+                    });
                   }
-                  /*setAlert({
-                    ...alert,
-                    title:"Create Course Success!" ,
-                    open : true,
-                    message : "Create Success !!",
-                    optionButton:"Add another course"
-                  });*/
               })
               .catch(err => {
-                /*setAlert({
-                  ...alert,
+                setAlert({
                   title:"Create Course Failed" ,
                   open : true,
-                  message : "An Error Occured, Please try again later.\n" + err,
-                  optionButton:"Try Again"
-                });*/
-                window.alert('Error', JSON.stringify(err, null, 2));
+                  message : "An error occured during sending results to server, Please try again later and make sure that server is on.",
+                  submessage : err.name +": " + err.message ,
+                  optionmessage: "Try Again",
+                });
+                //window.alert('Error', JSON.stringify(err, null, 2));
                 console.error(err)
               })
           }else{
-            /*setAlert({
-              ...alert,
-              title:"Create Course Failed" ,
-              open : true,
-              message : "Some Fields Are Not Valid",
-              optionButton: ""
-            });*/
-            window.alert( JSON.stringify({context:'Information not valid',data:courseData,error:errors}, null, 2));
+            console.log(`errors from submit error ${JSON.stringify(errors)}`)
+            if(errors.tutor){
+              setAlert({
+                title: "I don't know who R U" ,
+                open : true,
+                message : errors.tutor,
+                mainMessage: "Login",
+                optionMessage : "Go Home",
+                optionRefTo : '/',
+              });
+              await new Promise(resolve => setTimeout(resolve, 20000));
+              //window.location.href = "/";
+            }else{
+              setAlert({
+                title:"Create Course Failed" ,
+                open : true,
+                message : "Some Fields Are Not Valid",
+              });
+            }
+            //window.alert( JSON.stringify({context:'Information not valid',data:courseData,error:errors}, null, 2));
           }
       }
 
