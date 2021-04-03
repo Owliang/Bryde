@@ -169,7 +169,7 @@ const CourseForm = (props) => {
                       open : true,
                       message : `Create Course Failed`,
                       submessage : response.data.error,
-                      optionmessage: "Try Again",
+                      optionMessage: "Try Again",
                     });
                   }
               })
@@ -178,8 +178,8 @@ const CourseForm = (props) => {
                   title:"Create Course Failed" ,
                   open : true,
                   message : "An error occured during sending results to server, Please try again later and make sure that server is on.",
-                  submessage : err.name +": " + err.message ,
-                  optionmessage: "Try Again",
+                  submessage : err.name + ": " + err.message ,
+                  optionMessage: "Try Again",
                 });
                 //window.alert('Error', JSON.stringify(err, null, 2));
                 console.error(err)
@@ -196,12 +196,14 @@ const CourseForm = (props) => {
                 optionRefTo : '/',
               });
               await new Promise(resolve => setTimeout(resolve, 20000));
-              //window.location.href = "/";
+              window.location.href = "/";
             }else{
               setAlert({
                 title:"Create Course Failed" ,
                 open : true,
                 message : "Some Fields Are Not Valid",
+                optionMessage : "Go Home 2",
+                optionRefTo : '/courses'
               });
             }
             //window.alert( JSON.stringify({context:'Information not valid',data:courseData,error:errors}, null, 2));

@@ -6,8 +6,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const MyDialog = (props) => {
-    const {open, handleClose, title, message, submessage, buttonOneRefTo, buttonOneMessage, buttonTwoRefTo, buttonTwoMessage  } = props;
+    const {open, handleClose, title, message, submessage, buttonOneRefTo, buttonOneMessage, buttonTwoRefTo, buttonTwoMessage, buttonTwoOnClick, buttonOneOnClick  } = props;
     console.log("dialog ",JSON.stringify(props))
+
+    const defaultOnClick = (refTo) => {
+        console.log('go by default')
+        window.location.href = refTo || '/'
+    }
+
     return (
         <Dialog
             open = {open}
@@ -30,15 +36,19 @@ const MyDialog = (props) => {
                 </Typography>}
             </DialogContent>
             <DialogActions>
-                <Button autoFocus onClick={() => window.location.href = buttonOneRefTo || '/'} color="primary">
+                <Button autoFocus onClick={() => {
+                    buttonOneOnClick ? buttonOneOnClick() : defaultOnClick(buttonOneRefTo)
+                }} color="primary">
                     {buttonOneMessage || "Go Home"}
                 </Button>
                 
-                { buttonTwoRefTo == null ? 
+                { (buttonTwoRefTo || buttonTwoOnClick) == null ? 
                 <Button onClick={handleClose} color="primary">
                     {buttonTwoMessage || "Close" }
                 </Button> : 
-                <Button onClick={() => window.location.href = buttonTwoRefTo} color="primary">
+                <Button onClick={() => {
+                    buttonTwoOnClick ? buttonTwoOnClick() :  defaultOnClick(buttonTwoRefTo)
+                }} color="primary">
                     {buttonTwoMessage}
                 </Button>}
             </DialogActions>

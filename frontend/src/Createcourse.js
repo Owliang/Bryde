@@ -73,10 +73,12 @@ export default function Employees() {
                 open = {dialog.open}
                 handleClose = {dialog.handleClose || handleClose}
                 message = {dialog.message}
-                buttonOneRefTo = {dialog.mainRef}
+                buttonOneRefTo = {dialog.mainRefTo}
                 buttonOneMessage = {dialog.mainMessage}
-                buttonTwoRefTo = {dialog.optionRef}
+                buttonTOneOnClick = {dialog.mainOnClick}
+                buttonTwoRefTo = {dialog.optionRefTo}
                 buttonTwoMessage = {dialog.optionMessage}
+                buttonTwoOnClick = {dialog.optionOnClick}
                 submessage = {dialog.submessage}
             />
                 <Typography variant="h2" color='primary' gutterBottom>
