@@ -8,7 +8,7 @@ import CreateCourse from './Createcourse'
 import EditCourse from "./components/EditCourse"
 import Home from './components/Home/Home'
 import SearchCourse from './components/Search/SearchCourse'
-
+import CourseScreen from './components/Search/CourseScreen'
 
 function App() {
 
@@ -50,6 +50,7 @@ function App() {
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
                             <PrivateRoute path='/search' component ={SearchCourse}/>
+                            <PrivateRoute path='/course/:id' component ={CourseScreen}/>
                             <LoginRoute path="/" component={Landing} />
                             <Route path='/courses' component={CourseList} />
                         </Switch>

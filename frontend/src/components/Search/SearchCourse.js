@@ -9,6 +9,7 @@ import List from '@material-ui/core/List';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
+import data from "./data";
 
 
 
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
       },
     paper: {
         padding: theme.spacing(2),
-        margin: 'auto',
+        margin: '1rem',
         background : '#4f4f4f',
         
         
@@ -100,6 +101,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SearchCourse() {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [result,setResult] = React.useState(false);
 
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -109,7 +111,13 @@ export default function SearchCourse() {
       setAnchorEl(null);
     };
 
+      
+    const handleResult = () => {
+        result === true ? setResult(false):setResult(true);
+      };
+
     const classes = useStyles();
+
 
     return (
       <Container fixed>
@@ -140,9 +148,9 @@ export default function SearchCourse() {
                     <MenuItem value="" >
                         <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    <MenuItem value={10}>Math</MenuItem>
+                    <MenuItem value={20}>Biology</MenuItem>
+                    <MenuItem value={30}>Physic</MenuItem>
                 </Select>
                 </Grid>
                 <Grid item xs={3}>
@@ -162,12 +170,22 @@ export default function SearchCourse() {
                     placeholder="Max"
                 />
                 </Grid>
-                <Button variant="outlined" color="primary" fullWidth className={classes.Button} > Search </Button>
+                <Button variant="outlined" color="primary" fullWidth className={classes.Button} onClick={handleResult}  > Search </Button>
             </Grid>
         </Paper>
+        {result === true ? 
+            <Typography variant="h4" className={classes.title} >Results </Typography>
+        
+            : <Typography variant="h4" className={classes.title} > No Result </Typography>}
+        {result === true &&
+        data.courses.map((cow) => (
+                <Paper className = {classes.paper}>
+                <img src= {cow.img} className={classes.courseImage}/>
+                <Typography align='center' variant="subtitle1" className={classes.typography}> {cow.name} </Typography>
+                <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} href={'/course/'+cow.id} > see detail </Button>
+                </Paper>
 
-
-        <Typography variant="h4" className={classes.title} >Results </Typography>
+            ))}
 
       </Container>
     )

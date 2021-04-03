@@ -108,7 +108,7 @@ export default function Home() {
                         <Paper className={classes.courseofweek}>
                         <img src= {cow.img} className={classes.courseImage}/>
                         <Typography align='center' variant="subtitle1" className={classes.typography}> {cow.cname} </Typography>
-                        <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > see detail </Button>
+                        <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} href={'/course/'+cow.id} > see detail </Button>
                         </Paper>
                         </Grid>
 
