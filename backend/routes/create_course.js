@@ -22,16 +22,27 @@ var upload = multer({
 })
 /* GET home page. */
 
-router.post('/test', function(req, res, next) {
-    res.json('responce');
-});
-
 router.get('/', function(req, res, next) {
     res.render('upload');
     //res.json({result:'Response from create course page'})
 });
 course_upload = upload.fields([{name:'attach_photo',maxcount:1},{name:'attach_video',maxcount:15}]);
 router.post('/',course_upload,function(req, res, next) {
+    /*MongoClient.connect(url, function(err, db) {
+        if (err) {
+          res.json({result:false,error:err})
+        }
+        else{
+            var dbo = db.db("BrydeTech");
+            buffer = {name:req.body.name,photo_buffer:fs.readFileSync('uploads/'+req.files['attach_photo'][0].originalname)}
+            dbo.collection("promotions").insertOne(buffer,function(err,res){
+                if (err) throw err;
+                db.close();
+            });
+            //console.log(fs.readFileSync('uploads/'+req.file.originalname))
+            res.json({result:true,error:""})
+        }
+    });*/
         MongoClient.connect(url, function(err, db) {
             if (err) {
               res.json({result:false,error:err})
@@ -44,7 +55,7 @@ router.post('/',course_upload,function(req, res, next) {
                 }
                 var myobj = {name:req.body.name,
                     tutor:req.body.tutor,
-                    price:req.body.price,
+                    price:parseInt(req.body.price),
                     subject:req.body.subject,
                     description:req.body.description,
                     link:req.body.link,

@@ -37,10 +37,10 @@ router.post('/',course_upload,function(req, res, next) {
                 for(i=0;i<(req.files['attach_video']).length;i++){
                     video.push(fs.readFileSync('uploads/'+req.files['attach_video'][i].originalname));
                 }
-                var idd = new mongo.ObjectID("605083491074484c8854f506");
+                var idd = new mongo.ObjectID(req.body.id);
                 var myquery = {_id:idd};
                 var newvalues = {$set:{name:req.body.name,
-                  price:req.body.price,
+                  price:parseInt(req.body.price),
                   subject:req.body.subject,
                   description:req.body.description,
                   link:req.body.link,
