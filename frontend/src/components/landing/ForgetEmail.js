@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Forget(props) {
+export default function ForgetEmail(props) {
 
     const classes = useStyles()
     const [email, setEmail] = useState('')
@@ -27,13 +27,14 @@ export default function Forget(props) {
     return (
         <Box display="flex" flexDirection="column">
             <Typography variant="h4" className={classes.typography}>
-                Forgot password?
+                Verify Information
             </Typography>
-            <Typography variant="h6" className={classes.typography}>
-                Enter an e-mail, we will sent you reset password if email exist.
+            <Typography variant="h6" className={classes.typography} style={{ marginBottom: 32 }}>
+                Enter your registered e-mail address
             </Typography>
             <TextFieldSmall
                 style={{ marginBottom: 16 }}
+                display='E-mail address'
                 autoFocus
                 value={email}
                 onChange={handleChangeEmail}
@@ -41,7 +42,7 @@ export default function Forget(props) {
             <Button
                 variant="outlined"
                 color="primary"
-                onClick={() => {props.setState(0)}}
+                onClick={() => {props.setState(4)}}
             >
                 Continue
             </Button>

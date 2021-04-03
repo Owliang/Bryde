@@ -1,11 +1,17 @@
 import React, { useState } from "react"
-import { makeStyles, Box, Button } from '@material-ui/core'
+import { makeStyles, Box, Button, Typography } from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
 import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     textFieldSmall: {
         marginBottom: 8,
+    },
+    typography: {
+        color: '#FFFFFF',
+    },
+    roleButton: {
+        width: '47.5%',
     },
 }));
 
@@ -27,6 +33,13 @@ export default function Register(props) {
         setRegisterData({
             ...registerData,
             [key]: event.target.value,
+        })
+    }
+
+    const handleChangeRole = (role) => {
+        setRegisterData({
+            ...registerData,
+            'role': role,
         })
     }
 
@@ -76,10 +89,34 @@ export default function Register(props) {
             <TextFieldSmall
                 display='Promptpay Number'
                 type='tel'
-                style={{marginBottom: 24}}
                 value={registerData['promptpay']}
                 onChange={handleChangeRegister('promptpay')}
             />
+            <Typography variant="h6" className={classes.typography}>
+                Register as
+            </Typography>
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                mb={4}
+            >
+                <Button
+                    variant={registerData.role == "student" ? "contained" : "outlined"}
+                    color="primary"
+                    onClick={() => {handleChangeRole('student')}}
+                    className={classes.roleButton}
+                >
+                    Student
+                </Button>
+                <Button
+                    variant={registerData.role == "teacher" ? "contained" : "outlined"}
+                    color="primary"
+                    onClick={() => {handleChangeRole('teacher')}}
+                    className={classes.roleButton}
+                >
+                    Teacher
+                </Button>
+            </Box>
             <Button
                 variant="outlined"
                 color="primary"

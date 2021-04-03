@@ -10,34 +10,46 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Verify(props) {
-    
-    const classes = useStyles()
-    const [code, setCode] = useState('')
+export default function ForgetName(props) {
 
-    const handleChangeCode = (event) => {
-        setCode(event.target.value)
+    const classes = useStyles()
+    const [name, setName] = useState({
+        'Firstname': '',
+        'Lastname': '',
+    })
+
+    const handleChangeName = (key) => (event) => {
+        setName({
+            ...name,
+            [key]: event.target.value,
+        })
     }
 
-    const handleVerify = () => {
+    const handleForget = () => {
         // axios here
-        console.log('VERIFY!')
+        console.log('FORGET!')
     }
 
     return (
         <Box display="flex" flexDirection="column">
             <Typography variant="h4" className={classes.typography}>
-                Verify e-mail address
+                Verify Information
             </Typography>
             <Typography variant="h6" className={classes.typography} style={{ marginBottom: 32 }}>
-                A verification code has been sent to your registered e-mail address. Please enter in the box below.
+                Enter your First name and Last name to continue. New password will be sent to your registered e-mail.
             </Typography>
             <TextFieldSmall
-                style={{ marginBottom: 16 }}
-                display='Verification code'
-                autoFocus
-                value={code}
-                onChange={handleChangeCode}
+                display='Firstname'
+                type='password'
+                value={name['Firstname']}
+                onChange={handleChangeName('Firstname')}
+            />
+            <TextFieldSmall
+                display='Lastname'
+                type='password'
+                value={name['Lastname']}
+                onChange={handleChangeName('Lastname')}
+                style={{ marginBottom: 32 }}
             />
             <Button
                 variant="outlined"

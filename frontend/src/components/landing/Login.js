@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { Box, Button, Link } from '@material-ui/core'
-import TextFieldSmall from '../TextFieldSmall'
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
+import { Box, Button, Link } from '@material-ui/core'
+import TextFieldSmall from '../TextFieldSmall'
 
 export default function Login(props) {
 
@@ -17,7 +17,6 @@ export default function Login(props) {
             ...loginData,
             [key]: event.target.value,
         })
-        
     }
 
     const handleLogin = async () => {
@@ -64,7 +63,7 @@ export default function Login(props) {
                 onChange={handleChangeLogin('password')}
             />
             <Link
-                style={{marginBottom: 16}}
+                style={{marginBottom: 32}}
                 align="right"
                 component="button"
                 variant="body2"
@@ -81,7 +80,7 @@ export default function Login(props) {
                 Login
             </Button>
             <Button
-                variant="outlined"
+                variant="contained"
                 color="primary"
                 onClick={() => {props.setState(1)}}
             >
