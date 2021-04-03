@@ -7,7 +7,7 @@ const FormComponents = {
     PreviewAvatar,
     SimpleButton,
     TextInput,
-    Select
+    Select,
 }
 
 export default FormComponents;

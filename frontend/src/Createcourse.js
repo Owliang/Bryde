@@ -2,6 +2,7 @@ import React, { useEffect, useState} from 'react'
 import { Paper, Typography, Grid, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CourseForm from './components/Course/CourseForm';
+import MyDialog from './components/MyDialog';
 
 const useStyles = makeStyles((theme) => ({
     pageContent: {
@@ -21,26 +22,42 @@ export default function Employees() {
 
     const classes = useStyles();
     const [tutor,setTutor] = useState();
+    const [dialog, setDialog] = useState("");
     
-    useEffect(() => {
+    
+    useEffect(async() => {
         try {
           var username = localStorage.getItem('username')
           var role = localStorage.getItem('role')
           console.log(JSON.stringify({name:username, role:role}))
           if(role != 'Tutor'){
-            window.alert('!!!! HOW DID YOU GET IN HERE KIDS !!!!')
+            setDialog({
+                title: "How Student get into this page." ,
+                open : true,
+                message : "!!!! HOW DID YOU GET IN HERE KIDS !!!!",
+                mainMessage: "Login to new account",
+                optionMessage : "Go Home Kids",
+                optionRefTo : '/'
+            })
+            await new Promise(resolve => setTimeout(resolve, 20000));
             window.location.href = "/";
           }
           setTutor(username)
         }catch{
-          /*setAlert({
-            ...alert,
+          setDialog({
+            title: "We are currently don't know you" ,
             message: "Please Login First",
             open: true,
-          })*/
+            mainMessage: "Login to new account",
+            optionMessage : "Go Home",
+            optionRefTo : '/',
+          })
+          await new Promise(resolve => setTimeout(resolve, 20000));
           window.location.href = "/";
         }
       }, [1]);
+
+    const handleClose = () => { setDialog({open: false })};
 
     return (
         <Grid
@@ -51,6 +68,19 @@ export default function Employees() {
         >
           
             <Grid item xs={12}>
+            <MyDialog
+                title = {dialog.title}
+                open = {dialog.open}
+                handleClose = {dialog.handleClose || handleClose}
+                message = {dialog.message}
+                buttonOneRefTo = {dialog.mainRefTo}
+                buttonOneMessage = {dialog.mainMessage}
+                buttonTOneOnClick = {dialog.mainOnClick}
+                buttonTwoRefTo = {dialog.optionRefTo}
+                buttonTwoMessage = {dialog.optionMessage}
+                buttonTwoOnClick = {dialog.optionOnClick}
+                submessage = {dialog.submessage}
+            />
                 <Typography variant="h2" color='primary' gutterBottom>
                 <Box fontWeight="fontWeightBold" m={1}>
                     Create Course
@@ -59,7 +89,7 @@ export default function Employees() {
             </Grid>
             <Grid item xs={10}>
                 <Paper className = {classes.paper} variant="outlined" component='div' elevation={3}>
-                    <CourseForm className={classes.root} tutor={tutor} noValidate />
+                    <CourseForm className={classes.root} tutor={tutor} setDialog={setDialog} noValidate />
                 </Paper>
             </Grid>
         </Grid>
