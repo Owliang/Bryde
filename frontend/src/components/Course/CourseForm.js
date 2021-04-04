@@ -16,6 +16,15 @@ import axios from "axios";
 
 const myCourseURL = "/myCourse";
 
+const initialCourseData = {
+  tutor: "",
+  name: "",
+  subject: "",
+  description: "",
+  price: "",
+  link: "",
+};
+
 const useStyles = makeStyles((theme) => ({
   textRoot: {
     //'& .MuiTextField-root': {
@@ -30,15 +39,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const initialCourseData = {
-  tutor: "",
-  name: "",
-  subject: "",
-  description: "",
-  price: "",
-  link: "",
-};
-
 const subject = [
   { value: "Mathematics", label: "Mathematics" },
   { value: "Science", label: "Science" },
@@ -49,10 +49,11 @@ const subject = [
 ];
 
 const CourseForm = (props) => {
-  const { tutor: curTutor, setDialog: setAlert } = props;
+  const { tutor: curTutor, setDialog: setAlert , mode, propsCourseData} = props;
   const [photo, selectPhoto] = useFileUpload();
   const classes = useStyles();
   console.log(`cur tutorfrom course Form ${curTutor}`);
+  console.log(`initialCourseData from Form`, propsCourseData)
 
   useEffect(() => {
     photo ? validate({ photo: photo }) : validate({ foo: "" });
@@ -109,11 +110,11 @@ const CourseForm = (props) => {
     setErrors,
     handleInputChange,
     resetForm,
-  } = useForm(initialCourseData, true, validate);
+  } = useForm(propsCourseData || initialCourseData, true, validate);
 
   useEffect(() => {
     setCourseData({ ...courseData, tutor: curTutor });
-  }, [curTutor]);
+  }, [1]);
 
   /*useEffect(() => {
     console.log('Updated errors', JSON.stringify(errors))
@@ -136,40 +137,33 @@ const CourseForm = (props) => {
         formData.append(key, courseData[key]);
       }
       let attatch_videos = [];
-      /*var nVideo = videos?.length;
-      for(var i=0; i<nVideo ;i++){
-        formData.append('attatch_video_'+i, videos[i].file);
-      }*/
       formData.append("attatch_photo", photo.file);
-      //formData.append('total_video', nVideo);
-      //window.alert(JSON.stringify({context:'Creating Course',data:{...courseData, attatch_photo : files.file }}, null, 2));
       console.log(attatch_videos);
       console.log([...formData]);
       axios
-        .post("http://localhost:4000/create_course", formData, {
-          crossdomain: true,
-        })
+        .post("http://localhost:4000/create_course", formData, {crossdomain: true,})
         .then((response) => {
           console.log("response: ", response);
           var isSuccess = response.data.result;
           if (isSuccess) {
             var cid = response.data.id;
             setAlert({
-              title: "Create Course Success!",
+              title: mode === "create" ? "Create Course Success!" : "Edit Course Success!",
               open: true,
-              message:
-                "Create Successfully. Do you want to upload course's video now or later",
-              optionMessage: "Add Now",
+              message: mode === "create" ?
+                "Create Successfully. Do you want to upload course's video now or later" :
+                "Create Successfully. Do you want to edit course's video",
+              optionMessage:  mode === "create" ? "Add Now" : "Edit Video",
               optionRefTo: "/course_video",
               //optionRefTo : `/course_video?cid=${cid}`,
-              mainMessage: "Add Later",
+              mainMessage:  mode === "create" ? "Add Later" : "Back",
               mainRefTo: myCourseURL,
             });
           } else {
             setAlert({
-              title: "Create Course Fail!",
+              title: mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
               open: true,
-              message: `Create Course Failed`,
+              message: mode === "create" ? "Create Course Failed" : "Edit Course Failed",
               submessage: response.data.error,
               optionMessage: "Try Again",
             });
@@ -177,18 +171,16 @@ const CourseForm = (props) => {
         })
         .catch((err) => {
           setAlert({
-            title: "Create Course Failed",
+            title: mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
             open: true,
             message:
               "An error occured during sending results to server, Please try again later and make sure that server is on.",
             submessage: err.name + ": " + err.message,
             optionMessage: "Try Again",
           });
-          //window.alert('Error', JSON.stringify(err, null, 2));
           console.error(err);
         });
     } else {
-      console.log(`errors from submit error ${JSON.stringify(errors)}`);
       if (errors.tutor) {
         setAlert({
           title: "I don't know who R U",
@@ -202,7 +194,7 @@ const CourseForm = (props) => {
         window.location.href = "/";
       } else {
         setAlert({
-          title: "Create Course Failed",
+          title: mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
           open: true,
           message: "Some Fields Are Not Valid",
         });

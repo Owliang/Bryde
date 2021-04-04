@@ -19,13 +19,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CreateCourse() {
+export default function EditCourse(props) {
+    const search = props.location.search; // returns the URL query String
+    const params = new URLSearchParams(search);
+    const CID = params.get("cid");
     const classes = useStyles();
     const [tutor, setTutor] = useState();
     const [dialog, setDialog] = useState("");
-    const [initialCourseData, setinitialCourseData] = useState(GetCourseData({mode: "create"}));
+    const [initialCourseData, setinitialCourseData] = useState(GetCourseData({CID:CID, mode: "edit", setAlert:setDialog}));
 
     useEffect(async () => {
+        console.log(`data from main`, initialCourseData)
         try {
             var username = localStorage.getItem("username");
             var role = localStorage.getItem("role");
@@ -84,8 +88,8 @@ export default function CreateCourse() {
                 />
                 <Typography variant="h2" color="primary" gutterBottom>
                     <Box fontWeight="fontWeightBold" m={1}>
-                        Create Course
-          </Box>
+                        Edit Course
+                    </Box>
                 </Typography>
             </Grid>
             <Grid item xs={10}>
@@ -97,9 +101,9 @@ export default function CreateCourse() {
                 >
                     <CourseForm
                         className={classes.root}
-                        mode="create"
                         tutor={tutor}
                         setDialog={setDialog}
+                        mode="edit"
                         propsCourseData={initialCourseData}
                         noValidate
                     />
