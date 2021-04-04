@@ -5,6 +5,7 @@ import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
 import CreateCourse from './Createcourse'
+import CourseVideo from './CourseVideo'
 import EditCourse from "./components/EditCourse"
 import Home from './components/Home/Home'
 
@@ -43,6 +44,7 @@ function App() {
                         <Switch>
                             <PrivateRoute path='/create_courses' component={CreateCourse} />
                             <PrivateRoute path='/editcourses' component={EditCourse} />
+                            <PrivateRoute path='/course_video' component={CourseVideo} />
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
                             <LoginRoute path="/" component={Landing} />

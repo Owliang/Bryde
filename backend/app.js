@@ -25,6 +25,7 @@ var create_courseRouter = require('./routes/create_course');
 var edit_courseRouter = require('./routes/edit_course');
 var student_courseRouter = require('./routes/student_course');
 var tutor_courseRouter = require('./routes/tutor_course');
+var courseRouter = require('./routes/course');
 
 var app = express();
 
@@ -65,6 +66,8 @@ app.use('/create_course',create_courseRouter);
 app.use('/edit_course',edit_courseRouter);
 app.use('/student_course',student_courseRouter);
 app.use('/tutor_course',tutor_courseRouter);
+app.use('/course',courseRouter);
+
 
 /*var corsOptions = {
   origin: "http://localhost:4000"
