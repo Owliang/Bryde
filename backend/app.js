@@ -8,12 +8,12 @@ var mongoose = require('mongoose')
 var cors = require('cors')
 
 //
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var productRouter = require('./routes/products');
-var blogRouter = require('./routes/blog');
-var homeRouter = require('./routes/home');
+//var indexRouter = require('./routes/index');
+
 //
+var homeRouter = require('./routes/home');
+var reset_passwordRouter = require('./routes/reset_password');
+var forget_passwordRouter = require('./routes/forget_password');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var verificationRouter = require('./routes/verification');
@@ -21,22 +21,20 @@ var create_questionRouter = require('./routes/create_question');
 var questionRouter = require('./routes/question');
 var question_moreRouter = require('./routes/question_more');
 var following_questionRouter = require('./routes/following_question');
+var courseRouter = require('./routes/course');
 var create_courseRouter = require('./routes/create_course');
+var add_videoRouter = require('./routes/add_video');
 var edit_courseRouter = require('./routes/edit_course');
 var student_courseRouter = require('./routes/student_course');
 var tutor_courseRouter = require('./routes/tutor_course');
-var courseRouter = require('./routes/course');
+var search_courseRouter = require('./routes/search_course');
+var paymentRouter = require('./routes/payment');
 
 var app = express();
-
 app.use(cors());
-
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
-  res.header('Access-Control-Allow-Methods','POST, GET, PUT, PATCH, DELETE, OPTIONS')
-  res.header('Access-Control-Allow-Headers','Content-Type, Option, Authorization')
-  next()
-})
+var fs = require('fs');
+var path = require('path');
+require('dotenv/config');
 
 
 // view engine setup
@@ -49,29 +47,29 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/products',productRouter);
-app.use('/home', homeRouter);
-app.use('/blog', blogRouter);
+//app.use('/', indexRouter);
 //
+app.use('/home', homeRouter);
 app.use('/register', registerRouter);
+app.use('/forget_password', forget_passwordRouter);
+app.use('/reset_password', reset_passwordRouter);
 app.use('/login', loginRouter);
 app.use('/verification', verificationRouter);
 app.use('/create_question',create_questionRouter);
 app.use('/question',questionRouter);
 app.use('/question_more',question_moreRouter);
 app.use('/following_question',following_questionRouter);
+app.use('/course',courseRouter);
 app.use('/create_course',create_courseRouter);
+app.use('/add_video',add_videoRouter);
 app.use('/edit_course',edit_courseRouter);
 app.use('/student_course',student_courseRouter);
 app.use('/tutor_course',tutor_courseRouter);
-app.use('/course',courseRouter);
+app.use('/search_course',search_courseRouter);
+app.use('/payment', paymentRouter);
 
-
-/*var corsOptions = {
-  origin: "http://localhost:4000"
-};*/
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

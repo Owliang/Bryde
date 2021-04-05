@@ -25,10 +25,6 @@ var upload = multer({
 })
 /* GET home page. */
 
-router.post('/test', function(req, res, next) {
-    res.json('responce');
-});
-
 router.get('/', function(req, res, next) {
     res.render('upload');
     //res.json({result:'Response from create course page'})
@@ -65,11 +61,16 @@ router.post('/',function(req, res, next) {
                         rating:7,
                         enrolled_date:'-',
                         student:[]};
-                    dbo.collection("courses").insertOne(myobj,function(err,response){
-                    //if (err) {console.log(err); throw err;}
+                    dbo.collection("courses").insertOne(myobj,function(err,result){
+                        if (err) {
+                            res.json({result:false , error:err})
+                        }
+                        else{
+                            res.json({result:true,error:"",id:result["ops"][0]["_id"]})
+                        }
                         db.close();
                     });
-                    res.json({result:true,error:""})
+                    
                 }
             });
         });

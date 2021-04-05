@@ -6,8 +6,6 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
 var Binary = require('mongodb').Binary;
 var fs = require('fs');
-var data = fs.readFileSync('aaa.txt');
-console.log(data);
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
@@ -18,7 +16,9 @@ router.get('/', function(req, res, next) {
         else{
             var dbo = db.db("BrydeTech");
             dbo.collection("Q&A").find({follower:req.query.username}, { projection: { _id: 0,comment:0,follower:0} }).toArray(function(err, result) {
-                if (err) throw err
+                if (err){
+                    res.json({result:false , error:err})
+                }
                 res.json({result:result});
                 db.close();
             })

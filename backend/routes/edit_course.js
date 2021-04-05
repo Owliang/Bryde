@@ -37,17 +37,19 @@ router.post('/',course_upload,function(req, res, next) {
                 for(i=0;i<(req.files['attach_video']).length;i++){
                     video.push(fs.readFileSync('uploads/'+req.files['attach_video'][i].originalname));
                 }
-                var idd = new mongo.ObjectID("605083491074484c8854f506");
+                var idd = new mongo.ObjectID(req.body.id);
                 var myquery = {_id:idd};
                 var newvalues = {$set:{name:req.body.name,
-                  price:req.body.price,
+                  price:parseInt(req.body.price),
                   subject:req.body.subject,
                   description:req.body.description,
                   link:req.body.link,
                 photo_buffer:fs.readFileSync('uploads/'+req.files['attach_photo'][0].originalname),
                 video_buffer:video}}
                 dbo.collection("courses").updateOne(myquery,newvalues,function(err,response){
-                    if (err) throw err;
+                    if (err) {
+                        res.json({result:false , error:err})
+                    }
                     db.close();
                 });
                 res.json({result:true,error:""})

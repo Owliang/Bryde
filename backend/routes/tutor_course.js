@@ -6,19 +6,19 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
 var Binary = require('mongodb').Binary;
 var fs = require('fs');
-var data = fs.readFileSync('aaa.txt');
-console.log(data);
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
     MongoClient.connect(url, function(err, db) {
         if (err) {
-            throw err;
+            res.json({result:false , error:err})
         }
         else{
             var dbo = db.db("BrydeTech");
             dbo.collection("courses").find({tutor:req.query.tutor}).toArray(function(err, result) {
-                if (err) throw err
+                if (err){
+                    res.json({result:false , error:err})
+                }
                 res.json({result:result});
                 db.close();
             })
