@@ -57,9 +57,10 @@ const subject = [
 ];
 
 const QuestionForm = (props) => {
-    const { username: curUser, mode, setDialog: setAlert } = props;
+    const { username, mode, setDialog: setAlert } = props;
     const [photos, selectPhotos] = useFileUpload();
     const classes = useStyles();
+    console.log(`cur User question Form ${username}`);
 
     useEffect(() => {
         photos ? validate({ photo: photos }) : validate({ foo: "" });
@@ -75,15 +76,13 @@ const QuestionForm = (props) => {
             temp.username = fieldValues.username != "" ? "" : "Please Login First";
         if ("subject" in fieldValues)
             temp.subject = fieldValues.subject != "" ? "" : "This field is required.";
-        if ("photo" in fieldValues)
-            temp.photo = fieldValues.photo ? "" : "Course's Image is required.";
         setErrors((errors) => ({
             ...temp,
         }));
         console.log("fieldValues", fieldValues);
-        console.log({ ...questionData, photo: photos });
+        //console.log({ ...questionData, photo: photos });
         console.log(`errors from validate${JSON.stringify(errors)}`);
-        console.log(`temp from validate${JSON.stringify(temp)}`);
+        //console.log(`temp from validate${JSON.stringify(temp)}`);
 
         if (fieldValues == { ...questionData, photo: photos })
             console.log(
@@ -103,14 +102,16 @@ const QuestionForm = (props) => {
     } = useForm(initialQuestionData, true, validate);
 
     useEffect(() => {
-        setQuestionData({ ...questionData, username: curUser });
-    }, [1]);
+        console.log(`cur User question Form useEffect ${username}`);
+        setQuestionData({ ...questionData, username: username });
+        console.log(`Data's user from useEffect ${JSON.stringify(questionData.username)}`);
+    }, [username]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Sumbit Hit");
-        console.log(`cur tutor from course Form Submit ${curUser}`);
-        console.log(`Data's tutor from submit ${JSON.stringify(questionData.user)}`);
+        console.log(`cur user from course question Submit ${username}`);
+        console.log(`Data's user from submit ${JSON.stringify(questionData.username)}`);
         console.log(`Data from submit ${JSON.stringify(questionData)}`);
 
         if (validate()) {

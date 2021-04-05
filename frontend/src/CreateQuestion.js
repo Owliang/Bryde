@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 const CreateQuestion = () => {
     const classes = useStyles();
     const [dialog, setDialog] = useState("");
-    const [user, setUser] = useState("")
+    const [user, setUser] = useState()
 
     useEffect(async () => {
         try {

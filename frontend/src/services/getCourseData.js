@@ -24,7 +24,10 @@ const GetCourseData = ((props) => {
                 var isSuccess = response.data.result;
                 if (isSuccess) {
                     console.log("Found");
-                    return(response.data.data)
+                    return({
+                        ...response.data.data,
+                        attatch_photo : 'data:image/jpg;base64,'+ response.data.data.photo_buffer 
+                    })
                 } else {
                     console.log("Not Found");
                     return(initialCourseData)
