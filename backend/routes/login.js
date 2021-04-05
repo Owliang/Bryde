@@ -42,9 +42,13 @@ router.post('/',[check("username","Please enter username").not().isEmpty(),
                         } else {
                             var today = new Date();
                             var time = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDay()+' '+today.getHours()+':'+today.getMinutes()+':'+today.getSeconds();
-                            console.log(time)
-                            console.log(user_name)
-                            res.json({result:true,error:""})
+                            myobj = {"username":user_name,"datetime":time}
+                            dbo.collection("logs").insertOne(myobj,function(err,response){
+                                if (err) {
+                                    res.json({result:false,error:err})
+                                }
+                                res.json({result:true,error:""})
+                            });
                         }
                     })
                 });
