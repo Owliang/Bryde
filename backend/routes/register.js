@@ -3,23 +3,12 @@ var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
-var fs = require('fs');
-var multer  = require('multer')
-var upload = multer({ 
-    storage:multer.diskStorage({
-        destination: function (req, file, cb) {
-            // ใช้งาน path module กำหนดโฟลเดอร์ที่จะบันทึกไฟล์
-            cb(null, 'uploads/')
-        },
-        filename: function (req, file, cb) {
-            // เปลี่ยนชื่อไฟล์ ในที่นี้ใช้เวลา timestamp ต่อด้วยชือ่ไฟล์เดิม
-            // เช่นไฟล์เดิมเป็น bird.png ก็จะได้เป็น  1558631524415-bird.png
-            cb(null, file.originalname)
-        }
-    })
-})
+var passwordHash = require('password-hash');
+const bcrypt = require('bcryptjs');
+const saltRounds = 10;
 const { body, validationResult, check } = require('express-validator');
 const { UnavailableForLegalReasons } = require('http-errors');
+var fs = require('fs');
 //for send email
 'use strict';
 const nodemailer = require('nodemailer');
@@ -28,21 +17,15 @@ const { render } = require('ejs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    img = fs.readFileSync('uploads/IMG_0130.mov')//iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
-    //res.render('register');
-    res.render('register',{param:img});
+    //img = fs.readFileSync('uploads/IMG_0130.mov')//iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
+    res.render('regis');
+    //res.render('register',{param:img});
     //res.json({ result : 'Response from register page' })  
 });
 
-router.post('/',upload.single('file'),/*[
-        check("username","Please Input your username").not().isEmpty(),
-        check("password","Please Input your password").not().isEmpty(),
-        check("fname","Please Input your fname").not().isEmpty(),
-        check("lname","Please Input your lname").not().isEmpty(),
-        check("email","Please Input your email").not().isEmpty(),
-        check("ppnumber","Please Input your Prompt Pay Number").not().isEmpty(),
-        check("isTutor","Please Input your role").not().isEmpty()
-    ],*/ function(req, res, next) {
+router.post('/'/*,upload.single('file')*/,[check("username","Please enter username").not().isEmpty(),
+            check("password","Please enter password").not().isEmpty()
+            ], function(req, res, next) {
         const result = validationResult(req);
         var errors = result.errors;
         if (!result.isEmpty()) {
@@ -56,26 +39,40 @@ router.post('/',upload.single('file'),/*[
                 }
                 else{
                     var dbo = db.db("BrydeTech");
-                    dbo.collection("users").find({"username":req.body.username}, { projection: { _id: 0, username: 1} }).toArray(function(err, result) {
+                    dbo.collection("users").find({"username":req.body.username,"email":req.body.email}, { projection: { _id: 0, username: 1} }).toArray(function(err, result) {
                         if (err) {
                             throw err;
                         }
                         if(result.length===0){
-                            var myobj = { username:req.body.username,
-                                password:req.body.password,
-                                fname:req.body.fname,
-                                lname:req.body.lname,
-                                email:req.body.email,
-                                ppnumber:req.body.ppnumber,
-                                isTutor:req.body.isTutor,
-                                file:'uploads/'+req.file.originalname,
-                                buffer:fs.readFileSync('uploads/'+req.file.originalname)};
-                                code = Math.floor(Math.random() * Math.floor(99999)).toString();
-                                send_email(req.body.email,code);
-                                res.json({ result : true ,code:code, data:myobj, error:""})
+                            bcrypt.genSalt(saltRounds, function (err, salt) {
+                                if (err) {
+                                  throw err
+                                } else {
+                                  bcrypt.hash(req.body.password, salt, function(err, hash) {
+                                    if (err) {
+                                      throw err
+                                    } else {
+                                        var myobj = { username:req.body.username,
+                                            password:hash,
+                                            fname:req.body.fname,
+                                            lname:req.body.lname,
+                                            email:req.body.email,
+                                            ppnumber:req.body.ppnumber,
+                                            isTutor:req.body.isTutor,
+                                            /*file:'uploads/'+req.file.originalname,
+                                        buffer:fs.readFileSync('uploads/'+req.file.originalname)*/};
+                                            code = Math.floor(Math.random() * Math.floor(99999)).toString();
+                                            module.exports.code = code;
+                                            module.exports.myobj = myobj;
+                                            send_email(req.body.email,code);
+                                            res.json({ result : true ,error:""})
+                                    }
+                                  })
+                                }
+                              })
                         }
                         else{
-                            res.json({result:false, error:"This username already registered"})
+                            res.json({result:false, error:"๊U already have an account"})
                         }
                         db.close();
                     });
@@ -85,6 +82,7 @@ router.post('/',upload.single('file'),/*[
 });
 
 module.exports = router;
+
 function send_email(email,code){
     // async..await is not allowed in global scope, must use a wrapper
     async function main() {

@@ -17,11 +17,7 @@ router.get('/', function(req, res, next) {
           dbo.collection("courses").find({_id:id},{ projection: {_id:0,name:1,tutor:1,subject:1,price:1,rating:1,video_buffer:1,student:1,photo_buffer:1} }).toArray(function(err, result) {
             if (err) throw err;
             db.close();
-            try{
-                video_size = result[0].video_buffer.length
-            }catch{
-                video_size = "No Video"
-            }
+            video_size = result[0].video_buffer.length
             enroll = result[0].student.findIndex(student => student == req.query.student_name);
             Isenroll = (enroll == -1) ? false : true;
             console.log(video_size,Isenroll)
@@ -31,7 +27,6 @@ router.get('/', function(req, res, next) {
         }
       });
 });
-
 router.post('/',function(req, res, next) {
 
 });

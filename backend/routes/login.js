@@ -3,17 +3,17 @@ var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
+var passwordHash = require('password-hash');
 const { body, validationResult, check } = require('express-validator');
+const bcrypt = require('bcryptjs');
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  //console.log("aa");
-  res.json({ result : 'Response from login page'})  
-  //res.render('login');
+  //res.json({ result : 'Response from login page'})  
+  res.render('login');
 });
 router.post('/',[check("username","Please enter username").not().isEmpty(),
                 check("password","Please enter password").not().isEmpty()]
 ,function(req, res, next) {
-    console.log("aa");
     const result = validationResult(req);
     var errors = result.errors;
     if (!result.isEmpty()) {
@@ -21,26 +21,32 @@ router.post('/',[check("username","Please enter username").not().isEmpty(),
     }else{
         MongoClient.connect(url, function(err, db) {
             if (err) {
-                //res.send(err);
                 res.json({result:false,error:err})
             }
             else{
                 var dbo = db.db("BrydeTech");
                 var user_name = req.body.username;
                 var passwd = req.body.password;
-                dbo.collection("users").find({"username":user_name,"password":passwd}, { projection: { _id: 0, username: 1 ,password:1} }).toArray(function(err, result) {
+                dbo.collection("users").find({"username":user_name}, { projection: { _id: 0, username: 1 ,password:1} }).toArray(function(err, result) {
                     if (err) {
                         throw err;
                     }
                     if(result.length===0){
                         res.json({ result : false , error : "Invalid username or password" })
-                        //res.render('product',{title:'Log in fail'});
                     }
-                    else{
-                        res.json({ result : true , error : ""})
-                        //res.render('product',{title:'Log in success'});
-                    }
-                    db.close();
+                    bcrypt.compare(passwd,result[0].password, function(err, isMatch) {
+                        if (err) {
+                          throw err
+                        } else if (!isMatch) {
+                            res.json({ result : false , error : "Invalid username or password" })
+                        } else {
+                            var today = new Date();
+                            var time = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDay()+' '+today.getHours()+':'+today.getMinutes()+':'+today.getSeconds();
+                            console.log(time)
+                            console.log(user_name)
+                            res.json({result:true,error:""})
+                        }
+                    })
                 });
             }
         });
