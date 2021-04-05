@@ -19,13 +19,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CreateCourse() {
+export default function CreateCourse(props) {
     const classes = useStyles();
+    const search = props.location.search; // returns the URL query String
+    const params = new URLSearchParams(search);
+    const CID = params.get("cid");
+    const mode = params.get("mode");
     const [tutor, setTutor] = useState();
     const [dialog, setDialog] = useState("");
-    const [initialCourseData, setinitialCourseData] = useState(GetCourseData({mode: "create"}));
+    const getInitialCourseData = () => GetCourseData({ CID: CID, mode: (mode || "create"), setAlert: setDialog});
+    const [initialCourseData, setinitialCourseData] = useState(getInitialCourseData);
 
     useEffect(async () => {
+        console.log(`data from main`, initialCourseData)
         try {
             var username = localStorage.getItem("username");
             var role = localStorage.getItem("role");
@@ -84,8 +90,8 @@ export default function CreateCourse() {
                 />
                 <Typography variant="h2" color="primary" gutterBottom>
                     <Box fontWeight="fontWeightBold" m={1}>
-                        Create Course
-          </Box>
+                        {mode === "create" ? "Create Course" : "Edit Course"}
+                    </Box>
                 </Typography>
             </Grid>
             <Grid item xs={10}>
@@ -97,10 +103,10 @@ export default function CreateCourse() {
                 >
                     <CourseForm
                         className={classes.root}
-                        mode="create"
+                        mode={mode || "create"}
                         tutor={tutor}
                         setDialog={setDialog}
-                        propsCourseData={initialCourseData}
+                        initialCourseData={initialCourseData}
                         noValidate
                     />
                 </Paper>

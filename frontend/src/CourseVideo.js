@@ -3,6 +3,7 @@ import { Paper, Typography, Grid, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import VideoForm from "./components/Course/VideoForm";
 import MyDialog from "./components/MyDialog";
+import GetCourseData from "./services/getCourseData";
 
 const myCourseURL = "/myCourse";
 
@@ -22,12 +23,15 @@ const useStyles = makeStyles((theme) => ({
 
 const CourseVideo = (props) => {
   const classes = useStyles();
-  const {mode} = props;
   const search = props.location.search; // returns the URL query String
   const params = new URLSearchParams(search);
   const CID = params.get("cid");
+  const mode = params.get("mode");
   const [tutor, setTutor] = useState();
   const [dialog, setDialog] = useState("");
+  const getInitialCourseData = () => GetCourseData({ CID: CID, mode: (mode || "edit"), setAlert: setDialog });
+  const [initialCourseData, setinitialCourseData] = useState(getInitialCourseData);
+
 
   useEffect(async () => {
     try {
@@ -112,9 +116,11 @@ const CourseVideo = (props) => {
           elevation={3}
         >
           <VideoForm
+            initialCourseData={initialCourseData}
             className={classes.root}
             tutor={tutor}
             setDialog={setDialog}
+            mode={mode}
             CID={CID}
           />
         </Paper>

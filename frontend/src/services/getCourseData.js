@@ -14,8 +14,7 @@ const initialCourseData = {
 
 const GetCourseData = ((props) => {
     console.log("Calling GetCoureData")
-    const { CID, mode, setAlert } = props;
-    const [data, setdata] = useState(initialCourseData)
+    const { CID, mode, setAlert, setData } = props;
 
     if (mode === "edit") {
         axios
@@ -25,10 +24,10 @@ const GetCourseData = ((props) => {
                 var isSuccess = response.data.result;
                 if (isSuccess) {
                     console.log("Found");
-                    setdata(response.data.data)
+                    return(response.data.data)
                 } else {
                     console.log("Not Found");
-                    setdata(initialCourseData)
+                    return(initialCourseData)
                 }
             })
             .catch((err) => {
@@ -42,13 +41,13 @@ const GetCourseData = ((props) => {
                     //optionRefTo: myCourseURL
                 });*/
                 console.error("catch error from getCourseData");
-                setdata(initialCourseData)
+                return(initialCourseData)
             });
+
+            return({...initialCourseData, name: "test Edit"});
+    }else{
+        return initialCourseData
     }
-    
-    return data;
-
-
 });
 
 export default GetCourseData

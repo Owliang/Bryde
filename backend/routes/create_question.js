@@ -29,8 +29,7 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res, next) {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
-        console.log(files)
-        console.log(files['attatch_photo'])
+        console.log(fields)
         const result = validationResult(fields);
         var errors = result.errors;
         if (!result.isEmpty()) {
@@ -46,7 +45,7 @@ router.post('/', function (req, res, next) {
                     var myobj = {
                         topic: fields.topic,
                         subject: fields.subject,
-                        description: fields.description,
+                        description: fields.content,
                         attach_photo: files['attatch_photo'].name,
                         buffer: fs.readFileSync(files['attatch_photo'].path),
                         comment: [], follower: []

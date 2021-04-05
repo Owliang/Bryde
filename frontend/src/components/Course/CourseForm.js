@@ -49,7 +49,7 @@ const subject = [
 ];
 
 const CourseForm = (props) => {
-  const { tutor: curTutor, setDialog: setAlert , mode, propsCourseData} = props;
+  const { tutor: curTutor, setDialog: setAlert , mode, initialCourseData:propsCourseData} = props;
   const [photo, selectPhoto] = useFileUpload();
   const classes = useStyles();
   console.log(`cur tutorfrom course Form ${curTutor}`);
@@ -155,7 +155,7 @@ const CourseForm = (props) => {
                 "Create Successfully. Do you want to edit course's video",
               optionMessage:  mode === "create" ? "Add Now" : "Edit Video",
               optionRefTo: "/course_video",
-              //optionRefTo : `/course_video?cid=${cid}`,
+              //optionRefTo : `/course_video?cid=${cid}&mode=${mode}`,
               mainMessage:  mode === "create" ? "Add Later" : "Back",
               mainRefTo: myCourseURL,
             });

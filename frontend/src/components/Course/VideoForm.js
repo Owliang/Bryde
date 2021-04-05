@@ -21,6 +21,7 @@ import {
   CircularProgress,
   IconButton
 } from "@material-ui/core";
+import RenameForm from "./RenameForm.js";
 
 const myCourseURL = "/myCourse";
 
@@ -86,43 +87,27 @@ const humanFileSize = (size) => {
 };
 
 const CourseVideo = (props) => {
-  const { tutor: curTutor, setDialog: setAlert, CID, mode } = props;
+  const { tutor: curTutor, setDialog: setAlert, CID, mode, initialCourseData } = props;
   const [videos, setVideos] = useState([]);
-  const [name, setName] = useState("");
+  const [popup, setPopup] = useState("");
   const [loading, setLoading] = useState(false);
   const [newVideos, selectNewVideos] = useFileUpload();
   const classes = useStyles(props);
 
   useEffect(() => {
-    //* dummy name
-    setName("The Course Name");
-    axios
-      .get("/course", { id: CID }, { crossdomain: true })
-      .then((response) => {
-        console.log("response: ", response);
-        var isSuccess = response.data.result;
-        if (isSuccess) {
-          setName("The Course Name");
-          console.log("Found");
-          if(mode === "edit"){
-            setVideos(response.data.video)
-          }
-        } else {
-          console.log("Not Found");
-        }
-      })
-      .catch((err) => {
-        setAlert({
-          title: "Create Course Failed",
-          open: true,
-          message:
-            "An error occured during sending results to server, Please try again later and make sure that server is on.",
-          submessage: err.name + ": " + err.message,
-          optionMessage: "Try Again Later",
-          OptionRefTo: myCourseURL
-        });
-        console.error(err);
-      });
+    if (mode === "edit") {
+      let tempVideos = []
+      let n = initialCourseData.videos.length
+      for (let i = 0; i < n; i++) {
+        tempVideos.push({
+          name: initialCourseData.videos_name[i],
+          size: initialCourseData.videos[i].size,
+          source: initialCourseData.videos[i].path,
+          file: initialCourseData.videos[i],
+        })
+      }
+      setVideos(tempVideos)
+    }
   }, [1]);
 
   useEffect(() => {
@@ -142,6 +127,10 @@ const CourseVideo = (props) => {
     console.log("submited");
   };
 
+  const handleClose = () => {
+    setPopup({ open: false });
+  };
+
   return (
     <Grid
       container
@@ -152,9 +141,27 @@ const CourseVideo = (props) => {
       <Grid item xs={12}>
         <Typography variant="h6" color="primary" gutterBottom>
           <Box fontWeight="fontWeightBold" m={1}>
-            Course name: {name}
+            Course name: {initialCourseData.name}
           </Box>
         </Typography>
+        <FormComponents.SingleFieldPopup
+          title="Change Video's Name"
+          open={popup.open}
+          handleClose={handleClose}
+        >
+          <RenameForm
+            value={popup.value}
+            setValue={(newValue) => {
+              setVideos(
+                videos.map((item, id) =>
+                  id === popup.index
+                    ? { ...item, name: newValue }
+                    : item
+                ))
+            }}
+            handleClose={handleClose}
+          />
+        </FormComponents.SingleFieldPopup>
       </Grid>
       <Grid item xs={12}>
         {videos?.length > 0 ? (
@@ -180,15 +187,14 @@ const CourseVideo = (props) => {
                     subtitle={<span>size: {humanFileSize(video.size)}</span>}
                     actionIcon={
                       <Box>
-                        <GridIcon id={video.id} aria-label={`rename id ${video.id}`}
+                        <GridIcon id={index} aria-label={`rename id ${index}`}
                           onClick={(event) => {
                             console.log('edit click at ', index)
-                            setVideos(
-                              videos.map((item, id) =>
-                                id === index
-                                  ? { ...item, name: "changed" }
-                                  : item
-                              ))
+                            setPopup({
+                              open: true,
+                              value: videos[index].name,
+                              index: index
+                              })
                           }}
                         >
                           <EditTwoToneIcon />
