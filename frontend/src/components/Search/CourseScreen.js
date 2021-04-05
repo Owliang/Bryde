@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Container, Grid, ListItem, Paper, Typography , Button , Select ,MenuItem ,FormControl,InputLabel} from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
@@ -10,7 +10,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import data from './data'
-
+import axios from 'axios'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +37,8 @@ const useStyles = makeStyles((theme) => ({
       },
     paper: {
         padding: theme.spacing(2),
-        margin: 'auto',
+
+        marginTop:'3rem',
         background : '#4f4f4f',
         
         
@@ -71,18 +72,18 @@ const useStyles = makeStyles((theme) => ({
     },
     courseImage:{
         margin: 'auto',
-        display: 'block',
-        minHeight: '150px',
-        minWidth: '260px',
-        maxWidth: '260px',
-        maxHeight: '150px',
+
+        maxWidth: '100%',
+
         
     },
     courseText:{
         align: 'center'
     },
     margin:{
-        margin:theme.spacing(1)
+        marginTop:'1rem',
+        marginBottom:'3rem',
+        marginLeft:'1rem'
     },
     Button:{
         backgroundColor :'#212121',
@@ -101,16 +102,52 @@ const useStyles = makeStyles((theme) => ({
 export default function CourseScreen(props) {
 
     const classes = useStyles();
-    const course = data.courses.find((x) => x.id === props.match.params.id);
+    const [course,setCourse] = useState([]);
+
+    useEffect(() => {
+        const fecthCourse = async () => {
+            const { data } = await axios.get('/course',{params:{
+                id : props.match.params.id,
+                student_name : 'ford'
+            }    
+            });
+            setCourse( data.data );
+            
+
+            
+        };
+        fecthCourse();
+    },[]);
     if(!course){
-        return <dic>Course Not Found</dic>
+        return (
+            <Typography variant='h2' align='center' className={classes.typography}>Class Not Found</Typography>
+        )
+
     }
     return (
       <Container fixed>
-        <img src={course.img} alt={course.name} />
-        <Typography className={classes.typography}>Course Name : { course.name }</Typography>
-        <Typography className={classes.typography}>Teach by : { course.tutor }</Typography>
-        <Typography className={classes.typography}>price : { course.price }</Typography>
+        <Paper className={classes.paper}>
+            <Grid className={classes.margin} >
+                <Typography className={classes.typography} variant='h5'>Course Name : { course.name }</Typography>
+            </Grid>
+
+            <div className='row'padding='1rem'>
+                <div className='col'>
+                    <img src={'data:image/jpg;base64,'+ course.photo_buffer } className={classes.courseImage} />
+                </div>
+                <div className='col'>
+                    <Typography className={classes.typography}>By : { course.tutor }</Typography>
+                    <Typography className={classes.typography}>Subject : { course.subject }</Typography>
+                    <Typography className={classes.typography}>Price : { course.price } Baht</Typography>
+                    <Typography className={classes.typography}>Rating : { course.rating }</Typography>
+                    <Typography className={classes.typography}>Number of Video : { course.video_size }</Typography>
+
+                </div>
+            </div>
+        </Paper>
+        
+        
+
       </Container>
     )
 }

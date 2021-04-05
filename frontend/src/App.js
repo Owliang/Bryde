@@ -14,15 +14,12 @@ function App() {
 
     const auth = localStorage.getItem('auth') == 'true' ? true : false
 
-    // auto login by ford
-    const auth2 = true;
-
     // use this instead of Route
     // if not login (auth is false), PrivateRoute will redirect to Landing page
     const PrivateRoute = ({ component: Component, ...rest }) => (
         <Route
             render={(props) => (
-                auth2 ? <Component {...props} /> : <Redirect to='/' />
+                auth ? <Component {...props} /> : <Redirect to='/' />
             )}
             {...rest}
         />
@@ -32,7 +29,7 @@ function App() {
     const LoginRoute = ({ component: Component, ...rest }) => (
         <Route
             render={(props) => (
-                auth2 ? <Redirect to='/home' /> : <Component {...props} />
+                auth ? <Redirect to='/home' /> : <Component {...props} />
             )}
             {...rest}
         />
