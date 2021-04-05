@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CourseVideo = (props) => {
   const classes = useStyles();
+  const {mode} = props;
   const search = props.location.search; // returns the URL query String
   const params = new URLSearchParams(search);
   const CID = params.get("cid");

@@ -5,6 +5,7 @@ import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
 import CreateCourse from './CreateCourse'
+import CreateQuestion from './CreateQuestion'
 import CourseVideo from './CourseVideo'
 import EditCourse from "./EditCourse"
 import Home from './components/Home/Home'
@@ -43,6 +44,7 @@ function App() {
                     <Router>
                         <Switch>
                             <PrivateRoute path='/create_course' component={CreateCourse} />
+                            <PrivateRoute path='/create_question' component={CreateQuestion} />
                             <PrivateRoute path='/edit_course' component={EditCourse} />
                             <PrivateRoute path='/course_video' component={CourseVideo} />
                             <PrivateRoute path='/courses' component={CourseList} />

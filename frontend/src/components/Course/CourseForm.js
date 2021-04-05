@@ -331,7 +331,7 @@ const CourseForm = (props) => {
       >
         <Grid item xs={4}>
           <FormComponents.SimpleButton
-            text="Submit"
+            text= {mode === "create" ? "Create" : "Save Changes"}
             onClick={handleSubmit}
           />
         </Grid>

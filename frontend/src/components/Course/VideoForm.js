@@ -86,7 +86,7 @@ const humanFileSize = (size) => {
 };
 
 const CourseVideo = (props) => {
-  const { tutor: curTutor, setDialog: setAlert, CID } = props;
+  const { tutor: curTutor, setDialog: setAlert, CID, mode } = props;
   const [videos, setVideos] = useState([]);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -104,6 +104,9 @@ const CourseVideo = (props) => {
         if (isSuccess) {
           setName("The Course Name");
           console.log("Found");
+          if(mode === "edit"){
+            setVideos(response.data.video)
+          }
         } else {
           console.log("Not Found");
         }
@@ -242,7 +245,7 @@ const CourseVideo = (props) => {
               console.log("select Done.",);
             }}
           >
-            <Typography component="div"> Upload Course Video </Typography>
+            <Typography component="div"> Add More Video </Typography>
             <CloudUploadOutlinedIcon className={classes.icon} />
           </Button>
           {loading && (
