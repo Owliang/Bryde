@@ -93,7 +93,7 @@ const CourseVideo = (props) => {
   const [loading, setLoading] = useState(false);
   const [newVideos, selectNewVideos] = useFileUpload();
   const classes = useStyles(props);
-
+  console.log(CID)
   useEffect(() => {
     if (mode === "edit") {
       let tempVideos = []
