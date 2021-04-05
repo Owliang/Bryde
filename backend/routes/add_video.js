@@ -31,13 +31,14 @@ router.post('/',function(req, res, next) {
                     for(i=0;i<fields['total_video'];i++){
                         video.push(fs.readFileSync(files['attatch_video_'+i].path));
                     }
-                    var id = new mongo.ObjectID(req.body.id);
+                    var id = new mongo.ObjectID(fields.id);
                     var myquery = {"_id":id}
                     var newvalues = {$set:{video_buffer:video}}
                     dbo.collection("courses").updateOne(myquery,newvalues,function(err,response){
                         if (err) {
                             res.json({result:false , error:err})
                         }
+                        console.log("yeah")
                         db.close();
                     });
                     res.json({result:true,error:""})

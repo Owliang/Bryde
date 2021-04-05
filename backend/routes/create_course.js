@@ -46,18 +46,14 @@ router.post('/',function(req, res, next) {
                 }
                 else{
                     var dbo = db.db("BrydeTech");
-                    var video = [];
-                    for(i=0;i<fields['total_video'];i++){
-                        video.push(fs.readFileSync(files['attatch_video_'+i].path));
-                    }
                     var myobj = {name:fields.name,
                         tutor:fields.tutor,
-                        price:fields.price,
+                        price:parseInt(fields.price),
                         subject:fields.subject,
                         description:fields.description,
                         link:fields.link,
                     photo_buffer:fs.readFileSync(files.attatch_photo.path),
-                    video_buffer:video,
+                    video_buffer:[],
                         rating:7,
                         enrolled_date:'-',
                         student:[]};
