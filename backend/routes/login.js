@@ -29,14 +29,14 @@ router.post('/',[check("username","Please enter username").not().isEmpty(),
                 var passwd = req.body.password;
                 dbo.collection("users").find({"username":user_name}, { projection: { _id: 0, username: 1 ,password:1} }).toArray(function(err, result) {
                     if (err) {
-                        throw err;
+                        res.json({result:false , error:err})
                     }
                     if(result.length===0){
                         res.json({ result : false , error : "Invalid username or password" })
                     }
                     bcrypt.compare(passwd,result[0].password, function(err, isMatch) {
                         if (err) {
-                          throw err
+                            res.json({result:false , error:err})
                         } else if (!isMatch) {
                             res.json({ result : false , error : "Invalid username or password" })
                         } else {

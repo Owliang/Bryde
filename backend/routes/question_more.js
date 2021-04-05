@@ -49,7 +49,7 @@ router.post('/', function(req, res, next) {
             var newvalues = { $push: {comment:req.body.comment} };
             dbo.collection("Q&A").find({"topic":req.body.topic}, { projection: { _id: 0, follower:1} }).toArray(function(err, result) {
                 if (err) {
-                    throw err;
+                    res.json({result:false , error:err})
                 }
                 res.json({ result : true , result:result,error : ""});
                 db.close();

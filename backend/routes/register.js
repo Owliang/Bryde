@@ -41,16 +41,16 @@ router.post('/'/*,upload.single('file')*/,[check("username","Please enter userna
                     var dbo = db.db("BrydeTech");
                     dbo.collection("users").find({"username":req.body.username,"email":req.body.email}, { projection: { _id: 0, username: 1} }).toArray(function(err, result) {
                         if (err) {
-                            throw err;
+                            res.json({result:false , error:err})
                         }
                         if(result.length===0){
                             bcrypt.genSalt(saltRounds, function (err, salt) {
                                 if (err) {
-                                  throw err
+                                    res.json({result:false , error:err})
                                 } else {
                                   bcrypt.hash(req.body.password, salt, function(err, hash) {
                                     if (err) {
-                                      throw err
+                                        res.json({result:false , error:err})
                                     } else {
                                         var myobj = { username:req.body.username,
                                             password:hash,

@@ -15,7 +15,9 @@ router.get('/', function(req, res, next) {
           var dbo = db.db("BrydeTech");
           var id = new mongo.ObjectID(req.query.id);
           dbo.collection("courses").find({_id:id},{ projection: {_id:0,name:1,tutor:1,subject:1,price:1,rating:1,video_buffer:1,student:1,photo_buffer:1} }).toArray(function(err, result) {
-            if (err) throw err;
+            if (err) {
+              res.json({result:false , error:err})
+            }
             db.close();
             video_size = result[0].video_buffer.length
             enroll = result[0].student.findIndex(student => student == req.query.student_name);

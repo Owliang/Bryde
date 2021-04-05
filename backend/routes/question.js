@@ -58,7 +58,7 @@ router.post('/',[check("username","Please enter username").not().isEmpty(),
                 var dbo = db.db("BrydeTech");
                 dbo.collection("Q&A").find({"follower":req.body.username,"topic":req.body.topic}, { projection: { _id: 0,topic:1} }).toArray(function(err, result) {
                     if (err) {
-                        throw err;
+                        res.json({result:false , error:err})
                     }
                     if(result.length === 0 ){
                         follow(req.body.topic,req.body.username);
@@ -88,7 +88,9 @@ function follow(topic,username){
                 var myquery = { topic: topic };
                 var newvalues = { $push: {follower:username} };
                 dbo.collection("Q&A").updateOne(myquery, newvalues, function(err, res) {
-                  if (err) throw err;
+                  if (err) {
+                    res.json({result:false , error:err})
+                  }
                   db.close();
                 });
             }
@@ -105,7 +107,9 @@ function unfollow(topic,username){
             var myquery = { topic: topic };
             var newvalues = { $pull: {follower:username} };
             dbo.collection("Q&A").updateOne(myquery, newvalues, function(err, res) {
-            if (err) throw err;
+            if (err) {
+                res.json({result:false , error:err})
+            }
             db.close();
             });
         }

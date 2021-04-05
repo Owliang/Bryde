@@ -47,7 +47,9 @@ router.post('/',course_upload,function(req, res, next) {
                 photo_buffer:fs.readFileSync('uploads/'+req.files['attach_photo'][0].originalname),
                 video_buffer:video}}
                 dbo.collection("courses").updateOne(myquery,newvalues,function(err,response){
-                    if (err) throw err;
+                    if (err) {
+                        res.json({result:false , error:err})
+                    }
                     db.close();
                 });
                 res.json({result:true,error:""})
