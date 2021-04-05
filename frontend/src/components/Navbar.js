@@ -1,11 +1,12 @@
 import React, { useState } from "react"
-import { makeStyles, AppBar, Toolbar, Typography, Button, IconButton, Box, Drawer, List, ListItem, ListItemText, Badge, Menu, MenuItem } from '@material-ui/core'
+import { makeStyles, AppBar, Toolbar, Typography, Button, IconButton, Box, Drawer, List, ListItem, ListItemText, Badge, Menu, MenuItem, Link } from '@material-ui/core'
 import { useHistory } from "react-router-dom";
 import MenuIcon from '@material-ui/icons/Menu'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import MailIcon from '@material-ui/icons/Mail'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import ButtonLink from './ButtonLink'
+import DropDownMenu from './DropDownMenu'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
     grow: {
         flexGrow: 1,
     },
+    navButton: {
+        height: '32px', 
+        marginRight: '8px',
+    },
 }));
 
 const mobile = { md: 'block', desktop: 'none' }
@@ -43,6 +48,7 @@ export default function Navbar() {
     const username = localStorage.getItem('username')
     const inbox = 7
     const notify = 4
+    const profile = 2
     const [isDrawerOpen, setDrawerOpen] = useState(false)
     const history = useHistory()
 
@@ -57,7 +63,7 @@ export default function Navbar() {
             onKeyDown={toggleDrawer(false)}
         >
             <List>
-                {['home', 'courses', 'livestream', 'qanda', 'account', 'help', 'report'].map((text) => (
+                {['home', 'courses', 'qanda'].map((text) => (
                     <ListItem button key={text}>
                         <ListItemText primary={text} />
                     </ListItem>
@@ -66,17 +72,6 @@ export default function Navbar() {
         </div>
     )
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-
-    const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
     const handleLogout = () => {
         localStorage.setItem('username', '')
         localStorage.setItem('auth', false)
@@ -84,70 +79,123 @@ export default function Navbar() {
         window.location.reload();
     }
 
+    const inboxContent = [1,2,3].map(num => (
+        <Box onClick={handleLogout}>Logout</Box>
+    ))
+
+    const notifyContent = [1,2,3].map(num => (
+        <Box onClick={handleLogout}>Logout</Box>
+    ))
+
+    const profileContent = [1,2,3].map(num => (
+        <Box onClick={handleLogout}>Logout</Box>
+    ))
+
+    const NavButton = ((props) => (
+        <ButtonLink
+            variant="contained"
+            color="secondary"
+            path={props.path}
+            className={classes.navButton}
+        >
+            {props.children}
+        </ButtonLink>
+    ))
+
+    const NavDropDown = ((props) => {
+        const {title, children, ...prop} = props
+        return (
+            <DropDownMenu
+                variant="contained"
+                color="secondary"
+                title={title}
+                className={classes.navDropDown}
+            >
+                {children}
+            </DropDownMenu>
+        )
+    })
+
     return (
         <div className={classes.root}>
             <AppBar className={classes.appBar}>
                 <Toolbar className={classes.toolBar}>
                     <Box display={mobile}>
-                        <IconButton className={classes.menuButton} onClick={toggleDrawer(true)} edge="start">
+                        <IconButton
+                            className={classes.menuButton}
+                            onClick={toggleDrawer(true)}
+                            edge="start"
+                        >
                             <MenuIcon />
                         </IconButton>
                     </Box>
-                    <Typography variant="h6" color="secondary">OffDemand</Typography>
+                    <Typography variant="h6" color="secondary">
+                        OffDemand
+                    </Typography>
+
+
                     <Box display={desktop}>
-                    <ButtonLink color="secondary" path="/home">Home</ButtonLink>
-                        <ButtonLink color="secondary" path="/courses">Course</ButtonLink>
-                        <ButtonLink color="secondary" path="/livestream">Livestream</ButtonLink>
-                        <ButtonLink color="secondary" path="/qanda">Q&A</ButtonLink>
-                        <ButtonLink color="secondary" path="/account">Account</ButtonLink>
-                        <ButtonLink color="secondary" path="/helpcenter">Help Center</ButtonLink>
-                        <ButtonLink color="secondary" path="/report">Report</ButtonLink>
+                        <NavButton path="/home">Home</NavButton>
+                        <NavDropDown title="Course">
+                            <NavButton path="/courses">Course</NavButton>
+                            <MenuItem component={Link} to="/courses">Course</MenuItem>
+                        </NavDropDown>
+                        <NavButton path="/qanda">Q&A</NavButton>
                     </Box>
+
+
                     <div className={classes.grow} />
-                    <div>
-                        <IconButton>
-                            <Badge badgeContent={inbox} color="primary">
-                                <MailIcon color="secondary"/>
-                            </Badge>
-                        </IconButton>
-                        <IconButton>
-                            <Badge badgeContent={notify} color="primary">
-                                <NotificationsIcon color="secondary"/>
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleMenu}
-                            color="secondary"
-                        >
-                            {username}
-                            <AccountCircle color="secondary"/>
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                            }}
-                            open={open}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                        </Menu>
-                    </div>
+                    <DropDownMenu
+                        title={
+                            <Badge
+                                badgeContent={inbox}
+                                color="primary"
+                                children={<MailIcon color="secondary"/>}
+                                max={99}
+                            />
+                        }
+                    >
+                        {inboxContent}
+                    </DropDownMenu>
+
+                    <DropDownMenu
+                        title={
+                            <Badge
+                                badgeContent={notify}
+                                color="primary"
+                                children={<NotificationsIcon color="secondary"/>}
+                                max={99}
+                            />
+                        }
+                    >
+                        {notifyContent}
+                    </DropDownMenu>
+
+                    <DropDownMenu
+                        title={
+                            <Badge
+                                badgeContent={profile}
+                                color="primary"
+                                children={<AccountCircle color="secondary"/>}
+                                max={99}
+                            />
+                        }
+                    >
+                        {profileContent}
+                    </DropDownMenu>
                 </Toolbar>
             </AppBar>
-            <Drawer className={classes.drawer} onClose={toggleDrawer(false)} open={isDrawerOpen} anchor="left">
+
+            {/* navbar for mobile */}
+            <Drawer
+                className={classes.drawer}
+                onClose={toggleDrawer(false)}
+                open={isDrawerOpen}
+                anchor="left"
+            >
                 {drawerItem()}
             </Drawer>
+
             <Toolbar />
         </div>
     );
