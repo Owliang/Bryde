@@ -60,6 +60,7 @@ const QuestionForm = (props) => {
     const { username, mode, setDialog: setAlert } = props;
     const [photos, selectPhotos] = useFileUpload();
     const classes = useStyles();
+    console.log(`cur User question Form ${username}`);
 
     useEffect(() => {
         photos ? validate({ photo: photos }) : validate({ foo: "" });
@@ -79,9 +80,9 @@ const QuestionForm = (props) => {
             ...temp,
         }));
         console.log("fieldValues", fieldValues);
-        console.log({ ...questionData, photo: photos });
+        //console.log({ ...questionData, photo: photos });
         console.log(`errors from validate${JSON.stringify(errors)}`);
-        console.log(`temp from validate${JSON.stringify(temp)}`);
+        //console.log(`temp from validate${JSON.stringify(temp)}`);
 
         if (fieldValues == { ...questionData, photo: photos })
             console.log(
@@ -101,14 +102,16 @@ const QuestionForm = (props) => {
     } = useForm(initialQuestionData, true, validate);
 
     useEffect(() => {
+        console.log(`cur User question Form useEffect ${username}`);
         setQuestionData({ ...questionData, username: username });
-    }, [1]);
+        console.log(`Data's user from useEffect ${JSON.stringify(questionData.username)}`);
+    }, [username]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Sumbit Hit");
-        console.log(`cur tutor from course Form Submit ${username}`);
-        console.log(`Data's tutor from submit ${JSON.stringify(questionData.user)}`);
+        console.log(`cur user from course question Submit ${username}`);
+        console.log(`Data's user from submit ${JSON.stringify(questionData.username)}`);
         console.log(`Data from submit ${JSON.stringify(questionData)}`);
 
         if (validate()) {

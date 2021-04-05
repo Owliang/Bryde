@@ -114,7 +114,7 @@ const CourseForm = (props) => {
 
   useEffect(() => {
     setCourseData({ ...courseData, tutor: curTutor });
-  }, [1]);
+  }, [curTutor]);
 
   /*useEffect(() => {
     console.log('Updated errors', JSON.stringify(errors))
