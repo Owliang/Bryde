@@ -125,6 +125,41 @@ const CourseVideo = (props) => {
     formData.append("total_video", nVideo);
     formData.append("id", CID);
     console.log("submited");
+    axios
+      .post("http://localhost:4000/add_video", formData, { crossdomain: true, })
+      .then((response) => {
+        console.log("response: ", response);
+        var isSuccess = response.data.result;
+        if (isSuccess) {
+          var cid = response.data.id;
+          setAlert({
+            title: "Add Course's Video Success!",
+            open: true,
+            message: "Add Video Successfully.",
+            optionMessage: "Back",
+            optionRefTo: myCourseURL,
+          });
+        } else {
+          setAlert({
+            title: "Add Video Fail!",
+            open: true,
+            message: "Add Video Failed !",
+            submessage: response.data.error,
+            optionMessage: "Try Again",
+          });
+        }
+      })
+      .catch((err) => {
+        setAlert({
+          title: "There are Server Failure",
+          open: true,
+          message:
+            "An error occured during sending results to server, Please try again later and make sure that server is on.",
+          submessage: err.name + ": " + err.message,
+          optionMessage: "Try Again",
+        });
+        console.error(err);
+      });
   };
 
   const handleClose = () => {
@@ -194,7 +229,7 @@ const CourseVideo = (props) => {
                               open: true,
                               value: videos[index].name,
                               index: index
-                              })
+                            })
                           }}
                         >
                           <EditTwoToneIcon />

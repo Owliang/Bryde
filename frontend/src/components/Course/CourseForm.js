@@ -152,10 +152,9 @@ const CourseForm = (props) => {
               open: true,
               message: mode === "create" ?
                 "Create Successfully. Do you want to upload course's video now or later" :
-                "Create Successfully. Do you want to edit course's video",
+                "Edit Successfully. Do you want to edit course's video",
               optionMessage:  mode === "create" ? "Add Now" : "Edit Video",
-              optionRefTo: "/course_video",
-              //optionRefTo : `/course_video?cid=${cid}&mode=${mode}`,
+              optionRefTo : `/course_video?cid=${cid}&mode=${mode}`,
               mainMessage:  mode === "create" ? "Add Later" : "Back",
               mainRefTo: myCourseURL,
             });

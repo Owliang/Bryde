@@ -24,14 +24,15 @@ export default function CreateCourse(props) {
     const search = props.location.search; // returns the URL query String
     const params = new URLSearchParams(search);
     const CID = params.get("cid");
-    const mode = params.get("mode");
+    const mode = params.get("mode") || "create";
     const [tutor, setTutor] = useState();
     const [dialog, setDialog] = useState("");
-    const getInitialCourseData = () => GetCourseData({ CID: CID, mode: (mode || "create"), setAlert: setDialog});
+    const getInitialCourseData = () => GetCourseData({ CID: CID, mode: ( mode || "create"), setAlert: setDialog});
     const [initialCourseData, setinitialCourseData] = useState(getInitialCourseData);
 
     useEffect(async () => {
         console.log(`data from main`, initialCourseData)
+        console.log(mode)
         try {
             var username = localStorage.getItem("username");
             var role = localStorage.getItem("role");

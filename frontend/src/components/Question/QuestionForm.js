@@ -57,7 +57,7 @@ const subject = [
 ];
 
 const QuestionForm = (props) => {
-    const { username: curUser, mode, setDialog: setAlert } = props;
+    const { username, mode, setDialog: setAlert } = props;
     const [photos, selectPhotos] = useFileUpload();
     const classes = useStyles();
 
@@ -75,8 +75,6 @@ const QuestionForm = (props) => {
             temp.username = fieldValues.username != "" ? "" : "Please Login First";
         if ("subject" in fieldValues)
             temp.subject = fieldValues.subject != "" ? "" : "This field is required.";
-        if ("photo" in fieldValues)
-            temp.photo = fieldValues.photo ? "" : "Course's Image is required.";
         setErrors((errors) => ({
             ...temp,
         }));
@@ -103,13 +101,13 @@ const QuestionForm = (props) => {
     } = useForm(initialQuestionData, true, validate);
 
     useEffect(() => {
-        setQuestionData({ ...questionData, username: curUser });
+        setQuestionData({ ...questionData, username: username });
     }, [1]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Sumbit Hit");
-        console.log(`cur tutor from course Form Submit ${curUser}`);
+        console.log(`cur tutor from course Form Submit ${username}`);
         console.log(`Data's tutor from submit ${JSON.stringify(questionData.user)}`);
         console.log(`Data from submit ${JSON.stringify(questionData)}`);
 
