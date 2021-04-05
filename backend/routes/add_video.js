@@ -31,7 +31,8 @@ router.post('/',function(req, res, next) {
                     for(i=0;i<fields['total_video'];i++){
                         video.push(fs.readFileSync(files['attatch_video_'+i].path));
                     }
-                    var myquery = {"_id":req.body.id}
+                    var id = new mongo.ObjectID(req.body.id);
+                    var myquery = {"_id":id}
                     var newvalues = {$set:{video_buffer:video}}
                     dbo.collection("courses").updateOne(myquery,newvalues,function(err,response){
                         if (err) {
