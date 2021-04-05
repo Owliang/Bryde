@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
             enroll = result[0].student.findIndex(student => student == req.query.student_name);
             Isenroll = (enroll == -1) ? false : true;
             console.log(video_size,Isenroll)
-            data = {name:result[0].name,tutor:result[0].tutor,subject:result[0].subject,price:result[0].price,rating:result[0].rating,video_size:video_size,Isenroll:Isenroll,photo_buffer:result[0].photo_buffer}
+            data = {name:result[0].name,tutor:result[0].tutor,subject:result[0].subject,price:result[0].price,desciption:result[0].desciption,rating:result[0].rating,video_size:video_size,Isenroll:Isenroll,photo_buffer:result[0].photo_buffer}
             res.json({result:true,error:"",data:data})
           });
         }
