@@ -23,13 +23,12 @@ var upload = multer({
 })
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    res.render('create_question')
-    //res.json({ result : 'Response from create question page' })  
+    //res.render('create_question')
+    res.json({ result : 'Response from create question page' })  
 });
 router.post('/', function (req, res, next) {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
-        console.log(fields)
         const result = validationResult(fields);
         var errors = result.errors;
         if (!result.isEmpty()) {
@@ -55,7 +54,6 @@ router.post('/', function (req, res, next) {
                         if (err) res.json({ result: false, error: err });
                         db.close();
                     });
-                    //console.log(fs.readFileSync('uploads/'+req.file.originalname))
                     res.json({ result: true, error: "" })
                 }
             });

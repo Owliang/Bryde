@@ -11,7 +11,7 @@ const { abort } = require('process');
 
 router.get('/', function(req, res, next) {
     var topic = ((req.body.topic=="") ? /^/ : req.body.topic )
-    var creator = ((req.body.creator=="") ? /^/ : req.body.creator )
+    var creator = ((req.body.username=="") ? /^/ : req.body.username )
     var subject = ((req.body.subject=="") ? /^/ : req.body.subject )
     var q = {topic:topic,creator:creator,subject:subject}
     MongoClient.connect(url, function(err, db) {

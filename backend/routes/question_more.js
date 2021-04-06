@@ -12,12 +12,14 @@ router.get('/', function(req, res, next) {
         //res.json({result:req.query.subject});
         MongoClient.connect(url, function(err, db) {
             if (err) {
-                throw err;
+                res.json({result:false,error:err})
             }
             else{
                 var dbo = db.db("BrydeTech");
                 dbo.collection("Q&A").find({topic:req.query.topic}, { projection: { _id: 0,} }).toArray(function(err, result) {
-                    if (err) throw err
+                    if (err) {
+                        res.json({result:false,error:err})
+                    }
                     res.json({result:result});
                     db.close();
                 })
@@ -27,21 +29,23 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
     MongoClient.connect(url, function(err, db) {
         if (err) {
-            throw err;
+            res.json({result:false,error:err})
         }
         else{
             var dbo = db.db("BrydeTech");
             var myquery = { topic: req.body.topic };
             var newvalues = { $push: {comment:req.body.comment} };
             dbo.collection("Q&A").updateOne(myquery, newvalues, function(err, res) {
-                if (err) throw err;
+                if (err){
+                    res.json({result:false,error:err})
+                }
                 db.close();
             });
         }
     });
     MongoClient.connect(url, function(err, db) {
         if (err) {
-            throw err;
+            res.json({result:false,error:err})
         }
         else{
             var dbo = db.db("BrydeTech");
