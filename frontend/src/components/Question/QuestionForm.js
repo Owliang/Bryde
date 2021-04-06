@@ -119,7 +119,7 @@ const QuestionForm = (props) => {
             for (let key in questionData) {
                 formData.append(key, questionData[key]);
             }
-                formData.append('attatch_photo', photos.file);
+            formData.append('attatch_photo', photos.file);
             console.log([...formData]);
             axios
                 .post("http://localhost:4000/create_question", formData, { crossdomain: true, })
