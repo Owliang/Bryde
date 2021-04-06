@@ -11,7 +11,7 @@ var fs = require('fs');
 router.get('/', function(req, res, next) {
     MongoClient.connect(url, function(err, db) {
         if (err) {
-            throw err;
+            res.json({result:false,error:err})
         }
         else{
             var dbo = db.db("BrydeTech");

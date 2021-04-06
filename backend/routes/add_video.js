@@ -11,14 +11,13 @@ var formidable = require('formidable')
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-    res.render('upload');
-    //res.json({result:'Response from create course page'})
+    //res.render('upload');
+    res.json({result:'Response from create course page'})
 });
 
 
 //router.post('/',course_upload,function(req, res, next) {
 router.post('/',function(req, res, next) {
-        console.log('recieve data')
         var form = new formidable.IncomingForm();
         form.parse(req, function(err, fields, files) {
             MongoClient.connect(url, function(err, db) {
