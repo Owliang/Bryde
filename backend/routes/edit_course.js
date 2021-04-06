@@ -25,7 +25,7 @@ var upload = multer({
 
 router.get('/', function(req, res, next) {
     res.render('edit_course');
-    /*MongoClient.connect(url, function(err, db) {
+    MongoClient.connect(url, function(err, db) {
         if (err) {
           res.json({result:false,error:err})
         }
@@ -43,7 +43,7 @@ router.get('/', function(req, res, next) {
                 db.close();
             });
         }
-    });  */
+    });  
 });
 /*router.post('/',course_upload,function(req, res, next) {
         MongoClient.connect(url, function(err, db) {

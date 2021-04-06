@@ -22,15 +22,11 @@ router.get('/', function(req, res, next) {
             video_size = result[0].video_buffer.length
             enroll = result[0].student.findIndex(student => student == req.query.student_name);
             Isenroll = (enroll == -1) ? false : true;
-            //console.log(video_size,Isenroll)
             data = {name:result[0].name,tutor:result[0].tutor,subject:result[0].subject,price:result[0].price,desciption:result[0].desciption,rating:result[0].rating,Isenroll:Isenroll
               ,link:result[0].link,photo_buffer:result[0].photo_buffer,total_video:video_size,video_name:result[0].video_name,video_buffer:result[0].video_buffer,video_size:result[0].video_size,video_type:result[0].video_type}
             res.json({result:true,error:"",data:data})
           });
         }
       });
-});
-router.post('/',function(req, res, next) {
-
 });
 module.exports = router;

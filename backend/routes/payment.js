@@ -10,8 +10,8 @@ const { body, validationResult, check } = require('express-validator');
 const { UnavailableForLegalReasons } = require('http-errors');
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  //res.json({ result : 'Response from login page'})  
-  res.render('payment_detail');
+  res.json({ result : 'Response from login page'})  
+  //res.render('payment_detail');
 });
 router.post('/',[check("tutor","Please Input tutor"),check("price","Please Input price")], function(req, res, next) {
   const result = validationResult(req);
@@ -38,7 +38,6 @@ router.post('/',[check("tutor","Please Input tutor"),check("price","Please Input
                 res.json({result:false,error:err})
               }
               img = fs.readFileSync(name)
-              //console.log(img.toString('base64'))
               res.json({result:true,error:"",qr:img.toString('base64')})
               //res.render('payment',{param:img.toString('base64')})
             })

@@ -26,13 +26,10 @@ var upload = multer({
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-    res.render('upload');
-    //res.json({result:'Response from create course page'})
+    //res.render('upload');
+    res.json({result:'Response from create course page'})
 });
 
-course_upload = upload.fields([{name:'attach_photo',maxcount:1},{name:'attach_video',maxcount:15}]);
-
-//router.post('/',course_upload,function(req, res, next) {
 router.post('/',function(req, res, next) {
         console.log('recieve data')
         var form = new formidable.IncomingForm();
@@ -52,11 +49,11 @@ router.post('/',function(req, res, next) {
                         subject:fields.subject,
                         description:fields.description,
                         link:fields.link,
-                    photo_buffer:fs.readFileSync(files.attatch_photo.path),
-                    video_name:[],
-                    video_buffer:[],
-                    video_size:[],
-                    video_type:[],
+                        photo_buffer:fs.readFileSync(files.attatch_photo.path),
+                        video_name:[],
+                        video_buffer:[],
+                        video_size:[],
+                        video_type:[],
                         rating:7,
                         enrolled_date:'-',
                         student:[]};

@@ -17,10 +17,9 @@ const { render } = require('ejs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    //img = fs.readFileSync('uploads/IMG_0130.mov')//iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
-    res.render('regis');
+    //res.render('regis');
     //res.render('register',{param:img});
-    //res.json({ result : 'Response from register page' })  
+    res.json({ result : 'Response from register page' })  
 });
 
 router.post('/'/*,upload.single('file')*/,[check("username","Please enter username").not().isEmpty(),

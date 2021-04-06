@@ -15,7 +15,9 @@ router.get('/', function(req, res, next) {
       else {
         var dbo = db.db("BrydeTech");
         dbo.collection("ads").find({name:"defalut"},{ projection: { _id:0,photo_buffer:1} }).toArray(function(err, result) {
-          if (err) throw err;
+          if (err) {
+            res.json({result:false,error:err})
+          }
           db.close();
           res.json({result:true,error:"",data:result[0]})
         });
