@@ -49,9 +49,9 @@ export default function Navbar() {
 
     const classes = useStyles();
     const username = localStorage.getItem('username')
-    const inbox = 7
-    const notify = 4
-    const profile = 2
+    const inbox = 4
+    const notify = 3
+    const profile = 0
     const [isDrawerOpen, setDrawerOpen] = useState(false)
     const history = useHistory()
 
@@ -108,7 +108,7 @@ export default function Navbar() {
     }
 
     const handleFollowingQuestion = () => {
-        history.push("/courses")
+        history.push("/qanda/follow")
         window.location.reload();
     }
 
@@ -164,7 +164,7 @@ export default function Navbar() {
                             className={classes.navButton}
                         >
                             <Box onClick={handleDashboard}>Dashboard</Box>
-                            <Box onClick={handleLogout}>Folowing Question</Box>
+                            <Box onClick={handleFollowingQuestion}>Folowing Question</Box>
                         </DropDownMenu>
                     </Box>
 

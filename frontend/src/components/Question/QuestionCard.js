@@ -9,13 +9,18 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     button: {
-        backgroundColor: '#212121',
+        // backgroundColor: '#212121',
     },
 }));
 
 export default function QuestionCard(props) {
 
     const classes = useStyles()
+    const [isFollow, setIsFollow] = useState(false)
+    
+    const handleFollow = () => {
+        setIsFollow(!isFollow)
+    }
 
     return (
         <Box display="flex" bgcolor="background.light2" borderRadius={8} {...props}>
@@ -45,12 +50,12 @@ export default function QuestionCard(props) {
                     See more
                 </Button>
                 <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => {console.log('yay')}}
+                    variant={isFollow ? "contained" : "outlined"}
+                    color={isFollow ? "primary" : "#000"}
+                    onClick={handleFollow}
                     className={classes.button}
                 >
-                    Follow
+                    {isFollow ? 'Followed' : 'Follow'}
                 </Button>
             </Box>
             

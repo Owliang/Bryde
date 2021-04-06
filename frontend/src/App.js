@@ -7,7 +7,10 @@ import Landing from './components/Landing'
 import CreateCourse from './Createcourse'
 import EditCourse from "./components/EditCourse"
 import Home from './components/Home/Home'
-import QAndA from './components/QAndA'
+import QuestionBoard from './components/QuestionBoard'
+import QuestionCreate from './components/QuestionCreate'
+import QuestionInfo from './components/QuestionInfo'
+import QuestionFollow from './components/QuestionFollow'
 
 
 function App() {
@@ -44,8 +47,12 @@ function App() {
                         <Switch>
                             <PrivateRoute path='/create_courses' component={CreateCourse} />
                             <PrivateRoute path='/editcourses' component={EditCourse} />
-                            <PrivateRoute path='/qanda' component={QAndA} />
+                            <PrivateRoute path='/qanda/info' component={QuestionInfo} />
+                            <PrivateRoute path='/qanda/create' component={QuestionCreate} />
+                            <PrivateRoute path='/qanda/follow' component={QuestionFollow} />
+                            <PrivateRoute path='/qanda' component={QuestionBoard} />
                             <PrivateRoute path='/courses' component={CourseList} />
+                            
                             <PrivateRoute path='/home' component={Home}/>
                             <LoginRoute path="/" component={Landing} />
                             <Route path='/courses' component={CourseList} />
