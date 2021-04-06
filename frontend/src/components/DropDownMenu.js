@@ -27,8 +27,10 @@ const StyledMenu = withStyles({
 
 const StyledMenuItem = withStyles((theme) => ({
     root: {
+        color: '#FFF',
         '&:hover': {
             background: theme.palette.primary.main,
+            color: '#000',
          },
     },
 }))(MenuItem);

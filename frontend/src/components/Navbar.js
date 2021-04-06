@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
         height: '32px', 
         marginRight: '8px',
     },
+    logo: {
+        marginRight: '24px',
+    },
 }));
 
 const mobile = { md: 'block', desktop: 'none' }
@@ -76,45 +79,51 @@ export default function Navbar() {
         localStorage.setItem('username', '')
         localStorage.setItem('auth', false)
         history.push("/")
+        window.location.reload()
+    }
+
+    const handleProfile = () => {
+        history.push("/profile")
         window.location.reload();
     }
 
-    const inboxContent = [1,2,3].map(num => (
-        <Box onClick={handleLogout}>Logout</Box>
+    const handleHome = () => {
+        history.push("/home")
+        window.location.reload();
+    }
+
+    const handleMycourse = () => {
+        history.push("/mycourse")
+        window.location.reload();
+    }
+
+    const handleCourse = () => {
+        history.push("/courses")
+        window.location.reload();
+    }
+
+    const handleDashboard = () => {
+        history.push("/qanda")
+        window.location.reload();
+    }
+
+    const handleFollowingQuestion = () => {
+        history.push("/courses")
+        window.location.reload();
+    }
+
+    const inboxContent = ['inbox1','inbox2','inbox3','inbox4'].map(content => (
+        <Box onClick={handleLogout}>{content}</Box>
     ))
 
-    const notifyContent = [1,2,3].map(num => (
-        <Box onClick={handleLogout}>Logout</Box>
+    const notifyContent = ['notify1','notify2'].map(content => (
+        <Box onClick={handleLogout}>{content}</Box>
     ))
 
     const profileContent = [1,2,3].map(num => (
-        <Box onClick={handleLogout}>Logout</Box>
+        <>
+        </>
     ))
-
-    const NavButton = ((props) => (
-        <ButtonLink
-            variant="contained"
-            color="secondary"
-            path={props.path}
-            className={classes.navButton}
-        >
-            {props.children}
-        </ButtonLink>
-    ))
-
-    const NavDropDown = ((props) => {
-        const {title, children, ...prop} = props
-        return (
-            <DropDownMenu
-                variant="contained"
-                color="secondary"
-                title={title}
-                className={classes.navDropDown}
-            >
-                {children}
-            </DropDownMenu>
-        )
-    })
 
     return (
         <div className={classes.root}>
@@ -129,22 +138,38 @@ export default function Navbar() {
                             <MenuIcon />
                         </IconButton>
                     </Box>
-                    <Typography variant="h6" color="secondary">
+                    <Typography variant="h6" color="secondary" className={classes.logo} >
                         OffDemand
                     </Typography>
 
-
                     <Box display={desktop}>
-                        <NavButton path="/home">Home</NavButton>
-                        <NavDropDown title="Course">
-                            <NavButton path="/courses">Course</NavButton>
-                            <MenuItem component={Link} to="/courses">Course</MenuItem>
-                        </NavDropDown>
-                        <NavButton path="/qanda">Q&A</NavButton>
+                        <Button
+                            color="secondary"
+                            className={classes.navButton}
+                            onClick={handleHome}
+                        >
+                            Home
+                        </Button>
+                        <DropDownMenu
+                            title='Course'
+                            color="secondary"
+                            className={classes.navButton}
+                        >
+                            <Box onClick={handleCourse}>Search Course</Box>
+                            <Box onClick={handleMycourse}>My course</Box>
+                        </DropDownMenu>
+                        <DropDownMenu
+                            title='Q&A'
+                            color="secondary"
+                            className={classes.navButton}
+                        >
+                            <Box onClick={handleDashboard}>Dashboard</Box>
+                            <Box onClick={handleLogout}>Folowing Question</Box>
+                        </DropDownMenu>
                     </Box>
 
-
                     <div className={classes.grow} />
+
                     <DropDownMenu
                         title={
                             <Badge
@@ -181,7 +206,8 @@ export default function Navbar() {
                             />
                         }
                     >
-                        {profileContent}
+                        <Box onClick={handleProfile}>Profile</Box>
+                        <Box onClick={handleLogout}>Logout</Box>
                     </DropDownMenu>
                 </Toolbar>
             </AppBar>
