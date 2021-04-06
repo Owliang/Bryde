@@ -6,7 +6,7 @@ const myCourseURL = "/myCourse";
 
 const initialCourseData = {
     tutor: "",
-    name: "create",
+    name: "",
     subject: "",
     description: "",
     price: "",

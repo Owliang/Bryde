@@ -43,9 +43,9 @@ router.post('/',function(req, res, next) {
                         if (err) {
                             res.json({result:false , error:err})
                         }
+                        res.json({result:true,error:""})
                         db.close();
                     });
-                    res.json({result:true,error:""})
                 }
             });
         });

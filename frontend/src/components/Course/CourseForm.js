@@ -48,6 +48,8 @@ const CourseForm = (props) => {
   } = props;
   const [photo, selectPhoto] = useFileUpload();
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
+  const [uploadPercentage, setUploadPercentage] = useState(0);
   console.log(`cur tutorfrom course Form ${curTutor}`);
   console.log(`initialCourseData from Form`, initialCourseData);
 
@@ -145,9 +147,17 @@ const CourseForm = (props) => {
       formData.append("attatch_photo", courseData.attatch_photo.file);
       console.log(attatch_videos);
       console.log([...formData]);
+      setLoading(true)
       axios
         .post("http://localhost:4000/create_course", formData, {
           crossdomain: true,
+          onUploadProgress: progressEvent => {
+            setUploadPercentage(
+              parseInt(
+                Math.round((progressEvent.loaded * 100) / progressEvent.total)
+              )
+            );
+          }
         })
         .then((response) => {
           console.log("response: ", response);
@@ -170,6 +180,7 @@ const CourseForm = (props) => {
               mainRefTo: myCourseURL,
             });
           } else {
+            setLoading(false)
             setAlert({
               title:
                 mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
@@ -184,6 +195,7 @@ const CourseForm = (props) => {
           }
         })
         .catch((err) => {
+          setLoading(false)
           setAlert({
             title:
               mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
@@ -339,6 +351,10 @@ const CourseForm = (props) => {
         />
       </Grid>
       <br />
+      {loading &&
+        (<Grid item xs={12}>
+        <FormComponents.MyProgressBar value={uploadPercentage} />
+        </Grid>)}
       <br />
       <Grid
         container
@@ -351,6 +367,7 @@ const CourseForm = (props) => {
           <FormComponents.SimpleButton
             text={mode === "create" ? "Create" : "Save Changes"}
             onClick={handleSubmit}
+            disabled={loading}
           />
         </Grid>
       </Grid>
