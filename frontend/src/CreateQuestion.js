@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Paper, Typography, Grid, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import CourseForm from "./components/Course/CourseForm";
 import MyDialog from "./components/MyDialog";
-import GetCourseData from "./services/getCourseData";
+import QuestionForm from "./components/Question/QuestionForm";
 
 const useStyles = makeStyles((theme) => ({
     pageContent: {
@@ -19,20 +18,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CreateCourse(props) {
+const CreateQuestion = () => {
     const classes = useStyles();
-    const search = props.location.search; // returns the URL query String
-    const params = new URLSearchParams(search);
-    const CID = params.get("cid");
-    const mode = params.get("mode") || "create";
-    const [tutor, setTutor] = useState();
     const [dialog, setDialog] = useState("");
-    const getInitialCourseData = () => GetCourseData({ CID: CID, mode: mode, setAlert: setDialog});
-    const [initialCourseData, setinitialCourseData] = useState(getInitialCourseData);
+    const [user, setUser] = useState()
 
     useEffect(async () => {
-        console.log(`data from main`, initialCourseData)
-        console.log(mode)
         try {
             var username = localStorage.getItem("username");
             var role = localStorage.getItem("role");
@@ -49,7 +40,7 @@ export default function CreateCourse(props) {
                 await new Promise((resolve) => setTimeout(resolve, 20000));
                 window.location.href = "/";
             }
-            setTutor(username);
+            setUser(username);
         } catch {
             setDialog({
                 title: "We are currently don't know you",
@@ -91,8 +82,8 @@ export default function CreateCourse(props) {
                 />
                 <Typography variant="h2" color="primary" gutterBottom>
                     <Box fontWeight="fontWeightBold" m={1}>
-                        {mode === "create" ? "Create Course" : "Edit Course"}
-                    </Box>
+                        Create Question
+          </Box>
                 </Typography>
             </Grid>
             <Grid item xs={10}>
@@ -102,16 +93,17 @@ export default function CreateCourse(props) {
                     component="div"
                     elevation={3}
                 >
-                    <CourseForm
+                    <QuestionForm
                         className={classes.root}
-                        mode={mode || "create"}
-                        tutor={tutor}
+                        mode="create"
+                        username={user}
                         setDialog={setDialog}
-                        initialCourseData={initialCourseData}
                         noValidate
                     />
                 </Paper>
             </Grid>
         </Grid>
-    );
+    )
 }
+
+export default CreateQuestion

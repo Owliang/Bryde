@@ -19,20 +19,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CreateCourse(props) {
-    const classes = useStyles();
+export default function EditCourse(props) {
     const search = props.location.search; // returns the URL query String
     const params = new URLSearchParams(search);
     const CID = params.get("cid");
-    const mode = params.get("mode") || "create";
+    const classes = useStyles();
     const [tutor, setTutor] = useState();
     const [dialog, setDialog] = useState("");
-    const getInitialCourseData = () => GetCourseData({ CID: CID, mode: mode, setAlert: setDialog});
-    const [initialCourseData, setinitialCourseData] = useState(getInitialCourseData);
+    const [initialCourseData, setinitialCourseData] = useState(GetCourseData({CID:CID, mode: "edit", setAlert:setDialog}));
 
     useEffect(async () => {
         console.log(`data from main`, initialCourseData)
-        console.log(mode)
         try {
             var username = localStorage.getItem("username");
             var role = localStorage.getItem("role");
@@ -91,7 +88,7 @@ export default function CreateCourse(props) {
                 />
                 <Typography variant="h2" color="primary" gutterBottom>
                     <Box fontWeight="fontWeightBold" m={1}>
-                        {mode === "create" ? "Create Course" : "Edit Course"}
+                        Edit Course
                     </Box>
                 </Typography>
             </Grid>
@@ -104,10 +101,10 @@ export default function CreateCourse(props) {
                 >
                     <CourseForm
                         className={classes.root}
-                        mode={mode || "create"}
                         tutor={tutor}
                         setDialog={setDialog}
-                        initialCourseData={initialCourseData}
+                        mode="edit"
+                        propsCourseData={initialCourseData}
                         noValidate
                     />
                 </Paper>

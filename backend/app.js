@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose')
+var cors = require('cors')
 
 //
 //var indexRouter = require('./routes/index');
@@ -22,6 +23,7 @@ var question_moreRouter = require('./routes/question_more');
 var following_questionRouter = require('./routes/following_question');
 var courseRouter = require('./routes/course');
 var create_courseRouter = require('./routes/create_course');
+var add_videoRouter = require('./routes/add_video');
 var edit_courseRouter = require('./routes/edit_course');
 var student_courseRouter = require('./routes/student_course');
 var tutor_courseRouter = require('./routes/tutor_course');
@@ -29,7 +31,7 @@ var search_courseRouter = require('./routes/search_course');
 var paymentRouter = require('./routes/payment');
 
 var app = express();
-
+app.use(cors());
 var fs = require('fs');
 var path = require('path');
 require('dotenv/config');
@@ -59,6 +61,7 @@ app.use('/question_more',question_moreRouter);
 app.use('/following_question',following_questionRouter);
 app.use('/course',courseRouter);
 app.use('/create_course',create_courseRouter);
+app.use('/add_video',add_videoRouter);
 app.use('/edit_course',edit_courseRouter);
 app.use('/student_course',student_courseRouter);
 app.use('/tutor_course',tutor_courseRouter);

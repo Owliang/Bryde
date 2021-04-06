@@ -32,24 +32,28 @@ router.post('/',[check("fname","Please Input your fname").not().isEmpty(),
               var dbo = db.db("BrydeTech");
               var myquery = {"username":req.body.username,"lname":req.body.lname,"fname":req.body.fname,"email":data.email};
               dbo.collection("users").findOne(myquery,function(err,doc){
-                if (err) throw err;
+                if (err) {
+                  res.json({result:false , error:err})
+                }
                 if(doc == null){
                     res.json({result:false,error:"Incorrect Information"})
                 }
                 else{
                     bcrypt.genSalt(saltRounds, function (err, salt) {
                         if (err) {
-                          throw err
+                          res.json({result:false , error:err})
                         } else {
                           bcrypt.hash(req.body.password, salt, function(err, hash) {
                             if (err) {
-                              throw err
+                              res.json({result:false , error:err})
                             } 
                             else{
                                 console.log(hash)
                                 var newvalues = {$set:{password:hash}}
                                 dbo.collection("users").updateOne(myquery,newvalues,function(err,res){
-                                    if (err) throw err;
+                                    if (err) {
+                                      res.json({result:false , error:err})
+                                    }
                                     db.close();
                                 });
                                 res.json({result:true,error:""})

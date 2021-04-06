@@ -30,49 +30,47 @@ router.get('/', function(req, res, next) {
 });
 
 course_upload = upload.fields([{name:'attach_photo',maxcount:1},{name:'attach_video',maxcount:15}]);
-router.post('/',course_upload,function(req, res, next) {
-    /*MongoClient.connect(url, function(err, db) {
-        if (err) {
-          res.json({result:false,error:err})
-        }
-        else{
-            var dbo = db.db("BrydeTech");
-            buffer = {name:req.body.name,photo_buffer:fs.readFileSync('uploads/'+req.files['attach_photo'][0].originalname)}
-            dbo.collection("promotions").insertOne(buffer,function(err,res){
-                if (err) throw err;
-                db.close();
-            });
-            //console.log(fs.readFileSync('uploads/'+req.file.originalname))
-            res.json({result:true,error:""})
-        }
-    });*/
-        MongoClient.connect(url, function(err, db) {
-            if (err) {
-              res.json({result:false,error:err})
-            }
-            else{
-                var dbo = db.db("BrydeTech");
-                var video = [];
-                for(i=0;i<(req.files['attach_video']).length;i++){
-                    video.push(fs.readFileSync('uploads/'+req.files['attach_video'][i].originalname));
+
+//router.post('/',course_upload,function(req, res, next) {
+router.post('/',function(req, res, next) {
+        console.log('recieve data')
+        var form = new formidable.IncomingForm();
+        form.parse(req, function(err, fields, files) {
+            console.log(fields)
+            console.log(files)
+            console.log(files['attatch_photo'])
+            MongoClient.connect(url, function(err, db) {
+                if (err) {
+                res.json({result:false,error:err})
                 }
-                var myobj = {name:req.body.name,
-                    tutor:req.body.tutor,
-                    price:parseInt(req.body.price),
-                    subject:req.body.subject,
-                    description:req.body.description,
-                    link:req.body.link,
-                  photo_buffer:fs.readFileSync('uploads/'+req.files['attach_photo'][0].originalname),
-                  video_buffer:video,
-                    rating:7,
-                    enrolled_date:'-',
-                    student:[]};
-                dbo.collection("courses").insertOne(myobj,function(err,response){
-                    if (err) throw err;
-                    db.close();
-                });
-                res.json({result:true,error:""})
-            }
+                else{
+                    var dbo = db.db("BrydeTech");
+                    var myobj = {name:fields.name,
+                        tutor:fields.tutor,
+                        price:parseInt(fields.price),
+                        subject:fields.subject,
+                        description:fields.description,
+                        link:fields.link,
+                    photo_buffer:fs.readFileSync(files.attatch_photo.path),
+                    video_name:[],
+                    video_buffer:[],
+                    video_size:[],
+                    video_type:[],
+                        rating:7,
+                        enrolled_date:'-',
+                        student:[]};
+                    dbo.collection("courses").insertOne(myobj,function(err,result){
+                        if (err) {
+                            res.json({result:false , error:err})
+                        }
+                        else{
+                            res.json({result:true,error:"",id:result["ops"][0]["_id"]})
+                        }
+                        db.close();
+                    });
+                    
+                }
+            });
         });
 });
 

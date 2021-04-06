@@ -16,7 +16,9 @@ router.get('/', function(req, res, next) {
         else{
             var dbo = db.db("BrydeTech");
             dbo.collection("courses").find({student:req.query.username}).toArray(function(err, result) {
-                if (err) throw err
+                if (err) {
+                    res.json({result:false , error:err})
+                }
                 res.json({result:result});
                 db.close();
             })

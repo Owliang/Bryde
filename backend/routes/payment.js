@@ -34,12 +34,13 @@ router.post('/',[check("tutor","Please Input tutor"),check("price","Please Input
             const payload = generatePayload(result[0].ppnumber, { amount }) //First parameter : mobileNumber || IDCardNumber
             var name = './qr/'+req.body.tutor +'_' + result[0].ppnumber+'_'+amount+'.jpg'
             qrcode.toFile(name,payload,function(err){
-              if(err) throw err;
-              console.log("complete")
+              if(err) {
+                res.json({result:false,error:err})
+              }
               img = fs.readFileSync(name)
-              console.log(img)
-              //res.json({result:true,error:"",qr:img})
-              res.render('payment',{param:img})
+              //console.log(img.toString('base64'))
+              res.json({result:true,error:"",qr:img.toString('base64')})
+              //res.render('payment',{param:img.toString('base64')})
             })
             db.close();
           });
