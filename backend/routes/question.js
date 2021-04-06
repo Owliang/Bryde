@@ -6,7 +6,8 @@ var url = "mongodb://127.0.0.1:27017/";
 const { body, validationResult, check } = require('express-validator');
 const { UnavailableForLegalReasons } = require('http-errors');
 var fs = require('fs');
-var multer  = require('multer')
+var multer  = require('multer');
+const { abort } = require('process');
 
 router.get('/', function(req, res, next) {
     var topic = ((req.body.topic=="") ? /^/ : req.body.topic )
@@ -19,7 +20,7 @@ router.get('/', function(req, res, next) {
         }
         else{
             var dbo = db.db("BrydeTech");
-            dbo.collection("Q&A").find(q,{ projection: { _id:1,topic:1,creator:1} }).toArray(function(err, result) {
+            dbo.collection("Q&A").find(q,{ projection: { _id:1,topic:1,creator:1,subject:1} }).sort({topic:-1}).toArray(function(err, result) {
                 if (err){
                     res.json({result:false , error:err})
                 }
