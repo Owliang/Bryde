@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from "axios";
+import b64toBlob from './b64toBlob'
 
 const myCourseURL = "/myCourse";
 
@@ -16,21 +17,41 @@ const GetCourseData = ((props) => {
     console.log("Calling GetCoureData")
     const { CID, mode, setAlert, setData } = props;
 
-    if (mode === "edit") {
+    if (mode == "edit") {
         axios
             .get("http://localhost:4000/course", { id: CID }, { crossdomain: true })
             .then((response) => {
                 console.log("response: ", response);
                 var isSuccess = response.data.result;
                 if (isSuccess) {
+                    let tempVideos = []
+                    let n = response.data.data.total_video
+                    for (let i = 0; i < n; i++) {
+                        let video = response.data.data.videos_buffer[i]
+                        let video_type = response.data.data.videos_type[i]
+                        const video_blob = b64toBlob(photo, video_type);
+                        const video_blobUrl = URL.createObjectURL(video_blob);
+                        tempVideos.push({
+                            name: response.data.data.videos_name[i],
+                            source: video_blobUrl,
+                            size: response.data.data.videos_size[i],
+                            type: video_type,
+                        })
+                    }
                     console.log("Found");
-                    return({
+                    let photo = response.data.data.photo_buffer
+                    const photo_blob = b64toBlob(photo, 'image/jpg');
+                    const photo_blobUrl = URL.createObjectURL(photo_blob);
+                    return ({
                         ...response.data.data,
-                        attatch_photo : 'data:image/jpg;base64,'+ response.data.data.photo_buffer 
+                        attatch_photo: {
+                            source: photo_blobUrl
+                        },
+                        attatch_video: tempVideos
                     })
                 } else {
                     console.log("Not Found");
-                    return(initialCourseData)
+                    return (initialCourseData)
                 }
             })
             .catch((err) => {
@@ -44,11 +65,11 @@ const GetCourseData = ((props) => {
                     //optionRefTo: myCourseURL
                 });*/
                 console.error("catch error from getCourseData");
-                return(initialCourseData)
+                return (initialCourseData)
             });
 
-            return({...initialCourseData, name: "test Edit"});
-    }else{
+        return ({ ...initialCourseData, name: "test Edit" });
+    } else {
         return initialCourseData
     }
 });

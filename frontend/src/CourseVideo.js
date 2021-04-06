@@ -26,10 +26,11 @@ const CourseVideo = (props) => {
   const search = props.location.search; // returns the URL query String
   const params = new URLSearchParams(search);
   const CID = params.get("cid");
-  const mode = params.get("mode");
+  const cName = params.get("cname");
+  const mode = params.get("mode") || "create";
   const [tutor, setTutor] = useState();
   const [dialog, setDialog] = useState("");
-  const getInitialCourseData = () => GetCourseData({ CID: CID, mode: (mode || "edit"), setAlert: setDialog });
+  const getInitialCourseData = () => GetCourseData({ CID: CID, mode: mode , setAlert: setDialog });
   const [initialCourseData, setinitialCourseData] = useState(getInitialCourseData);
 
 
@@ -116,7 +117,7 @@ const CourseVideo = (props) => {
           elevation={3}
         >
           <VideoForm
-            initialCourseData={initialCourseData}
+            initialCourseData={{ name: cName}}
             className={classes.root}
             tutor={tutor}
             setDialog={setDialog}

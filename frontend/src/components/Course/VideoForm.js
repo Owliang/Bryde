@@ -94,19 +94,11 @@ const CourseVideo = (props) => {
   const [newVideos, selectNewVideos] = useFileUpload();
   const classes = useStyles(props);
   console.log(CID)
+  console.log(`initialCourseData`, initialCourseData)
+
   useEffect(() => {
     if (mode === "edit") {
-      let tempVideos = []
-      let n = initialCourseData.videos.length
-      for (let i = 0; i < n; i++) {
-        tempVideos.push({
-          name: initialCourseData.videos_name[i],
-          size: initialCourseData.videos[i].size,
-          source: initialCourseData.videos[i].path,
-          file: initialCourseData.videos[i],
-        })
-      }
-      setVideos(tempVideos)
+      setVideos(initialCourseData.attatch_video)
     }
   }, [1]);
 
@@ -120,7 +112,9 @@ const CourseVideo = (props) => {
     var nVideo = videos?.length;
     for (var i = 0; i < nVideo; i++) {
       formData.append("attatch_video_" + i, videos[i].file);
-      formData.append("attatch_video_name" + i, videos[i].file);
+      formData.append("attatch_video_name_" + i, videos[i].name);
+      formData.append("attatch_video_size_" + i, videos[i].size);
+      formData.append("attatch_video_type_" + i, videos[i].file.type);
     }
     formData.append("total_video", nVideo);
     formData.append("id", CID);

@@ -49,17 +49,13 @@ const subject = [
 ];
 
 const CourseForm = (props) => {
-  const { tutor: curTutor, setDialog: setAlert , mode, initialCourseData:propsCourseData} = props;
+  const { tutor: curTutor, setDialog: setAlert, mode, initialCourseData: propsCourseData } = props;
   const [photo, selectPhoto] = useFileUpload();
   const classes = useStyles();
   console.log(`cur tutorfrom course Form ${curTutor}`);
   console.log(`initialCourseData from Form`, propsCourseData)
 
-  useEffect(() => {
-    photo ? validate({ photo: photo }) : validate({ foo: "" });
-  }, [photo]);
-
-  const validate = (fieldValues = { ...courseData, photo: photo }) => {
+  const validate = (fieldValues = { ...courseData }) => {
     let temp = { ...errors };
     if ("name" in fieldValues)
       temp.name = fieldValues.name != "" ? "" : "This field is required.";
@@ -85,13 +81,13 @@ const CourseForm = (props) => {
         ) || !fieldValues.link
           ? ""
           : "URL is not valid.";
-    if ("photo" in fieldValues)
-      temp.photo = fieldValues.photo ? "" : "Course's Image is required.";
+    if ("attatch_photo" in fieldValues)
+      temp.attatch_photo = fieldValues.attatch_photo ? "" : "Course's Image is required.";
     setErrors((errors) => ({
       ...temp,
     }));
     console.log("fieldValues", fieldValues);
-    console.log({ ...courseData, photo: photo });
+    console.log({ ...courseData, attatch_photo: photo });
     console.log(`errors from validate${JSON.stringify(errors)}`);
     console.log(`temp from validate${JSON.stringify(temp)}`);
 
@@ -111,6 +107,16 @@ const CourseForm = (props) => {
     handleInputChange,
     resetForm,
   } = useForm(propsCourseData || initialCourseData, true, validate);
+
+  useEffect(() => {
+    if (photo) {
+      validate({ attatch_photo: photo })
+      setCourseData({ ...courseData, attatch_photo: photo });
+    } else {
+      validate({ foo: "" });
+    }
+
+  }, [photo]);
 
   useEffect(() => {
     setCourseData({ ...courseData, tutor: curTutor });
@@ -134,14 +140,16 @@ const CourseForm = (props) => {
     if (validate()) {
       let formData = new FormData();
       for (let key in courseData) {
-        formData.append(key, courseData[key]);
+        if (key != "attatch_photo") {
+          formData.append(key, courseData[key]);
+        }
       }
       let attatch_videos = [];
-      formData.append("attatch_photo", photo.file);
+      formData.append("attatch_photo", courseData.attatch_photo.file);
       console.log(attatch_videos);
       console.log([...formData]);
       axios
-        .post("http://localhost:4000/create_course", formData, {crossdomain: true,})
+        .post("http://localhost:4000/create_course", formData, { crossdomain: true, })
         .then((response) => {
           console.log("response: ", response);
           var isSuccess = response.data.result;
@@ -153,9 +161,9 @@ const CourseForm = (props) => {
               message: mode === "create" ?
                 "Create Successfully. Do you want to upload course's video now or later" :
                 "Edit Successfully. Do you want to edit course's video",
-              optionMessage:  mode === "create" ? "Add Now" : "Edit Video",
-              optionRefTo : `/course_video?cid=${cid}&mode=${mode}`,
-              mainMessage:  mode === "create" ? "Add Later" : "Back",
+              optionMessage: mode === "create" ? "Add Now" : "Edit Video",
+              optionRefTo: `/course_video?cid=${cid}&mode=${mode}&cname=${courseData.name}`,
+              mainMessage: mode === "create" ? "Add Later" : "Back",
               mainRefTo: myCourseURL,
             });
           } else {
@@ -207,9 +215,9 @@ const CourseForm = (props) => {
       <Grid container justify="space-around" alignItems="center">
         <Grid item xs={12} md={6}>
           <FormComponents.PreviewAvatar
-            src={photo?.source}
+            src={courseData.attatch_photo?.source}
             onChange={() => {
-              validate({ photo: photo });
+              validate({ attatch_photo: photo });
             }}
           />
         </Grid>
@@ -249,8 +257,8 @@ const CourseForm = (props) => {
               <FormComponents.TextInput
                 className={classes.textRoot}
                 variant="outlined"
-                label={errors.photo ? "!!    Please Upload Image    !!" : ""}
-                error={errors.photo}
+                label={errors.attatch_photo ? "!!    Please Upload Image    !!" : ""}
+                error={errors.attatch_photo}
                 disabled
                 fullWidth
               />
@@ -330,7 +338,7 @@ const CourseForm = (props) => {
       >
         <Grid item xs={4}>
           <FormComponents.SimpleButton
-            text= {mode === "create" ? "Create" : "Save Changes"}
+            text={mode === "create" ? "Create" : "Save Changes"}
             onClick={handleSubmit}
           />
         </Grid>
