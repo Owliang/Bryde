@@ -27,7 +27,7 @@ export default function CreateCourse(props) {
     const mode = params.get("mode") || "create";
     const [tutor, setTutor] = useState();
     const [dialog, setDialog] = useState("");
-    const getInitialCourseData = () => GetCourseData({ CID: CID, mode: ( mode || "create"), setAlert: setDialog});
+    const getInitialCourseData = () => GetCourseData({ CID: CID, mode: mode, setAlert: setDialog});
     const [initialCourseData, setinitialCourseData] = useState(getInitialCourseData);
 
     useEffect(async () => {
