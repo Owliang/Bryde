@@ -53,7 +53,10 @@ router.post('/',function(req, res, next) {
                         description:fields.description,
                         link:fields.link,
                     photo_buffer:fs.readFileSync(files.attatch_photo.path),
+                    video_name:[],
                     video_buffer:[],
+                    video_size:[],
+                    video_type:[],
                         rating:7,
                         enrolled_date:'-',
                         student:[]};

@@ -44,6 +44,7 @@ router.post('/', function (req, res, next) {
                     var dbo = db.db("BrydeTech");
                     var myobj = {
                         topic: fields.topic,
+                        creator: fields.creator,
                         subject: fields.subject,
                         description: fields.content,
                         attach_photo: files['attatch_photo'].name,

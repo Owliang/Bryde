@@ -6,19 +6,41 @@ var url = "mongodb://127.0.0.1:27017/";
 const { body, validationResult, check } = require('express-validator');
 const { UnavailableForLegalReasons } = require('http-errors');
 var fs = require('fs');
-var multer  = require('multer')
+var multer  = require('multer');
+const { abort } = require('process');
 
 router.get('/', function(req, res, next) {
-    if(req.query.subject == ""){
+    var topic = ((req.body.topic=="") ? /^/ : req.body.topic )
+    var creator = ((req.body.creator=="") ? /^/ : req.body.creator )
+    var subject = ((req.body.subject=="") ? /^/ : req.body.subject )
+    var q = {topic:topic,creator:creator,subject:subject}
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
+            res.json({result:false,error:err})
+        }
+        else{
+            var dbo = db.db("BrydeTech");
+            dbo.collection("Q&A").find(q,{ projection: { _id:1,topic:1,creator:1,subject:1} }).sort({topic:-1}).toArray(function(err, result) {
+                if (err){
+                    res.json({result:false , error:err})
+                }
+                res.json({result:result});
+                db.close();
+            })
+        }
+    });
+    /*if(req.query.subject == ""){
         //res.json({result:req.query.subject});
         MongoClient.connect(url, function(err, db) {
             if (err) {
-                throw err;
+                res.json({ result: false, error: errors })
             }
             else{
                 var dbo = db.db("BrydeTech");
-                dbo.collection("Q&A").find({}, { projection: { _id: 0, topic:1} }).toArray(function(err, result) {
-                    if (err) throw err
+                dbo.collection("Q&A").find({}, { projection: { _id: 0, topic:1,creator:1} }).toArray(function(err, result) {
+                    if (err) {
+                        res.json({ result: false, error: errors })
+                    }
                     res.json({result:result});
                     db.close();
                 })
@@ -29,18 +51,20 @@ router.get('/', function(req, res, next) {
         //res.json({result:req.query.subject});
         MongoClient.connect(url, function(err, db) {
             if (err) {
-                throw err;
+                res.json({ result: false, error: errors })
             }
             else{
                 var dbo = db.db("BrydeTech");
                 dbo.collection("Q&A").find({"subject":req.query.subject}, { projection: { _id: 0, topic: 1} }).toArray(function(err, result) {
-                    if (err) throw err
+                    if (err) {
+                        res.json({ result: false, error: errors })
+                    }
                     res.json({result:result});
                     db.close();
                 })
             }
         });
-    }
+    }*/
 });
 router.post('/',[check("username","Please enter username").not().isEmpty(),
                 check("topic","Please enter topic").not().isEmpty()]
