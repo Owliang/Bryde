@@ -31,7 +31,6 @@ const CourseVideo = (props) => {
   const [tutor, setTutor] = useState();
   const [dialog, setDialog] = useState("");
   const getInitialCourseData = () => GetCourseData({ CID: CID, mode: mode , setAlert: setDialog });
-  const [initialCourseData, setinitialCourseData] = useState(getInitialCourseData);
 
 
   useEffect(async () => {
@@ -117,8 +116,9 @@ const CourseVideo = (props) => {
           elevation={3}
         >
           <VideoForm
-            initialCourseData={{ name: cName}}
+            getInitialCourseData={getInitialCourseData}
             className={classes.root}
+            cName = {cName}
             tutor={tutor}
             setDialog={setDialog}
             mode={mode}
