@@ -114,7 +114,7 @@ const CourseVideo = (props) => {
       formData.append("attatch_video_" + i, videos[i].file);
       formData.append("attatch_video_name_" + i, videos[i].name);
       formData.append("attatch_video_size_" + i, videos[i].size);
-      formData.append("attatch_video_type_" + i, videos[i].size);
+      formData.append("attatch_video_type_" + i, videos[i].file.type);
     }
     formData.append("total_video", nVideo);
     formData.append("id", CID);
