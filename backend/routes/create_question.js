@@ -48,7 +48,7 @@ router.post('/', function (req, res, next) {
                         description: fields.content,
                         attach_photo: files['attatch_photo'].name,
                         buffer: fs.readFileSync(files['attatch_photo'].path),
-                        comment: [], follower: []
+                        comment: [], follower: [] , writer:[]
                     };
                     dbo.collection("Q&A").insertOne(myobj, function (err, res) {
                         if (err) res.json({ result: false, error: err });

@@ -16,7 +16,8 @@ router.get('/', function(req, res, next) {
             }
             else{
                 var dbo = db.db("BrydeTech");
-                dbo.collection("Q&A").find({topic:req.query.topic}, { projection: { _id: 0,} }).toArray(function(err, result) {
+                var id = new mongo.ObjectID(req.query.id)
+                dbo.collection("Q&A").find({_id:id}, { projection: { _id: 0,} }).toArray(function(err, result) {
                     if (err) {
                         res.json({result:false,error:err})
                     }
@@ -33,8 +34,9 @@ router.post('/', function(req, res, next) {
         }
         else{
             var dbo = db.db("BrydeTech");
-            var myquery = { topic: req.body.topic };
-            var newvalues = { $push: {comment:req.body.comment} };
+            var id = new mongo.ObjectID(req.body.id)
+            var myquery = { _id:id};
+            var newvalues = { $push: {writer:req.body.username,comment:req.body.comment} };
             dbo.collection("Q&A").updateOne(myquery, newvalues, function(err, res) {
                 if (err){
                     res.json({result:false,error:err})
@@ -49,9 +51,7 @@ router.post('/', function(req, res, next) {
         }
         else{
             var dbo = db.db("BrydeTech");
-            var myquery = { topic: req.body.topic };
-            var newvalues = { $push: {comment:req.body.comment} };
-            dbo.collection("Q&A").find({"topic":req.body.topic}, { projection: { _id: 0, follower:1} }).toArray(function(err, result) {
+            dbo.collection("Q&A").find({_id:id}, { projection: { _id: 0, follower:1} }).toArray(function(err, result) {
                 if (err) {
                     res.json({result:false , error:err})
                 }
