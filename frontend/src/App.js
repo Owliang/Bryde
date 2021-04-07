@@ -9,7 +9,10 @@ import CreateQuestion from './CreateQuestion'
 import CourseVideo from './CourseVideo'
 import EditCourse from "./EditCourse"
 import Home from './components/Home/Home'
-
+import QuestionBoard from './components/QuestionBoard'
+import QuestionCreate from './components/QuestionCreate'
+import QuestionFollow from './components/QuestionFollow'
+import QuestionInfo from './components/Question/QuestionInfo'
 
 function App() {
 
@@ -47,6 +50,9 @@ function App() {
                             <PrivateRoute path='/create_question' component={CreateQuestion} />
                             <PrivateRoute path='/edit_course' component={EditCourse} />
                             <PrivateRoute path='/course_video' component={CourseVideo} />
+                            <PrivateRoute path='/qanda/info' component={QuestionInfo} />
+                            <PrivateRoute path='/qanda/follow' component={QuestionFollow} />
+                            <PrivateRoute path='/qanda' component={QuestionBoard} />
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
                             <LoginRoute path="/" component={Landing} />
