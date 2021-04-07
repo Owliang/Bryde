@@ -4,7 +4,7 @@ import { Container, Box } from '@material-ui/core'
 import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
-import CreateCourse from './CreateCourse'
+import CreateCourse from './Createcourse'
 import CreateQuestion from './CreateQuestion'
 import CourseVideo from './CourseVideo'
 import EditCourse from "./EditCourse"
