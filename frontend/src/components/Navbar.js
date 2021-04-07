@@ -93,12 +93,12 @@ export default function Navbar() {
     }
 
     const handleMycourse = () => {
-        history.push("/mycourse")
+        history.push("/mycourses")
         window.location.reload();
     }
 
     const handleCourse = () => {
-        history.push("/courses")
+        history.push("/search")
         window.location.reload();
     }
 

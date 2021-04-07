@@ -63,8 +63,10 @@ router.post('/',[check("tutor","Please Input tutor"),check("price","Please Input
                 res.json({result:false,error:err})
               }
               img = fs.readFileSync(name)
-              res.json({result:true,error:"",qr:img.toString('base64')})
-              //res.render('payment',{param:img.toString('base64')})
+              console.log(img)
+              data = {qr:img.toString('base64')}
+              res.json({data:data})
+              res.render('payment',{param:img})
             })
             db.close();
           });
