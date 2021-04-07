@@ -36,7 +36,7 @@ export default function QuestionCard(props) {
 
     const handleFollow = () => {
         axios.post("/question", {
-            topic: topic,
+            id: _id,
             username: localStorage.getItem('username')
         }).then(response => {
             console.log(response.data.description)

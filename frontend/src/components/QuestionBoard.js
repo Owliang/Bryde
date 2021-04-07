@@ -15,24 +15,35 @@ const useStyles = makeStyles((theme) => ({
 export default function QuestionBoard() {
 
     const questionList = [
-        // {
-        //     _id: "6052b4f4ff4b284d740d0c2d",
-        //     topic: "บวกเลขไม่เป็นงับบบ",
-        //     subject: "math",
-        //     creator: "a",
-        // },
-        // {
-        //     _id: "604f27851e813a34881f9656",
-        //     topic: "บวกเลขไม่เป็นงับ",
-        //     subject: "math",
-        //     creator: "a",
-        // },
-        // {
-        //     _id: "604f26a4995de24b207a3766",
-        //     topic: "ant เเปลว่าอะไรอ่ะ",
-        //     subject: "english",
-        //     creator: "b",
-        // },
+        {
+            "_id": "6052b4f4ff4b284d740d0c2d",
+            "topic": "บวกเลขไม่เป็นงับบบ",
+            "subject": "math",
+            "follower": [],
+            "creator": "a"
+        },
+        {
+            "_id": "604f27851e813a34881f9656",
+            "topic": "บวกเลขไม่เป็นงับ",
+            "subject": "math",
+            "follower": [
+                "aa",
+                "bb"
+            ],
+            "creator": "a"
+        },
+        {
+            "_id": "604f26a4995de24b207a3766",
+            "topic": "ant เเปลว่าอะไรอ่ะ",
+            "subject": "english",
+            "follower": [
+                "bbbb",
+                "aaaa",
+                "aa",
+                "owliang"
+            ],
+            "creator": "b"
+        }
     ]
 
     const classes = useStyles()
@@ -63,9 +74,11 @@ export default function QuestionBoard() {
     }
 
     const questionCardList = questionList.map(question => {
-        const {topic, subject, creator, _id} = question
+        const {topic, subject, creator, _id, follower} = question
+        const isFollow = follower.includes(localStorage.getItem('username'))
+        console.log(follower)
         return (
-            <QuestionCard mb={2} p={2} topic={topic} subject={subject} creator={creator} _id={_id} />
+            <QuestionCard mb={2} p={2} topic={topic} subject={subject} creator={creator} _id={_id} follow={isFollow} key={_id}/>
         )
     })
 

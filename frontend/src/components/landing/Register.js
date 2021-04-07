@@ -49,24 +49,24 @@ export default function Register(props) {
             return
         }
         axios.post("http://localhost:4000/register", {
-                username: registerData.username,
-                password: registerData.password,
-                fname: registerData.fname,
-                lname: registerData.lname,
-                email: registerData.email,
-                ppnumber: registerData.ppnumber,
-                isTutor: (registerData.role == 'teather' ? 'on' : 'off')
-            }).then(response => {
-                console.log(response.data)
-                const result = response.data.result
-                if (result) {
-                    props.setState(2)
-                } else {
-                    console.log("can't reg")
-                }
-            }).catch(err => {
-                console.error(err)
-            })
+            username: registerData.username,
+            password: registerData.password,
+            fname: registerData.fname,
+            lname: registerData.lname,
+            email: registerData.email,
+            ppnumber: registerData.ppnumber,
+            isTutor: (registerData.role == 'teather' ? 'on' : 'off')
+        }).then(response => {
+            console.log(response.data)
+            const result = response.data.result
+            if (result) {
+                props.setState(2)
+            } else {
+                console.log("can't reg")
+            }
+        }).catch(err => {
+            console.error(err)
+        })
     }
 
     return (
