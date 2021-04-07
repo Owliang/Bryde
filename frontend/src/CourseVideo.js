@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Paper, Typography, Grid, Box, CircularProgress } from "@material-ui/core";
+import { Paper, Typography, Grid, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import CourseForm from "./components/Course/CourseForm";
+import VideoForm from "./components/Course/VideoForm";
 import MyDialog from "./components/MyDialog";
 import GetCourseData from "./services/getCourseData";
 
@@ -21,33 +21,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CreateCourse(props) {
+const CourseVideo = (props) => {
   const classes = useStyles();
   const search = props.location.search; // returns the URL query String
   const params = new URLSearchParams(search);
-  const CID = params.get("cid") || 0;
+  const CID = params.get("cid");
+  const cName = params.get("cname");
   const mode = params.get("mode") || "create";
   const [tutor, setTutor] = useState();
   const [dialog, setDialog] = useState("");
-  const getInitialCourseData = () =>
-    GetCourseData({ CID: CID, mode: mode, setAlert: setDialog });
-  const [initialCourseData, setinitialCourseData] = useState("");
+  const getInitialCourseData = () => GetCourseData({ CID: CID, mode: mode , setAlert: setDialog });
+
 
   useEffect(async () => {
-    console.log("begin Init");
-    getInitialCourseData().then((initData) => {
-      console.log(`initialCourseData from useEffect`, initData);
-      setinitialCourseData({...initData,id:CID});
-    }).catch(async (err) => {
-      console.log("catching err")
-      await new Promise((resolve) => setTimeout(resolve, 20000));
-      window.location.href = myCourseURL;
-    })
-  }, [1]);
-
-  useEffect(async () => {
-    console.log(`data from main`, initialCourseData);
-    console.log(mode);
     try {
       var username = localStorage.getItem("username");
       var role = localStorage.getItem("role");
@@ -98,7 +84,7 @@ export default function CreateCourse(props) {
           message={dialog.message}
           buttonOneRefTo={dialog.mainRefTo}
           buttonOneMessage={dialog.mainMessage}
-          buttonTOneOnClick={dialog.mainOnClick}
+          buttonOneOnClick={dialog.mainOnClick}
           buttonTwoRefTo={dialog.optionRefTo}
           buttonTwoMessage={dialog.optionMessage}
           buttonTwoOnClick={dialog.optionOnClick}
@@ -106,7 +92,7 @@ export default function CreateCourse(props) {
         />
         <Typography variant="h2" color="primary" gutterBottom>
           <Box fontWeight="fontWeightBold" m={1}>
-            {mode === "create" ? "Create Course" : "Edit Course"}
+            Course Video
           </Box>
         </Typography>
       </Grid>
@@ -117,20 +103,19 @@ export default function CreateCourse(props) {
           component="div"
           elevation={3}
         >
-          {initialCourseData.length == 0 ? (
-            <CircularProgress size={150} />
-          ) : (
-            <CourseForm
-              className={classes.root}
-              mode={mode || "create"}
-              tutor={tutor}
-              setDialog={setDialog}
-              initialCourseData={initialCourseData}
-              noValidate
-            />
-          )}
+          <VideoForm
+            getInitialCourseData={getInitialCourseData}
+            className={classes.root}
+            cName = {cName}
+            tutor={tutor}
+            setDialog={setDialog}
+            mode={mode}
+            CID={CID}
+          />
         </Paper>
       </Grid>
     </Grid>
   );
-}
+};
+
+export default CourseVideo;

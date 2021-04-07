@@ -25,18 +25,11 @@ var upload = multer({
 })
 /* GET home page. */
 
-router.post('/test', function(req, res, next) {
-    res.json('responce');
-});
-
 router.get('/', function(req, res, next) {
-    res.render('upload');
-    //res.json({result:'Response from create course page'})
+    //res.render('upload');
+    res.json({result:'Response from create course page'})
 });
 
-course_upload = upload.fields([{name:'attach_photo',maxcount:1},{name:'attach_video',maxcount:15}]);
-
-//router.post('/',course_upload,function(req, res, next) {
 router.post('/',function(req, res, next) {
         console.log('recieve data')
         var form = new formidable.IncomingForm();
@@ -50,26 +43,30 @@ router.post('/',function(req, res, next) {
                 }
                 else{
                     var dbo = db.db("BrydeTech");
-                    var video = [];
-                    for(i=0;i<fields['total_video'];i++){
-                        video.push(fs.readFileSync(files['attatch_video_'+i].path));
-                    }
                     var myobj = {name:fields.name,
                         tutor:fields.tutor,
-                        price:fields.price,
+                        price:parseInt(fields.price),
                         subject:fields.subject,
                         description:fields.description,
                         link:fields.link,
-                    photo_buffer:fs.readFileSync(files.attatch_photo.path),
-                    video_buffer:video,
+                        photo_buffer:fs.readFileSync(files.attatch_photo.path),
+                        video_name:[],
+                        video_buffer:[],
+                        video_size:[],
+                        video_type:[],
                         rating:7,
                         enrolled_date:'-',
                         student:[]};
-                    dbo.collection("courses").insertOne(myobj,function(err,response){
-                    //if (err) {console.log(err); throw err;}
+                    dbo.collection("courses").insertOne(myobj,function(err,result){
+                        if (err) {
+                            res.json({result:false , error:err})
+                        }
+                        else{
+                            res.json({result:true,error:"",id:result["ops"][0]["_id"]})
+                        }
                         db.close();
                     });
-                    res.json({result:true,error:""})
+                    
                 }
             });
         });
