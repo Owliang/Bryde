@@ -9,6 +9,7 @@ import EditCourse from "./components/EditCourse"
 import Home from './components/Home/Home'
 import SearchCourse from './components/Search/SearchCourse'
 import CourseScreen from './components/Search/CourseScreen'
+import Lesson from './components/Course/Lesson'
 
 function App() {
 
@@ -48,6 +49,7 @@ function App() {
                             <PrivateRoute path='/home' component={Home}/>
                             <PrivateRoute path='/search' component ={SearchCourse}/>
                             <PrivateRoute path='/course/:id' component ={CourseScreen}/>
+                            <PrivateRoute path='/lesson/:id' component ={Lesson}/>
                             <LoginRoute path="/" component={Landing} />
                             <Route path='/courses' component={CourseList} />
                         </Switch>
