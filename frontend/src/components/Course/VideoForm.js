@@ -119,6 +119,9 @@ const CourseVideo = (props) => {
       } else {
         setinitialCourseData({ ...initData, name: cName });
       }
+    }).catch(async (err) => {
+      await new Promise((resolve) => setTimeout(resolve, 20000));
+      window.location.href = myCourseURL;
     });
   }, [1]);
 
@@ -164,17 +167,19 @@ const CourseVideo = (props) => {
           });
         } else {
           setLoading(false);
-          setAlert({
+          setUploadPercentage(0);
+          alert.open != true && setAlert({
             title: "Add Video Fail!",
             open: true,
-            message: "Add Video Failed !",
-            submessage: response.data.error,
+            message: "Add Video not successful. There're something wrong during uploading video to the server. Please contact admin or try again later.",
+            submessage: "Error: " + response.data.error.code,
             optionMessage: "Try Again",
           });
         }
       })
       .catch((err) => {
         setLoading(false);
+        setUploadPercentage(0);
         setAlert({
           title: "There are Server Failure",
           open: true,
@@ -317,10 +322,30 @@ const CourseVideo = (props) => {
                   selectNewVideos(
                     { accept: "video/*", multiple: true },
                     (selectvideos) => {
-                      selectvideos.map(({ source, name, size, file }) => {
+                      let videoLessSize = []
+                      let exceedName = []
+                      selectvideos.map(({ source, name, size, file }, index) => {
                         console.log({ source, name, size, file });
+                        if(size < 16777215){
+                          videoLessSize.push({ source, name, size, file });
+                        }else{
+                          exceedName.push(name)
+                        }
                       });
-                      setVideos([...videos, ...selectvideos]);
+                      if(videoLessSize.length != selectvideos.length){
+                        setAlert({
+                          open:true,
+                          title: "Some Video Exceed size Limit. !!",
+                          message:"There are video exceed size limit. The maximumsize that allow to uploaded videos is 16 Mb. The video that exceed the size limit will not uploaded to the server.",
+                          submessage:"there are " +  exceedName.length + " video exceed size limit. => " + exceedName,
+                          mainMessage:" ",
+                          mainOnClick: () => {
+                            setAlert({ open: false });
+                          } ,
+                          optionMessage:""
+                        })
+                      }
+                      setVideos([...videos, ...videoLessSize]);
                     }
                   );
                   //console.log(nVideo)

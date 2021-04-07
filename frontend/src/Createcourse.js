@@ -5,6 +5,8 @@ import CourseForm from "./components/Course/CourseForm";
 import MyDialog from "./components/MyDialog";
 import GetCourseData from "./services/getCourseData";
 
+const myCourseURL = "/myCourse";
+
 const useStyles = makeStyles((theme) => ({
   pageContent: {
     margin: theme.spacing(5),
@@ -23,7 +25,7 @@ export default function CreateCourse(props) {
   const classes = useStyles();
   const search = props.location.search; // returns the URL query String
   const params = new URLSearchParams(search);
-  const CID = params.get("cid");
+  const CID = params.get("cid") || 0;
   const mode = params.get("mode") || "create";
   const [tutor, setTutor] = useState();
   const [dialog, setDialog] = useState("");
@@ -31,12 +33,16 @@ export default function CreateCourse(props) {
     GetCourseData({ CID: CID, mode: mode, setAlert: setDialog });
   const [initialCourseData, setinitialCourseData] = useState("");
 
-  useEffect(() => {
+  useEffect(async () => {
     console.log("begin Init");
     getInitialCourseData().then((initData) => {
       console.log(`initialCourseData from useEffect`, initData);
-      setinitialCourseData(initData);
-    });
+      setinitialCourseData({...initData,id:CID});
+    }).catch(async (err) => {
+      console.log("catching err")
+      await new Promise((resolve) => setTimeout(resolve, 20000));
+      window.location.href = myCourseURL;
+    })
   }, [1]);
 
   useEffect(async () => {

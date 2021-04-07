@@ -148,8 +148,9 @@ const CourseForm = (props) => {
       console.log(attatch_videos);
       console.log([...formData]);
       setLoading(true)
+      let apiURL = mode == "create" ? "http://localhost:4000/create_course" : "http://localhost:4000/edit_course"
       axios
-        .post("http://localhost:4000/create_course", formData, {
+        .post(apiURL, formData, {
           crossdomain: true,
           onUploadProgress: progressEvent => {
             setUploadPercentage(
@@ -163,7 +164,7 @@ const CourseForm = (props) => {
           console.log("response: ", response);
           var isSuccess = response.data.result;
           if (isSuccess) {
-            var cid = response.data.id;
+            var cid = mode ==="create" ? response.data.id : initialCourseData.id;
             setAlert({
               title:
                 mode === "create"
@@ -189,7 +190,7 @@ const CourseForm = (props) => {
                 mode === "create"
                   ? "Create Course Failed"
                   : "Edit Course Failed",
-              submessage: response.data.error,
+              submessage: "Error: " + response.data.error.code,
               optionMessage: "Try Again",
             });
           }
