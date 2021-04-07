@@ -23,6 +23,13 @@ const useStyles = makeStyles((theme) => ({
     typography: {
         color: '#FFFFFF',
     },
+    coursedetail: {
+        color: '#FFFFFF',
+        marginLeft:'3rem',
+        marginTop:'auto',
+        marginBottom:'auto',
+        variant:'h6'
+    },
     grid: {
         height: '100%',
         padding : '1rem',
@@ -30,10 +37,10 @@ const useStyles = makeStyles((theme) => ({
     textFieldSmall: {
         marginBottom: 8,
     },
-    gridList: {
-        flexWrap: 'nowrap',
+    ButtonBlock: {
+        display:'flex',
+        justifyContent:'flex-end',
         // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-        transform: 'translateZ(0)',
       },
     paper: {
         padding: theme.spacing(2),
@@ -77,21 +84,31 @@ const useStyles = makeStyles((theme) => ({
 
         
     },
+    qrcode:{
+        marginTop: '2rem',
+        maxWidth: '25rem',
+        display:'block',
+        marginLeft:'auto',
+        marginRight:'auto'
+    },
     courseText:{
         align: 'center'
     },
     margin:{
-        marginTop:'1rem',
-        marginBottom:'3rem',
-        marginLeft:'1rem'
+        marginTop:'2rem',
+        marginBottom:'2rem',
+        marginLeft:'1rem',
+        marginRight:0
     },
     Button:{
         backgroundColor :'#212121',
         border:'1.5px solid',
         bordercolor:'#0EED0E',
         padding: '3px',
-        margin: '1rem',
+        marginLeft: '3rem',
+        marginTop: '1rem',
         color:'primary',
+        width:'10rem',
         '&:hover': {
             backgroundColor: '#212121',
             boxShadow: 'none',
@@ -103,28 +120,52 @@ export default function CourseScreen(props) {
 
     const classes = useStyles();
     const [course,setCourse] = useState([]);
+    const [QRcode,setQRcode] = useState([]);
+    const [showQRcode,setShowQRcode] = useState(false);
 
     useEffect(() => {
         const fecthCourse = async () => {
             const { data } = await axios.get('/course',{params:{
                 id : props.match.params.id,
-                student_name : 'ford'
+                student_name : localStorage.getItem('username')
             }    
             });
             setCourse( data.data );
-            
 
             
         };
         fecthCourse();
     },[]);
+
+    const fecthQRcode = async () => {
+        const { data } = await axios.post('/payment',{
+            tutor: course.tutor,
+            price : course.price
+            });
+        setQRcode( data.data );    
+        };
+        
+
+
+
+    const handleEnroll = () => {
+        fecthQRcode();
+        setShowQRcode(true);
+        console.log(QRcode);
+        
+      };
+    
+      
+
     if(!course){
         return (
             <Typography variant='h2' align='center' className={classes.typography}>Class Not Found</Typography>
         )
 
     }
+
     return (
+        
       <Container fixed>
         <Paper className={classes.paper}>
             <Grid className={classes.margin} >
@@ -136,16 +177,43 @@ export default function CourseScreen(props) {
                     <img src={'data:image/jpg;base64,'+ course.photo_buffer } className={classes.courseImage} />
                 </div>
                 <div className='col'>
-                    <Typography className={classes.typography}>By : { course.tutor }</Typography>
-                    <Typography className={classes.typography}>Subject : { course.subject }</Typography>
-                    <Typography className={classes.typography}>Price : { course.price } Baht</Typography>
-                    <Typography className={classes.typography}>Rating : { course.rating }</Typography>
-                    <Typography className={classes.typography}>Number of Video : { course.video_size }</Typography>
+                    <Typography className={classes.coursedetail} >By : { course.tutor }</Typography>
+                    <Typography className={classes.coursedetail} >Subject : { course.subject }</Typography>
+                    <Typography className={classes.coursedetail} >Price : { course.price } Baht</Typography>
+                    <Typography className={classes.coursedetail} >Rating : { course.rating }</Typography>
+                    <Typography className={classes.coursedetail} >Number of Video : { course.video_size }</Typography>
 
                 </div>
+                <div className={classes.margin} >
+                    <Typography className={classes.typography} variant='h6'>Description :</Typography>
+                    
+                </div>
+                    <Typography className={classes.coursedetail}  > course.description </Typography>
+                
             </div>
         </Paper>
-        
+        {course.Isenroll === true &&
+            <Typography className={classes.typography}>You've already enrolled in this class</Typography>
+        }
+        <div className={classes.ButtonBlock} >
+        {course.Isenroll === true ? <br/> : showQRcode === false ?
+                    
+                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={() => {handleEnroll()}} >enroll</Button>
+                    :
+                    <Button variant="outlined" align='end' color="primary" className={classes.Button} href='/' >done</Button>
+                }
+        <Button variant="outlined" align='end' color="primary" className={classes.Button} href='/' >back</Button>
+
+        </div>
+
+
+        {showQRcode === true &&
+            <div className='row' display='flex' justifyContent='justify-center'>
+                
+                <img src={'data:image/jpg;base64,'+ QRcode.qr} className={classes.qrcode} align= 'center' />
+                
+            </div>
+                    }
         
 
       </Container>
