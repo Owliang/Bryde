@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
         }
         else{
             var dbo = db.db("BrydeTech");
-            dbo.collection("Q&A").find({follower:req.query.username}, { projection: { _id: 0,comment:0,follower:0} }).toArray(function(err, result) {
+            dbo.collection("Q&A").find({follower:req.query.username}, { projection: { _id: 1,comment:0,follower:0,writer:0} }).toArray(function(err, result) {
                 if (err){
                     res.json({result:false , error:err})
                 }

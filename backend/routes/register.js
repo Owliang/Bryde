@@ -17,9 +17,9 @@ const { render } = require('ejs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    //res.render('regis');
+    res.render('regis');
     //res.render('register',{param:img});
-    res.json({ result : 'Response from register page' })  
+    //res.json({ result : 'Response from register page' })  
 });
 
 router.post('/'/*,upload.single('file')*/,[check("username","Please enter username").not().isEmpty(),
