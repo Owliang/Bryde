@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Container, Grid, ListItem, Paper, Typography , Button , Select ,MenuItem ,FormControl,InputLabel} from '@material-ui/core'
 import axios from 'axios'
 
-
 const useStyles = makeStyles((theme) => ({
 
     title: {
@@ -31,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
     ButtonBlock: {
         display:'flex',
         justifyContent:'flex-end',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
       },
     paper: {
         padding: theme.spacing(2),
@@ -158,10 +156,26 @@ export default function Lesson(props) {
                     <Typography className={classes.typography} variant='h6'>Description :</Typography>
                     
                 </div>
-                    <Typography className={classes.coursedetail}  > course.description </Typography>
+                    <Typography className={classes.coursedetail}  > {course.description} </Typography>
                 
             </div>
         </Paper>
+        <Grid container spacing={3} className={classes.grid}>
+            <Grid item xs={6}>
+                <Select fullWidth className={classes.dropdown}  >
+                    <MenuItem value={'0'}>clip 1</MenuItem>
+                    <MenuItem value={'1'}>clip 2</MenuItem>
+                    <MenuItem value={'2'}>clip 3</MenuItem>
+                    <MenuItem value={'3'}>clip 4</MenuItem>
+                </Select>
+            </Grid>
+            <Grid item xs={6}>
+                <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} > Download course material </Button>
+            </Grid>
+        </Grid>
+
+
+
 
 
         {localStorage.getItem('role') === 'tutor' &&
