@@ -17,7 +17,6 @@ const { render } = require('ejs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    //img = fs.readFileSync('uploads/IMG_0130.mov')//iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=='
     res.render('regis');
     //res.render('register',{param:img});
     //res.json({ result : 'Response from register page' })  
@@ -39,18 +38,18 @@ router.post('/'/*,upload.single('file')*/,[check("username","Please enter userna
                 }
                 else{
                     var dbo = db.db("BrydeTech");
-                    dbo.collection("users").find({"username":req.body.username,"email":req.body.email}, { projection: { _id: 0, username: 1} }).toArray(function(err, result) {
+                    dbo.collection("users").find({"username":req.body.username}, { projection: { _id: 0, username: 1} }).toArray(function(err, result) {
                         if (err) {
-                            throw err;
+                            res.json({result:false , error:err})
                         }
                         if(result.length===0){
                             bcrypt.genSalt(saltRounds, function (err, salt) {
                                 if (err) {
-                                  throw err
+                                    res.json({result:false , error:err})
                                 } else {
                                   bcrypt.hash(req.body.password, salt, function(err, hash) {
                                     if (err) {
-                                      throw err
+                                        res.json({result:false , error:err})
                                     } else {
                                         var myobj = { username:req.body.username,
                                             password:hash,

@@ -11,12 +11,14 @@ var fs = require('fs');
 router.get('/', function(req, res, next) {
     MongoClient.connect(url, function(err, db) {
         if (err) {
-            throw err;
+            res.json({result:false,error:err})
         }
         else{
             var dbo = db.db("BrydeTech");
-            dbo.collection("Q&A").find({follower:req.query.username}, { projection: { _id: 0,comment:0,follower:0} }).toArray(function(err, result) {
-                if (err) throw err
+            dbo.collection("Q&A").find({follower:req.query.username}, { projection: { _id: 1,comment:0,follower:0,writer:0} }).toArray(function(err, result) {
+                if (err){
+                    res.json({result:false , error:err})
+                }
                 res.json({result:result});
                 db.close();
             })

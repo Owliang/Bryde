@@ -41,7 +41,7 @@ router.post('/',[check("code","Please Input code")], function(req, res, next) {
             var dbo = db.db("BrydeTech");
             dbo.collection("users").insertOne(data.myobj,function(err,res){
                 if (err) {
-                  throw err;
+                  res.json({result:false , error:err})
                 }
                 db.close();
             });

@@ -12,12 +12,15 @@ router.get('/', function(req, res, next) {
         //res.json({result:req.query.subject});
         MongoClient.connect(url, function(err, db) {
             if (err) {
-                throw err;
+                res.json({result:false,error:err})
             }
             else{
                 var dbo = db.db("BrydeTech");
-                dbo.collection("Q&A").find({topic:req.query.topic}, { projection: { _id: 0,} }).toArray(function(err, result) {
-                    if (err) throw err
+                var id = new mongo.ObjectID(req.query.id)
+                dbo.collection("Q&A").find({_id:id}, { projection: { _id: 0} }).toArray(function(err, result) {
+                    if (err) {
+                        res.json({result:false,error:err})
+                    }
                     res.json({result:result});
                     db.close();
                 })
@@ -27,34 +30,37 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
     MongoClient.connect(url, function(err, db) {
         if (err) {
-            throw err;
+            res.json({result:false,error:err})
         }
         else{
             var dbo = db.db("BrydeTech");
-            var myquery = { topic: req.body.topic };
-            var newvalues = { $push: {comment:req.body.comment} };
+            var id = new mongo.ObjectID(req.body.id)
+            var myquery = { _id:id};
+            //var newvalues = {$push:{comment:{writer:req.body.username,desc:req.body.comment}}}
+            var newvalues = { $push: {writer:req.body.username,comment:req.body.comment} };
             dbo.collection("Q&A").updateOne(myquery, newvalues, function(err, res) {
-                if (err) throw err;
+                if (err){
+                    res.json({result:false,error:err})
+                }
                 db.close();
             });
+            res.json({result:true,error:""})
         }
     });
-    MongoClient.connect(url, function(err, db) {
+    /*MongoClient.connect(url, function(err, db) {
         if (err) {
-            throw err;
+            res.json({result:false,error:err})
         }
         else{
             var dbo = db.db("BrydeTech");
-            var myquery = { topic: req.body.topic };
-            var newvalues = { $push: {comment:req.body.comment} };
-            dbo.collection("Q&A").find({"topic":req.body.topic}, { projection: { _id: 0, follower:1} }).toArray(function(err, result) {
+            dbo.collection("Q&A").find({_id:id}, { projection: { _id: 0, follower:1} }).toArray(function(err, result) {
                 if (err) {
-                    throw err;
+                    res.json({result:false , error:err})
                 }
                 res.json({ result : true , result:result,error : ""});
                 db.close();
             });
         }
-    });
+    });*/
 });
 module.exports = router;

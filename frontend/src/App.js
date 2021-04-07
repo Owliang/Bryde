@@ -4,8 +4,10 @@ import { Container, Box } from '@material-ui/core'
 import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
-import CreateCourse from './Createcourse'
-import EditCourse from "./components/EditCourse"
+import CreateCourse from './CreateCourse'
+import CreateQuestion from './CreateQuestion'
+import CourseVideo from './CourseVideo'
+import EditCourse from "./EditCourse"
 import Home from './components/Home/Home'
 import SearchCourse from './components/Search/SearchCourse'
 import CourseScreen from './components/Search/CourseScreen'
@@ -43,8 +45,10 @@ function App() {
                 <Box height='100vh'> 
                     <Router>
                         <Switch>
-                            <PrivateRoute path='/create_courses' component={CreateCourse} />
-                            <PrivateRoute path='/editcourses' component={EditCourse} />
+                            <PrivateRoute path='/create_course' component={CreateCourse} />
+                            <PrivateRoute path='/create_question' component={CreateQuestion} />
+                            <PrivateRoute path='/edit_course' component={EditCourse} />
+                            <PrivateRoute path='/course_video' component={CourseVideo} />
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
                             <PrivateRoute path='/search' component ={SearchCourse}/>
