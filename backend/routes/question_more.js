@@ -27,7 +27,8 @@ router.get('/', function(req, res, next) {
             }
         });
 });
-router.post('/', function(req, res, next) {
+router.post('/'[check("username","Please enter username").not().isEmpty(),
+check("id","Please enter id").not().isEmpty(),check("comment","Please enter comment").not().isEmpty()], function(req, res, next) {
     MongoClient.connect(url, function(err, db) {
         if (err) {
             res.json({result:false,error:err})
