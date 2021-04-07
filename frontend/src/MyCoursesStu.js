@@ -34,9 +34,9 @@ function MyCourseStu() {
             var username = localStorage.getItem("username");
             var role = localStorage.getItem("role");
             console.log(JSON.stringify({ name: username, role: role }));
-            if (role != "Tutor") {
+            if (role != "Student") {
                 setDialog({
-                    title: "How Student get into this page.",
+                    title: "How Tutor get into this page.",
                     open: true,
                     message: "!!!! HOW DID YOU GET IN HERE KIDS !!!!",
                     mainMessage: "Login to new account",
@@ -46,7 +46,7 @@ function MyCourseStu() {
                 await new Promise((resolve) => setTimeout(resolve, 20000));
                 window.location.href = "/";
             }
-            setTutor(username);
+            setStudent(username);
         } catch {
             setDialog({
                 title: "We are currently don't know you",
@@ -66,7 +66,7 @@ function MyCourseStu() {
     useEffect(() => {
         axios.get("/student_course", {
             params: {
-                student: student
+                username: student
             }
         }).then(response => {
                 console.log(response.data.result)

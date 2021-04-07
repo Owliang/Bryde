@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
       color: 'white'
     },
     media: {
-      paddingTop: "56.25%"
+      paddingTop: "30%"
     },
 }))
 

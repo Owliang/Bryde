@@ -52,7 +52,7 @@ function App() {
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
                             <PrivateRoute path='/mycourses' component={MyCourses}/>
-                            <PrivateRoute path='/mycoursesstu' component={MyCoursesStu}/>
+                            <PrivateRoute path='/mycoursesstu' component={MyCourseStu}/>
                             <LoginRoute path="/" component={Landing} />
                             <Route path='/courses' component={CourseList} />
                         </Switch>
