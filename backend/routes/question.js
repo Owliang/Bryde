@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
         }
         else{
             var dbo = db.db("BrydeTech");
-            dbo.collection("Q&A").find(q,{ projection: { _id:1,topic:1,creator:1,subject:1} }).sort({topic:-1}).toArray(function(err, result) {
+            dbo.collection("Q&A").find(q,{ projection: { _id:1,topic:1,creator:1,subject:1,follower:1} }).sort({topic:-1}).toArray(function(err, result) {
                 if (err){
                     res.json({result:false , error:err})
                 }
@@ -29,42 +29,6 @@ router.get('/', function(req, res, next) {
             })
         }
     });
-    /*if(req.query.subject == ""){
-        //res.json({result:req.query.subject});
-        MongoClient.connect(url, function(err, db) {
-            if (err) {
-                res.json({ result: false, error: errors })
-            }
-            else{
-                var dbo = db.db("BrydeTech");
-                dbo.collection("Q&A").find({}, { projection: { _id: 0, topic:1,creator:1} }).toArray(function(err, result) {
-                    if (err) {
-                        res.json({ result: false, error: errors })
-                    }
-                    res.json({result:result});
-                    db.close();
-                })
-            }
-        });
-    }
-    else{
-        //res.json({result:req.query.subject});
-        MongoClient.connect(url, function(err, db) {
-            if (err) {
-                res.json({ result: false, error: errors })
-            }
-            else{
-                var dbo = db.db("BrydeTech");
-                dbo.collection("Q&A").find({"subject":req.query.subject}, { projection: { _id: 0, topic: 1} }).toArray(function(err, result) {
-                    if (err) {
-                        res.json({ result: false, error: errors })
-                    }
-                    res.json({result:result});
-                    db.close();
-                })
-            }
-        });
-    }*/
 });
 router.post('/',[check("username","Please enter username").not().isEmpty(),
                 check("topic","Please enter topic").not().isEmpty()]
@@ -80,7 +44,8 @@ router.post('/',[check("username","Please enter username").not().isEmpty(),
             }
             else{
                 var dbo = db.db("BrydeTech");
-                dbo.collection("Q&A").find({"follower":req.body.username,"topic":req.body.topic}, { projection: { _id: 0,topic:1} }).toArray(function(err, result) {
+                var id = new mongo.ObjectID(req.body.id)
+                dbo.collection("Q&A").find({"follower":req.body.username,_id:id}, { projection: { _id: 0,topic:1} }).toArray(function(err, result) {
                     if (err) {
                         res.json({result:false , error:err})
                     }
