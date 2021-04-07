@@ -36,6 +36,7 @@ router.post('/', function(req, res, next) {
             var dbo = db.db("BrydeTech");
             var id = new mongo.ObjectID(req.body.id)
             var myquery = { _id:id};
+            //var newvalues = {$push:{comment:{writer:req.body.username,desc:req.body.comment}}}
             var newvalues = { $push: {writer:req.body.username,comment:req.body.comment} };
             dbo.collection("Q&A").updateOne(myquery, newvalues, function(err, res) {
                 if (err){
@@ -43,9 +44,10 @@ router.post('/', function(req, res, next) {
                 }
                 db.close();
             });
+            res.json({result:true,error:""})
         }
     });
-    MongoClient.connect(url, function(err, db) {
+    /*MongoClient.connect(url, function(err, db) {
         if (err) {
             res.json({result:false,error:err})
         }
@@ -59,6 +61,6 @@ router.post('/', function(req, res, next) {
                 db.close();
             });
         }
-    });
+    });*/
 });
 module.exports = router;

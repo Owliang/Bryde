@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useFileUpload } from "use-file-upload";
-import { styled } from '@material-ui/core/styles';
-import VideoThumbnail from 'react-video-thumbnail';
+import { styled } from "@material-ui/core/styles";
+import VideoThumbnail from "react-video-thumbnail";
 import FormComponents from "../FormComponents/FormComponents.js";
 import CloudUploadOutlinedIcon from "@material-ui/icons/CloudUploadOutlined";
-import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
-import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
+import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
+import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import { green } from "@material-ui/core/colors";
 import {
   GridList,
@@ -19,17 +19,14 @@ import {
   Typography,
   makeStyles,
   CircularProgress,
-  IconButton
+  IconButton,
 } from "@material-ui/core";
 import RenameForm from "./RenameForm.js";
 
 const myCourseURL = "/myCourse";
 
 const GridIcon = styled(({ color, ...other }) => <IconButton {...other} />)({
-  color: (props) =>
-    props.color === 'red'
-      ? 'red'
-      : ' #00ff23 ',
+  color: (props) => (props.color === "red" ? "red" : " #00ff23 "),
   margin: 3,
 });
 
@@ -45,9 +42,9 @@ const useStyles = makeStyles((theme) => ({
   },
   gridicon: {
     color: (props) =>
-      props.color === 'red'
-        ? 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
-        : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+      props.color === "red"
+        ? "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)"
+        : "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
   },
   gridroot: {
     margin: theme.spacing(3),
@@ -75,10 +72,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     position: "relative",
   },
-  loading:{
+  loading: {
     width: 1000,
     height: 500,
-  }
+  },
 }));
 
 const humanFileSize = (size) => {
@@ -91,33 +88,45 @@ const humanFileSize = (size) => {
 };
 
 const CourseVideo = (props) => {
-  const { tutor: curTutor, setDialog: setAlert, CID, mode, getInitialCourseData, cName } = props;
+  const {
+    tutor: curTutor,
+    setDialog: setAlert,
+    CID,
+    mode,
+    getInitialCourseData,
+    cName,
+  } = props;
   const [videos, setVideos] = useState([]);
   const [popup, setPopup] = useState("");
-  const [loading, setLoading] = useState(false);
   const [newVideos, selectNewVideos] = useFileUpload();
   const classes = useStyles(props);
-  const [initialCourseData, setinitialCourseData] = useState({ status: "loading" });
+  const [initialCourseData, setinitialCourseData] = useState({
+    status: "loading",
+  });
+  const [loading, setLoading] = useState(false);
   const [uploadPercentage, setUploadPercentage] = useState(0);
-  console.log(CID)
-  console.log(`initialCourseData video form`, initialCourseData)
+  console.log(CID);
+  console.log(`initialCourseData video form`, initialCourseData);
 
   useEffect(() => {
-    console.log("begin Init")
+    console.log("begin Init");
     getInitialCourseData().then((initData) => {
-      console.log(`initialCourseData from useEffect`, initData)
-      setinitialCourseData(initData)
+      console.log(`initialCourseData from useEffect`, initData);
+      setinitialCourseData(initData);
       if (mode === "edit") {
-        console.log("set init Video")
-        setVideos(initData.attatch_video)
-      }else{
-        setinitialCourseData({...initData,name:cName})
+        console.log("set init Video");
+        setVideos(initData.attatch_video);
+      } else {
+        setinitialCourseData({ ...initData, name: cName });
       }
-    })
+    }).catch(async (err) => {
+      await new Promise((resolve) => setTimeout(resolve, 20000));
+      window.location.href = myCourseURL;
+    });
   }, [1]);
 
   useEffect(() => {
-    console.log(`videos`, videos)
+    console.log(`videos`, videos);
   }, [videos]);
 
   const handleSubmit = () => {
@@ -127,23 +136,23 @@ const CourseVideo = (props) => {
       formData.append("attatch_video_" + i, videos[i].file);
       formData.append("attatch_video_name_" + i, videos[i].name);
       formData.append("attatch_video_size_" + i, videos[i].size);
-      mode === "edit" ? 
-        formData.append("attatch_video_type_" + i, videos[i].type) 
-      : formData.append("attatch_video_type_" + i, videos[i].file.type)
+      formData.append("attatch_video_type_" + i, videos[i].file.type);
     }
     formData.append("total_video", nVideo);
     formData.append("id", CID);
-    console.log("submited");
-    setLoading(true)
+    console.log("submited", [...formData]);
+    setLoading(true);
     axios
-      .post("http://localhost:4000/add_video", formData, { crossdomain: true,
-      onUploadProgress: progressEvent => {
-        setUploadPercentage(
-          parseInt(
-            Math.round((progressEvent.loaded * 100) / progressEvent.total)
-          )
-        );
-      } })
+      .post("http://localhost:4000/add_video", formData, {
+        crossdomain: true,
+        onUploadProgress: (progressEvent) => {
+          setUploadPercentage(
+            parseInt(
+              Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            )
+          );
+        },
+      })
       .then((response) => {
         console.log("response: ", response);
         var isSuccess = response.data.result;
@@ -157,16 +166,20 @@ const CourseVideo = (props) => {
             optionRefTo: myCourseURL,
           });
         } else {
-          setAlert({
+          setLoading(false);
+          setUploadPercentage(0);
+          alert.open != true && setAlert({
             title: "Add Video Fail!",
             open: true,
-            message: "Add Video Failed !",
-            submessage: response.data.error,
+            message: "Add Video not successful. There're something wrong during uploading video to the server. Please contact admin or try again later.",
+            submessage: "Error: " + response.data.error.code,
             optionMessage: "Try Again",
           });
         }
       })
       .catch((err) => {
+        setLoading(false);
+        setUploadPercentage(0);
         setAlert({
           title: "There are Server Failure",
           open: true,
@@ -185,146 +198,188 @@ const CourseVideo = (props) => {
 
   return (
     <div>
-      {initialCourseData.status == "loading" ?
-      (<CircularProgress size={150} />)
-      : (<Grid
-        container
-        //direction="column"
-        justify="space-between"
-        alignItems="center"
-      >
-        <Grid item xs={12}>
-          <Typography variant="h6" color="primary" gutterBottom>
-            <Box fontWeight="fontWeightBold" m={1}>
-              Course name: {initialCourseData.name}
-            </Box>
-          </Typography>
-          <FormComponents.SingleFieldPopup
-            title="Change Video's Name"
-            open={popup.open}
-            handleClose={handleClose}
-          >
-            <RenameForm
-              value={popup.value}
-              setValue={(newValue) => {
-                setVideos(
-                  videos.map((item, id) =>
-                    id === popup.index
-                      ? { ...item, name: newValue }
-                      : item
-                  ))
-              }}
-              handleClose={handleClose}
-            />
-          </FormComponents.SingleFieldPopup>
-        </Grid>
-        <Grid item xs={12}>
-          {videos?.length > 0 ? (
-            <div className={classes.gridroot}>
-              <br />
-              <br />
-              <GridList cellHeight={250} className={classes.gridList}>
-                <GridListTile key="Subheader" cols={2} style={{ height: "auto" }}>
-                  <ListSubheader component="div" color="primary" variant='h5'>
-                    Video List
-                </ListSubheader>
-                </GridListTile>
-                {videos.map((video, index) => (
-                  <GridListTile key={`${index}${video.name}`}>
-                    <VideoThumbnail
-                      videoUrl={video.source}
-                      thumbnailHandler={(thumbnail) => console.log(thumbnail)}
-                      width={425}
-                      height={240}
-                    />
-                    <GridListTileBar
-                      title={video.name}
-                      subtitle={<span>size: {humanFileSize(video.size)}</span>}
-                      actionIcon={
-                        <Box>
-                          <GridIcon id={index} aria-label={`rename id ${index}`}
-                            onClick={(event) => {
-                              console.log('edit click at ', index)
-                              setPopup({
-                                open: true,
-                                value: videos[index].name,
-                                index: index
-                              })
-                            }}
-                          >
-                            <EditTwoToneIcon />
-                          </GridIcon>
-                          <GridIcon id={video.id} aria-label={`delete id ${video.id}`} color='red'
-                            onClick={(event) => {
-                              console.log('delete click at ', index)
-                              setVideos(videos.filter((item, id) => id !== index))
-                            }}
-                          >
-                            <DeleteTwoToneIcon />
-                          </GridIcon>
-                        </Box>
-                      }
-                    />
-                  </GridListTile>
-                ))}
-              </GridList>
-            </div>
-          ) : (
-            <Typography
-              variant="h5"
-              display="block"
-              gutterBottom
-              color="secondary"
-              align="center"
-            >
-              <Box m={1}>
-                <br />
-              Currently, No Video Uploaded.
-            </Box>
+      {initialCourseData.status == "loading" ? (
+        <CircularProgress size={150} />
+      ) : (
+        <Grid
+          container
+          //direction="column"
+          justify="space-between"
+          alignItems="center"
+        >
+          <Grid item xs={12}>
+            <Typography variant="h6" color="primary" gutterBottom>
+              <Box fontWeight="fontWeightBold" m={1}>
+                Course name: {initialCourseData.name}
+              </Box>
             </Typography>
-          )}
-        </Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}>
-          <div className={classes.wrapper}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={async () => {
-                selectNewVideos({ accept: "video/*", multiple: true }, (selectvideos) => {
-                  selectvideos.map(({ source, name, size, file }) => {
-                    console.log({ source, name, size, file });
-                  });
-                  setVideos([
-                    ...videos,
-                    ...selectvideos,
-                  ])
-                });
-                //console.log(nVideo)
-                console.log("select Done.",);
-              }}
-              disabled={loading}
+            <FormComponents.SingleFieldPopup
+              title="Change Video's Name"
+              open={popup.open}
+              handleClose={handleClose}
             >
-              <Typography component="div"> Add More Video </Typography>
-              <CloudUploadOutlinedIcon className={classes.icon} />
-            </Button>
-            {loading && (
-              <CircularProgress size={24} className={classes.buttonProgress} />
+              <RenameForm
+                value={popup.value}
+                setValue={(newValue) => {
+                  setVideos(
+                    videos.map((item, id) =>
+                      id === popup.index ? { ...item, name: newValue } : item
+                    )
+                  );
+                }}
+                handleClose={handleClose}
+              />
+            </FormComponents.SingleFieldPopup>
+          </Grid>
+          <Grid item xs={12}>
+            {videos?.length > 0 ? (
+              <div className={classes.gridroot}>
+                <br />
+                <br />
+                <GridList cellHeight={250} className={classes.gridList}>
+                  <GridListTile
+                    key="Subheader"
+                    cols={2}
+                    style={{ height: "auto" }}
+                  >
+                    <ListSubheader component="div" color="primary" variant="h5">
+                      Video List
+                    </ListSubheader>
+                  </GridListTile>
+                  {videos.map((video, index) => (
+                    <GridListTile key={`${index}${video.name}`}>
+                      <VideoThumbnail
+                        videoUrl={video.source}
+                        thumbnailHandler={(thumbnail) => console.log(thumbnail)}
+                        width={425}
+                        height={240}
+                      />
+                      <GridListTileBar
+                        title={video.name}
+                        subtitle={
+                          <span>size: {humanFileSize(video.size)}</span>
+                        }
+                        actionIcon={
+                          <Box>
+                            <GridIcon
+                              id={index}
+                              aria-label={`rename id ${index}`}
+                              onClick={(event) => {
+                                console.log("edit click at ", index);
+                                setPopup({
+                                  open: true,
+                                  value: videos[index].name,
+                                  index: index,
+                                });
+                              }}
+                            >
+                              <EditTwoToneIcon />
+                            </GridIcon>
+                            <GridIcon
+                              id={video.id}
+                              aria-label={`delete id ${video.id}`}
+                              color="red"
+                              onClick={(event) => {
+                                console.log("delete click at ", index);
+                                setVideos(
+                                  videos.filter((item, id) => id !== index)
+                                );
+                              }}
+                            >
+                              <DeleteTwoToneIcon />
+                            </GridIcon>
+                          </Box>
+                        }
+                      />
+                    </GridListTile>
+                  ))}
+                </GridList>
+              </div>
+            ) : (
+              <Typography
+                variant="h5"
+                display="block"
+                gutterBottom
+                color="secondary"
+                align="center"
+              >
+                <Box m={1}>
+                  <br />
+                  Currently, No Video Uploaded.
+                </Box>
+              </Typography>
             )}
-          </div>
+          </Grid>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={4}></Grid>
+          <Grid item xs={4}>
+            <div className={classes.wrapper}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={async () => {
+                  selectNewVideos(
+                    { accept: "video/*", multiple: true },
+                    (selectvideos) => {
+                      let videoLessSize = []
+                      let exceedName = []
+                      selectvideos.map(({ source, name, size, file }, index) => {
+                        console.log({ source, name, size, file });
+                        if(size < 16777215){
+                          videoLessSize.push({ source, name, size, file });
+                        }else{
+                          exceedName.push(name)
+                        }
+                      });
+                      if(videoLessSize.length != selectvideos.length){
+                        setAlert({
+                          open:true,
+                          title: "Some Video Exceed size Limit. !!",
+                          message:"There are video exceed size limit. The maximumsize that allow to uploaded videos is 16 Mb. The video that exceed the size limit will not uploaded to the server.",
+                          submessage:"there are " +  exceedName.length + " video exceed size limit. => " + exceedName,
+                          mainMessage:" ",
+                          mainOnClick: () => {
+                            setAlert({ open: false });
+                          } ,
+                          optionMessage:""
+                        })
+                      }
+                      setVideos([...videos, ...videoLessSize]);
+                    }
+                  );
+                  //console.log(nVideo)
+                  console.log("select Done.");
+                }}
+                disabled={loading}
+              >
+                <Typography component="div"> Add More Video </Typography>
+                <CloudUploadOutlinedIcon className={classes.icon} />
+              </Button>
+              {loading && (
+                <CircularProgress
+                  size={24}
+                  className={classes.buttonProgress}
+                />
+              )}
+            </div>
+          </Grid>
+          {loading && (
+            <Grid item xs={12}>
+              <FormComponents.MyProgressBar value={uploadPercentage} />
+            </Grid>
+          )}
+          <Grid item xs={4}></Grid>
+          <Grid item xs={4}>
+            <FormComponents.SimpleButton
+              text="Submit"
+              onClick={handleSubmit}
+              disabled={loading}
+            />
+          </Grid>
+          <Grid item xs={3}></Grid>
         </Grid>
-        {loading &&
-        (<Grid item xs={12}>
-        <FormComponents.MyProgressBar value={uploadPercentage} />
-        </Grid>)}
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}>
-          <FormComponents.SimpleButton text="Submit" onClick={handleSubmit} disabled={loading} />
-        </Grid>
-        <Grid item xs={3}></Grid>
-      </Grid>)}
+      )}
     </div>
   );
 };
