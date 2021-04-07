@@ -132,7 +132,9 @@ const CourseVideo = (props) => {
   const handleSubmit = () => {
     let formData = new FormData();
     var nVideo = videos?.length;
+    let total_size = 0;
     for (var i = 0; i < nVideo; i++) {
+      total_size += parseInt(videos[i].size);
       formData.append("attatch_video_" + i, videos[i].file);
       formData.append("attatch_video_name_" + i, videos[i].name);
       formData.append("attatch_video_size_" + i, videos[i].size);
@@ -140,6 +142,7 @@ const CourseVideo = (props) => {
     }
     formData.append("total_video", nVideo);
     formData.append("id", CID);
+    if(total_size < 16777215){
     console.log("submited", [...formData]);
     setLoading(true);
     axios
@@ -190,6 +193,19 @@ const CourseVideo = (props) => {
         });
         console.error(err);
       });
+    }else{
+      setAlert({
+        open:true,
+        title: "Total Video size Exceeding size Limit. !!",
+        message:"The total video size exceed size limit. The maximum size that allow to uploaded videos is 16 Mb. Please make sure that total size of video is below 16 Mb and try again.",
+        submessage:"Total video size is " + humanFileSize(total_size) ,
+        mainMessage:" ",
+        mainOnClick: () => {
+          setAlert({ open: false });
+        } ,
+        optionMessage:""
+      })
+    }
   };
 
   const handleClose = () => {
