@@ -6,7 +6,6 @@ var url = "mongodb://127.0.0.1:27017/";
 const { body, validationResult, check } = require('express-validator');
 const { UnavailableForLegalReasons } = require('http-errors');
 var fs = require('fs');
-// var formidable = require('formidable')
 
 var multer  = require('multer')
 var upload = multer({ 
