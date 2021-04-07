@@ -13,6 +13,9 @@ import QuestionBoard from './components/QuestionBoard'
 import QuestionCreate from './components/QuestionCreate'
 import QuestionFollow from './components/QuestionFollow'
 import QuestionInfo from './components/Question/QuestionInfo'
+import SearchCourse from './components/Search/SearchCourse'
+import CourseScreen from './components/Search/CourseScreen'
+import Lesson from './components/Course/Lesson'
 
 function App() {
 
@@ -55,6 +58,9 @@ function App() {
                             <PrivateRoute path='/qanda' component={QuestionBoard} />
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
+                            <PrivateRoute path='/search' component ={SearchCourse}/>
+                            <PrivateRoute path='/course/:id' component ={CourseScreen}/>
+                            <PrivateRoute path='/lesson/:id' component ={Lesson}/>
                             <LoginRoute path="/" component={Landing} />
                             <Route path='/courses' component={CourseList} />
                         </Switch>
