@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     },
     typography: {
         color: '#FFFFFF',
-        marginLeft: 8,
     },
 }));
 

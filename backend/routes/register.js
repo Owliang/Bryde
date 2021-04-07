@@ -17,9 +17,9 @@ const { render } = require('ejs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    //res.render('regis');
+    res.render('regis');
     //res.render('register',{param:img});
-    res.json({ result : 'Response from register page' })  
+    //res.json({ result : 'Response from register page' })  
 });
 
 router.post('/'/*,upload.single('file')*/,[check("username","Please enter username").not().isEmpty(),
@@ -38,7 +38,7 @@ router.post('/'/*,upload.single('file')*/,[check("username","Please enter userna
                 }
                 else{
                     var dbo = db.db("BrydeTech");
-                    dbo.collection("users").find({"username":req.body.username,"email":req.body.email}, { projection: { _id: 0, username: 1} }).toArray(function(err, result) {
+                    dbo.collection("users").find({"username":req.body.username}, { projection: { _id: 0, username: 1} }).toArray(function(err, result) {
                         if (err) {
                             res.json({result:false , error:err})
                         }

@@ -23,8 +23,8 @@ var upload = multer({
 })
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    //res.render('create_question')
-    res.json({ result : 'Response from create question page' })  
+    res.render('create_question')
+    //res.json({ result : 'Response from create question page' })  
 });
 router.post('/', function (req, res, next) {
     var form = new formidable.IncomingForm();
@@ -43,12 +43,13 @@ router.post('/', function (req, res, next) {
                     var dbo = db.db("BrydeTech");
                     var myobj = {
                         topic: fields.topic,
-                        creator: fields.creator,
+                        creator: fields.username,
                         subject: fields.subject,
                         description: fields.content,
                         attach_photo: files['attatch_photo'].name,
                         buffer: fs.readFileSync(files['attatch_photo'].path),
-                        comment: [], follower: []
+                        comment: [], follower: [] , writer:[],
+                        //follower:[],comment:[]
                     };
                     dbo.collection("Q&A").insertOne(myobj, function (err, res) {
                         if (err) res.json({ result: false, error: err });

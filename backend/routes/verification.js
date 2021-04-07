@@ -23,8 +23,8 @@ var upload = multer({
 })
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  //res.render('verification');
-  res.json({ result : 'Response from verification page' })  
+  res.render('verification');
+  //res.json({ result : 'Response from verification page' })  
 });
 router.post('/',[check("code","Please Input code")], function(req, res, next) {
   const result = validationResult(req);

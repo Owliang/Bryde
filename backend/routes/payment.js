@@ -13,6 +13,31 @@ router.get('/', function(req, res, next) {
   res.json({ result : 'Response from login page'})  
   //res.render('payment_detail');
 });
+router.post('/done',[check("username","Please Input username"),check("id","Please Input course id")], function(req, res, next) {
+  const result = validationResult(req);
+  var errors = result.errors;
+  if (!result.isEmpty()) {
+      res.json({result:false,error:errors})
+  }
+  else{
+    MongoClient.connect(url, function(err, db) {
+      if (err) {
+        res.json({result:false,error:err})
+      }
+      else{
+          var dbo = db.db("BrydeTech");
+          var id = new mongo.ObjectID(req.body.id)
+          dbo.collection("courses").updateOne({_id:id},{$push:{student:req.body.username}}),(function(err, result) {
+            if (err) {
+              res.json({result:false , error:err})
+            }
+            db.close();
+          });
+          res.json({result:true,error:""})
+      }
+    });
+  }
+});
 router.post('/',[check("tutor","Please Input tutor"),check("price","Please Input price")], function(req, res, next) {
   const result = validationResult(req);
   var errors = result.errors;

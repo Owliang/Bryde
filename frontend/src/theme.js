@@ -12,7 +12,8 @@ const theme = createMuiTheme({
       default: '#191919',
       dark: '#191919',
       main: '#212121',
-      light: '#333333'
+      light: '#333333',
+      light2: '#4F4F4F',
     },
   },
   breakpoints: {
@@ -25,6 +26,7 @@ const theme = createMuiTheme({
       xl: 1920,
     },
   },
+  spacing: 8,
 });
 
 export default theme
