@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
       color: 'white'
     },
     media: {
-      paddingTop: "56.25%"
+      paddingTop: "30%"
     },
 }))
 
@@ -58,7 +58,7 @@ export default function CourseCardStu(props){
               
               <Grid item xs={1}>
                 <CardMedia className={classes.media}>
-                  <img src={img} width ="160px" hight="160px" />
+                  <img src={'data:image/jpg;base64,'+ props.course.photo_buffer } width ="160px" hight="160px" />
                 </CardMedia>
               </Grid>
               
@@ -95,9 +95,7 @@ export default function CourseCardStu(props){
                   <Button className={classes.button} size="small" color="primary">
                     Course Materials
                   </Button>
-                  <Button className={classes.button} size="small" color="primary">
-                    OffMessage
-                  </Button>
+                  
                 </CardActions>
               </Grid>
 

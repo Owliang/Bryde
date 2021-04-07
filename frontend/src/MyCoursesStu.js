@@ -34,9 +34,9 @@ function MyCourseStu() {
             var username = localStorage.getItem("username");
             var role = localStorage.getItem("role");
             console.log(JSON.stringify({ name: username, role: role }));
-            if (role != "Tutor") {
+            if (role != "Student") {
                 setDialog({
-                    title: "How Student get into this page.",
+                    title: "How Tutor get into this page.",
                     open: true,
                     message: "!!!! HOW DID YOU GET IN HERE KIDS !!!!",
                     mainMessage: "Login to new account",
