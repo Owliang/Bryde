@@ -20,7 +20,7 @@ export default function Login(props) {
     }
 
     const handleLogin = async () => {
-        axios.post("/login", {
+        axios.post("http://localhost:4000/login", {
                 username: loginData.username,
                 password: loginData.password
             },{

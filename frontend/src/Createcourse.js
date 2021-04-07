@@ -43,7 +43,7 @@ export default function CreateCourse(props) {
                     open: true,
                     message: "!!!! HOW DID YOU GET IN HERE KIDS !!!!",
                     mainMessage: "Login to new account",
-                    optionMessage: "Go Home Kids",
+                    optionMessage: "Go Home Kids" ,
                     optionRefTo: "/",
                 });
                 await new Promise((resolve) => setTimeout(resolve, 20000));

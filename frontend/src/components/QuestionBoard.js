@@ -14,10 +14,32 @@ const useStyles = makeStyles((theme) => ({
 
 export default function QuestionBoard() {
 
+    const questionList = [
+        {
+            _id: "6052b4f4ff4b284d740d0c2d",
+            topic: "บวกเลขไม่เป็นงับบบ",
+            subject: "math",
+            creator: "a",
+        },
+        // {
+        //     _id: "604f27851e813a34881f9656",
+        //     topic: "บวกเลขไม่เป็นงับ",
+        //     subject: "math",
+        //     creator: "a",
+        // },
+        // {
+        //     _id: "604f26a4995de24b207a3766",
+        //     topic: "ant เเปลว่าอะไรอ่ะ",
+        //     subject: "english",
+        //     creator: "b",
+        // },
+    ]
+
     const classes = useStyles()
+    const subjectList = ['','english','math']
     const [questionData, setQuestionData] = useState({
         topic: '',
-        creator: '',
+        username: '',
         subject: '',
     })
 
@@ -29,17 +51,18 @@ export default function QuestionBoard() {
     }
 
     const handleSearchQuestion = async () => {
-        axios.post("/question", questionData)
-             .then(response => {
-                console.log(response.data)
-            }).catch(err => {
-                console.error(err)
-            })
+        axios.get("http://localhost:4000/question", questionData
+        ).then(response => {
+            console.log(response.data.result)
+        }).catch(err => {
+            console.error(err)
+        })
     }
 
-    const questionCardList = ['1','2','3'].map((number) => {
+    const questionCardList = questionList.map(question => {
+        const {topic, subject, creator} = question
         return (
-            <QuestionCard mb={2} p={2}/>
+            <QuestionCard mb={2} p={2} topic={topic} subject={subject} creator={creator} />
         )
     })
 
@@ -49,11 +72,10 @@ export default function QuestionBoard() {
                 <Typography variant="h4" className={classes.typography}>
                     Q & A
                 </Typography>
-
                 <ButtonLink
                     variant="contained"
                     color="primary"
-                    path='/qanda/create'
+                    path='/create_question'
                     startIcon={<AddIcon />}
                     className={classes.navButton}
                 >
@@ -84,8 +106,8 @@ export default function QuestionBoard() {
                 </Grid>
                 <Grid item xs={8}>
                     <TextFieldSmall
-                        value={questionData['creator']}
-                        onChange={handleChangeQuestion('creator')}
+                        value={questionData['username']}
+                        onChange={handleChangeQuestion('username')}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -103,7 +125,7 @@ export default function QuestionBoard() {
                         onChange={handleChangeQuestion('subject')}
                         select
                     >
-                        {['a','b'].map(subject => (
+                        {subjectList.map(subject => (
                             <MenuItem key={subject} value={subject}>
                                 {subject}
                             </MenuItem>
@@ -126,7 +148,7 @@ export default function QuestionBoard() {
 
 
             <Typography variant="h4" className={classes.typography}>
-                Result (3)
+                Result ({questionList.length})
             </Typography>
             <Box mt={2}>
                 {questionCardList}

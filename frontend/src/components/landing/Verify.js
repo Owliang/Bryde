@@ -20,8 +20,19 @@ export default function Verify(props) {
     }
 
     const handleVerify = () => {
-        // axios here
-        console.log('VERIFY!')
+        axios.post("http://localhost:4000/verification", {
+                code: code,
+            }).then(response => {
+                console.log(response.data)
+                const result = response.data.result
+                if (result) {
+                    props.setState(0)
+                } else {
+                    console.log("can't verify")
+                }
+            }).catch(err => {
+                console.error(err)
+            })
     }
 
     return (
@@ -42,7 +53,7 @@ export default function Verify(props) {
             <Button
                 variant="outlined"
                 color="primary"
-                onClick={() => {props.setState(0)}}
+                onClick={() => {handleVerify()}}
             >
                 Continue
             </Button>
