@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
     ButtonBlock: {
         display:'flex',
         justifyContent:'flex-end',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
       },
     paper: {
         padding: theme.spacing(2),
@@ -145,7 +144,13 @@ export default function CourseScreen(props) {
         setQRcode( data.data );    
         };
         
-
+    const enroll = async () => {
+        const { data } = await axios.post('/payment/done',{
+            id: props.match.params.id,
+            username: localStorage.getItem('username')
+            });
+        setQRcode( data.data );    
+        };
 
 
     const handleEnroll = () => {
@@ -155,7 +160,6 @@ export default function CourseScreen(props) {
         
       };
     
-      
 
     if(!course){
         return (
@@ -192,19 +196,22 @@ export default function CourseScreen(props) {
                 
             </div>
         </Paper>
-        {course.Isenroll === true &&
-            <Typography className={classes.typography}>You've already enrolled in this class</Typography>
-        }
+    
         <div className={classes.ButtonBlock} >
         {course.Isenroll === true ? <br/> : showQRcode === false ?
                     
                     <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={() => {handleEnroll()}} >enroll</Button>
                     :
-                    <Button variant="outlined" align='end' color="primary" className={classes.Button} href='/' >done</Button>
+                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={()=>{enroll()}} href='/' >done</Button>
                 }
-        <Button variant="outlined" align='end' color="primary" className={classes.Button} href='/' >back</Button>
+        <Button variant="outlined" align='end' color="primary" className={classes.Button}  href='/' >back</Button>
 
         </div>
+        {course.Isenroll === true &&
+            <Typography className={classes.typography} >You've already enrolled in this class</Typography>
+            
+            
+        }
 
 
         {showQRcode === true &&
