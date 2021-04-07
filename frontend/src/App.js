@@ -4,10 +4,10 @@ import { Container, Box } from '@material-ui/core'
 import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
-import CreateCourse from './Createcourse'
+import CreateCourse from './CreateCourse'
 import CreateQuestion from './CreateQuestion'
 import CourseVideo from './CourseVideo'
-import EditCourse from "./EditCourse"
+import EditCourse from './EditCourse'
 import Home from './components/Home/Home'
 import MyCourses from './MyCourses'
 import MyCourseStu from './MyCoursesStu'
@@ -58,8 +58,7 @@ function App() {
                             <PrivateRoute path='/course_video' component={CourseVideo} />
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
-                            <PrivateRoute path='/mycourses' component={MyCourses}/>
-                            <PrivateRoute path='/mycoursesstu' component={MyCoursesStu}/>
+                            <PrivateRoute path='/mycourses' component={localStorage.getItem('role')==='Tutor'? MyCourses : MyCourseStu}/>
                             <PrivateRoute path='/search' component ={SearchCourse}/>
                             <PrivateRoute path='/course/:id' component ={CourseScreen}/>
                             <PrivateRoute path='/lesson/:id' component ={Lesson}/>

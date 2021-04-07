@@ -46,7 +46,7 @@ function MyCourseStu() {
                 await new Promise((resolve) => setTimeout(resolve, 20000));
                 window.location.href = "/";
             }
-            setTutor(username);
+            setStudent(username);
         } catch {
             setDialog({
                 title: "We are currently don't know you",
@@ -66,7 +66,7 @@ function MyCourseStu() {
     useEffect(() => {
         axios.get("/student_course", {
             params: {
-                student: student
+                username: student
             }
         }).then(response => {
                 console.log(response.data.result)
@@ -106,7 +106,7 @@ function MyCourseStu() {
             <Grid item xs={8}>
                 <Typography variant="h2" color='primary' gutterBottom>
                     <Box fontSize={30}>
-                        Total Course : {courseList.length}
+                        Total Course st: {courseList.length}
                     </Box>
                 </Typography>
             </Grid>
