@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function CourseCardStu(props){
+export default function CourseCardStudent(props){
     const classes = useStyles();
     const theme = useTheme(); 
     const {_id, name, tutor, price, subject, desc, rating, student, img, ...other} = props.course

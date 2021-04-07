@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function MyCourseStu() {
+function MyCourseStudent() {
     //const [selectedCourse, selectedCourse] = useState();
     const classes = useStyles();
     const [courseList,setCourseList] = useState([]);
@@ -122,7 +122,7 @@ function MyCourseStu() {
                 {courseList.map(course => (
                     <Grid item xs={12} key={courseList.indexOf(course)}>
                         
-                        <CourseCardStu course={course} />
+                        <CourseCardStudent course={course} />
                      </Grid>
                 ))}
             </Grid>
@@ -131,4 +131,4 @@ function MyCourseStu() {
     );
 }
 
-export default MyCourseStu
+export default MyCourseStudent
