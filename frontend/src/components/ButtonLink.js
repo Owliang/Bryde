@@ -5,7 +5,9 @@ import { Button } from '@material-ui/core'
 function ButtonLink(props) {
 
     const {path, ...prop} = props
+
     const history = useHistory();
+    
     const handleOnClick = useCallback(() => {
         history.push(path)
         window.location.reload();
