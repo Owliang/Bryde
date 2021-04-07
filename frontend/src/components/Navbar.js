@@ -98,7 +98,7 @@ export default function Navbar() {
     }
 
     const handleCourse = () => {
-        history.push("/courses")
+        history.push("/search")
         window.location.reload();
     }
 

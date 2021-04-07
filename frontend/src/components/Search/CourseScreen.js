@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Container, Grid, ListItem, Paper, Typography , Button , Select ,MenuItem ,FormControl,InputLabel} from '@material-ui/core'
-import TextFieldSmall from '../TextFieldSmall'
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import List from '@material-ui/core/List';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import data from './data'
+import { Container, Grid, Paper, Typography , Button } from '@material-ui/core'
 import axios from 'axios'
 
 
@@ -145,11 +136,10 @@ export default function CourseScreen(props) {
         };
         
     const enroll = async () => {
-        const { data } = await axios.post('/payment/done',{
+        const {data} = await axios.post('/payment/done',{
             id: props.match.params.id,
             username: localStorage.getItem('username')
-            });
-        setQRcode( data.data );    
+            });  
         };
 
 
@@ -192,7 +182,7 @@ export default function CourseScreen(props) {
                     <Typography className={classes.typography} variant='h6'>Description :</Typography>
                     
                 </div>
-                    <Typography className={classes.coursedetail}  > course.description </Typography>
+                    <Typography className={classes.coursedetail}  > {course.description} </Typography>
                 
             </div>
         </Paper>
@@ -202,7 +192,7 @@ export default function CourseScreen(props) {
                     
                     <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={() => {handleEnroll()}} >enroll</Button>
                     :
-                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={()=>{enroll()}} href='/' >done</Button>
+                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={enroll()} href='/' >done</Button>
                 }
         <Button variant="outlined" align='end' color="primary" className={classes.Button}  href='/' >back</Button>
 

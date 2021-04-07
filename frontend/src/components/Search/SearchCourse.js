@@ -1,15 +1,7 @@
 import React, { useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Container, Grid, ListItem, Paper, Typography , Button , Select ,MenuItem ,FormControl,InputLabel} from '@material-ui/core'
+import { Container, Grid, Paper, Typography , Button , Select ,MenuItem } from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import List from '@material-ui/core/List';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import data from "./data";
 import axios from 'axios';
 
 
