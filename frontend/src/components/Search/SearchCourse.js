@@ -229,7 +229,7 @@ export default function SearchCourse() {
                             <Typography variant="h4" className={classes.coursedetail}> {course.name} </Typography>
                             <Typography variant="subtitle1" className={classes.coursedetail}>By {course.tutor} </Typography>
                             <Typography variant="subtitle1" className={classes.coursedetail}>Subject : {course.subject} </Typography>
-                            <Typography variant="subtitle1" className={classes.coursedetail}>Price : {course.price} Bath </Typography>
+                            <Typography variant="subtitle1" className={classes.coursedetail}>Price : {course.price} Baht </Typography>
                             <Typography variant="subtitle1" className={classes.coursedetail}>Rating : {course.rating} </Typography>
 
                         </Grid>

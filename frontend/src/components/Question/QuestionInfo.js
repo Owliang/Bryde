@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
             color: '#000',
          },
     },
+    courseImage: {
+        maxWidth: '50%',
+    },
 }));
 
 export default function QuestionMore(props) {
@@ -103,7 +106,7 @@ export default function QuestionMore(props) {
                     </Typography>
                 </Box>
                 <Box className={classes.grow} />
-                <Box display="flex" flexDirection="column" alignItems="spacce-between" mb={4}>
+                {/* <Box display="flex" flexDirection="column" alignItems="spacce-between" mb={4}>
                     <Button
                         variant={isFollow ? "contained" : "outlined"}
                         color={isFollow ? "primary" : "#000"}
@@ -112,12 +115,13 @@ export default function QuestionMore(props) {
                     >
                         {isFollow ? 'Followed' : 'Follow'}
                     </Button>
-                </Box>
+                </Box> */}
             </Box>
-            <Box display="flex" bgcolor="background.light2" borderRadius={8} minHeight="100px" p={3} mb={6}>
+            <Box display="flex" bgcolor="background.light2" borderRadius={8} minHeight="100px" p={3} mb={6} flexDirection="column">
                 <Typography variant="h6" className={classes.typography}>
                     {result.description}
                 </Typography>
+                <img src= {'data:image/jpg;base64,'+ result.buffer } className={classes.courseImage} />
             </Box>
             <Typography variant="h4" className={classes.typography}>
                 Comment ({result.comment.length})

@@ -65,7 +65,7 @@ function MyCourse() {
     useEffect(() => {
         axios.get("/tutor_course", {
             params: {
-                username: tutor
+                tutor: localStorage.getItem("username")
             }
         }).then(response => {
                 console.log(response.data.result)
@@ -119,7 +119,7 @@ function MyCourse() {
                     size="large"
                     text="Submit"
                     type="submit"
-                    onClick={() => { window.location.href = `/create_course/?cid'+course._id+'&mode=edit` }}
+                    href="/create_course/?mode=create"
                 >
                     Add Course
                 </Button>

@@ -71,13 +71,13 @@ export default function ForgetName(props) {
                 onChange={handleChangeData('username')}
             />
             <TextFieldSmall
-                display='Password'
+                display='New Password'
                 type='password'
                 value={data['password']}
                 onChange={handleChangeData('password')}
             />
             <TextFieldSmall
-                display='Confirm Password'
+                display='Confirm New Password'
                 type='password'
                 value={data['confirmPassword']}
                 onChange={handleChangeData('confirmPassword')}

@@ -14,7 +14,7 @@ import {
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import axios from "axios";
 
-const myCourseURL = "/myCourse";
+const myCourseURL = "/mycourses";
 
 const useStyles = makeStyles((theme) => ({
   textRoot: {
@@ -149,6 +149,7 @@ const CourseForm = (props) => {
       console.log([...formData]);
       setLoading(true)
       let apiURL = mode == "create" ? "http://localhost:4000/create_course" : "http://localhost:4000/edit_course"
+      console.log(apiURL)
       axios
         .post(apiURL, formData, {
           crossdomain: true,
@@ -312,7 +313,7 @@ const CourseForm = (props) => {
             value={courseData.price}
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">Bath</InputAdornment>
+                <InputAdornment position="end">Baht</InputAdornment>
               ),
             }}
             error={errors.price}
