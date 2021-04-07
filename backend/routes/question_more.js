@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
             else{
                 var dbo = db.db("BrydeTech");
                 var id = new mongo.ObjectID(req.query.id)
-                dbo.collection("Q&A").find({_id:id}, { projection: { _id: 0,} }).toArray(function(err, result) {
+                dbo.collection("Q&A").find({_id:id}, { projection: { _id: 0} }).toArray(function(err, result) {
                     if (err) {
                         res.json({result:false,error:err})
                     }
