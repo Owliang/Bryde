@@ -4,15 +4,14 @@ import { Container, Box } from '@material-ui/core'
 import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
-import CreateCourse from './CreateCourse'
+import CreateCourse from './Createcourse'
 import CreateQuestion from './CreateQuestion'
 import CourseVideo from './CourseVideo'
 import EditCourse from "./EditCourse"
 import Home from './components/Home/Home'
-import QuestionBoard from './components/QuestionBoard'
-import QuestionCreate from './components/QuestionCreate'
-import QuestionFollow from './components/QuestionFollow'
-import QuestionInfo from './components/Question/QuestionInfo'
+import MyCourses from './MyCourses'
+import MyCourseStu from './MyCoursesStu'
+
 
 function App() {
 
@@ -50,11 +49,10 @@ function App() {
                             <PrivateRoute path='/create_question' component={CreateQuestion} />
                             <PrivateRoute path='/edit_course' component={EditCourse} />
                             <PrivateRoute path='/course_video' component={CourseVideo} />
-                            <PrivateRoute path='/qanda/info' component={QuestionInfo} />
-                            <PrivateRoute path='/qanda/follow' component={QuestionFollow} />
-                            <PrivateRoute path='/qanda' component={QuestionBoard} />
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
+                            <PrivateRoute path='/mycourses' component={MyCourses}/>
+                            <PrivateRoute path='/mycoursesstu' component={MyCoursesStu}/>
                             <LoginRoute path="/" component={Landing} />
                             <Route path='/courses' component={CourseList} />
                         </Switch>
