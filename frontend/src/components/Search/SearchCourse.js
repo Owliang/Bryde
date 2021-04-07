@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     },
     gridList: {
         flexWrap: 'nowrap',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
         transform: 'translateZ(0)',
       },
     paper: {
@@ -188,13 +187,16 @@ export default function SearchCourse() {
                     <Typography variant = 'h5' className = {classes.typography}> Subject : </Typography>
                 </Grid>
                 <Grid item xs={9}>
-                <Select fullWidth className={classes.dropdown} >
-                    <MenuItem value={searchData['subject']} onChange={handleChangeSearch('subject')}>
+                <Select fullWidth className={classes.dropdown} onChange={handleChangeSearch('subject')} >
+                    <MenuItem value={''} >
                         <em>None</em>
                     </MenuItem>
-                    <MenuItem value={'Match'}>Math</MenuItem>
-                    <MenuItem value={20}>Biology</MenuItem>
-                    <MenuItem value={30}>Physic</MenuItem>
+                    <MenuItem value={'Mathematics'}>Mathematics</MenuItem>
+                    <MenuItem value={'Sciences'} >Sciences</MenuItem>
+                    <MenuItem value={'Social Studies'}>Social Studies</MenuItem>
+                    <MenuItem value={'Languages'}>Languages</MenuItem>
+                    <MenuItem value={'Arts'}>Arts</MenuItem>
+                    <MenuItem value={'Others'}>Others</MenuItem>
                 </Select>
                 </Grid>
                 <Grid item xs={3}>
