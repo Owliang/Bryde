@@ -24,7 +24,12 @@ router.get('/', function(req, res, next) {
                 if (err){
                     res.json({result:false , error:err})
                 }
-                res.json({result:result});
+                var isFollow = []
+                for(i=0;i<result.length;i++){
+                    follow = result[i].follower.findIndex(student => student == req.body.student_name);
+                    isFollow[i] = (follow == -1) ? false:true;
+                }
+                res.json({result:result,error:"",isFollow:isFollow});
                 db.close();
             })
         }
