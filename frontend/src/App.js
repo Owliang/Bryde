@@ -10,7 +10,7 @@ import CourseVideo from './CourseVideo'
 import EditCourse from './EditCourse'
 import Home from './components/Home/Home'
 import MyCourses from './MyCourses'
-import MyCourseStu from './MyCoursesStu'
+import MyCourseStudent from './MyCourseStudent'
 import QuestionBoard from './components/QuestionBoard'
 import QuestionCreate from './components/QuestionCreate'
 import QuestionFollow from './components/QuestionFollow'
@@ -58,7 +58,7 @@ function App() {
                             <PrivateRoute path='/course_video' component={CourseVideo} />
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
-                            <PrivateRoute path='/mycourses' component={localStorage.getItem('role')==='Tutor'? MyCourses : MyCourseStu}/>
+                            <PrivateRoute path='/mycourses' component={localStorage.getItem('role')==='Tutor'? MyCourses : MyCourseStudent}/>
                             <PrivateRoute path='/search' component ={SearchCourse}/>
                             <PrivateRoute path='/course/:id' component ={CourseScreen}/>
                             <PrivateRoute path='/lesson/:id' component ={Lesson}/>

@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import { Button ,Box, withStyles, CardHeader, CardContent } from '@material-ui/core';
 
-import CourseCardStu from './CourseCardStu'
+import CourseCardStudent from './CourseCardStudent'
 import MyDialog from "./components/MyDialog";
 import axios from 'axios'
 
