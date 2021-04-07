@@ -15,12 +15,12 @@ const useStyles = makeStyles((theme) => ({
 export default function QuestionBoard() {
 
     const questionList = [
-        {
-            _id: "6052b4f4ff4b284d740d0c2d",
-            topic: "บวกเลขไม่เป็นงับบบ",
-            subject: "math",
-            creator: "a",
-        },
+        // {
+        //     _id: "6052b4f4ff4b284d740d0c2d",
+        //     topic: "บวกเลขไม่เป็นงับบบ",
+        //     subject: "math",
+        //     creator: "a",
+        // },
         // {
         //     _id: "604f27851e813a34881f9656",
         //     topic: "บวกเลขไม่เป็นงับ",
@@ -51,8 +51,11 @@ export default function QuestionBoard() {
     }
 
     const handleSearchQuestion = async () => {
-        axios.get("http://localhost:4000/question", questionData
-        ).then(response => {
+        axios.get("http://localhost:4000/question", {
+            topic: '',
+            username: '',
+            subject: '',
+        }).then(response => {
             console.log(response.data.result)
         }).catch(err => {
             console.error(err)
@@ -60,9 +63,9 @@ export default function QuestionBoard() {
     }
 
     const questionCardList = questionList.map(question => {
-        const {topic, subject, creator} = question
+        const {topic, subject, creator, _id} = question
         return (
-            <QuestionCard mb={2} p={2} topic={topic} subject={subject} creator={creator} />
+            <QuestionCard mb={2} p={2} topic={topic} subject={subject} creator={creator} _id={_id} />
         )
     })
 
@@ -90,13 +93,13 @@ export default function QuestionBoard() {
                         Topic :
                     </Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={10}>
                     <TextFieldSmall
                         value={questionData['topic']}
                         onChange={handleChangeQuestion('topic')}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={1}>
 
                 </Grid>
                 <Grid item xs={1}>
@@ -104,13 +107,13 @@ export default function QuestionBoard() {
                         Creator :
                     </Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={10}>
                     <TextFieldSmall
                         value={questionData['username']}
                         onChange={handleChangeQuestion('username')}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={1}>
 
                 </Grid>
                 <Grid item xs={1}>

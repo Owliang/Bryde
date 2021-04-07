@@ -5,7 +5,6 @@ import QuestionCard from './Question/QuestionCard'
 import ButtonLink from './ButtonLink'
 import axios from 'axios'
 
-
 const useStyles = makeStyles((theme) => ({
     typography: {
         color: '#FFFFFF',
@@ -31,9 +30,9 @@ export default function QuestionFollow() {
     }, []);
 
     const questionCardList = followQuestion.map(question => {
-        const {topic, subject, ...ques} = question
+        const {topic, subject, creator, _id, ...ques} = question
         return (
-            <QuestionCard mb={2} p={2} topic={topic} subject={subject} />
+            <QuestionCard mb={2} p={2} topic={topic} subject={subject} creator={creator} follow={true} _id={_id} />
         )
     })
 

@@ -10,17 +10,29 @@ const useStyles = makeStyles((theme) => ({
     grow: {
         flexGrow: 1,
     },
-    button: {
-        // backgroundColor: '#212121',
+    buttonMore: {
+        background: theme.palette.background.default,
+        color: '#FFF',
+        '&:hover': {
+            background: theme.palette.primary.main,
+            color: '#000',
+         },
+         marginBottom: '8px'
     },
+    buttonFollow: {
+        color: '#000',
+        '&:hover': {
+            background: theme.palette.primary.main,
+            color: '#FFF',
+         },
+    }
 }));
 
 export default function QuestionCard(props) {
-
+    const {_id, topic, subject, creator, follow, ...prop} = props
     const classes = useStyles()
     const history = useHistory()
-    const [isFollow, setIsFollow] = useState(false)
-    const {topic, subject, creator, ...prop} = props
+    const [isFollow, setIsFollow] = useState(follow)
 
     const handleFollow = () => {
         axios.post("/question", {
@@ -57,15 +69,15 @@ export default function QuestionCard(props) {
     }, []);
 
     const handleMore = () => {
-        history.push("/qanda/more?topic=" + topic)
+        history.push("/qanda/info?id=" + _id)
         window.location.reload();
     }
 
     return (
         <Box display="flex" bgcolor="background.light2" borderRadius={8} {...props}>
             <Box display="flex" bgcolor="background.light2" flexDirection="column">
-                <Typography variant="h6" className={classes.typography}>
-                    Topic: {topic}
+                <Typography variant="h5" className={classes.typography}>
+                    {topic}
                 </Typography>
                 <Typography variant="h6" className={classes.typography}>
                     by {creator}
@@ -80,15 +92,15 @@ export default function QuestionCard(props) {
                     variant="outlined"
                     color="primary"
                     onClick={() => {handleMore()}}
-                    className={classes.button}
+                    className={classes.buttonMore}
                 >
                     See more
                 </Button>
                 <Button
                     variant={isFollow ? "contained" : "outlined"}
-                    color={isFollow ? "primary" : "#000"}
                     onClick={handleFollow}
-                    className={classes.button}
+                    className={classes.buttonFollow}
+                    style={ {background: (isFollow ? "#0EED0E" : "#191919"), color: (isFollow ? "#191919" : "#FFF")}}
                 >
                     {isFollow ? 'Followed' : 'Follow'}
                 </Button>

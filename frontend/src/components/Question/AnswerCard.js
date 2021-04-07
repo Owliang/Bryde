@@ -27,9 +27,6 @@ export default function QuestionMore(props) {
                     <Typography variant="h6" className={classes.typography}>
                         by {username}
                     </Typography>
-                    <Typography variant="h6" className={classes.typography}>
-                        date 10:33 25-02-2000
-                    </Typography>
                 </Box>
             </Box>
         </>

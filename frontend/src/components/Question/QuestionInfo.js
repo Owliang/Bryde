@@ -58,37 +58,39 @@ export default function QuestionMore(props) {
     useEffect(() => {
         axios.get("http://localhost:4000/question_more", {
             params: {
-                topic: "บวกเลขไม่เป็นงับ",
+                id: props.location.search.split('=')[1],
             },
         }).then(response => {
-            setResult(response.data)
+            setResult(response.data.result[0])
         }).catch(err => {
             console.error(err)
         })
     }, []);
 
-    const answerCardList = ['1'].map(com => {
+    const answerCardList = (Array.from(Array(result.comment.length).keys())).map(index => {
         return (
-            <AnswerCard content={com} username='owliang' mb={3}/>
+            <AnswerCard content={result.comment[index]} username={result.writer[index]} mb={3}/>
         )
     })
 
     return (
         <>
-            <Box display="flex" bgcolor="background.light2" borderRadius={8}>
+            <Box mt={4} mb={1}>
+                <Typography variant="h4" className={classes.typography}>
+                    {result.topic}
+                </Typography>
+            </Box>
+            <Box display="flex" bgcolor="background.light2" borderRadius={8} p={2} mt={4} mb={2}>
                 <Box display="flex" flexDirection="column">
                     <Typography variant="h6" className={classes.typography}>
-                        Topic: {result.topic}
-                    </Typography>
-                    <Typography variant="h6" className={classes.typography}>
-                        by {result.username}
+                        by {result.creator}
                     </Typography>
                     <Typography variant="h6" className={classes.typography}>
                         Subject: {result.subject}
                     </Typography>
                 </Box>
                 <Box className={classes.grow} />
-                <Box display="flex" flexDirection="column" alignItems="spacce-between">
+                <Box display="flex" flexDirection="column" alignItems="spacce-between" mb={4}>
                     <Button
                         variant={isFollow ? "contained" : "outlined"}
                         color={isFollow ? "primary" : "#000"}
@@ -99,11 +101,13 @@ export default function QuestionMore(props) {
                     </Button>
                 </Box>
             </Box>
-            <Box display="flex" bgcolor="background.light2" borderRadius={8}>
-                {result.description}
+            <Box display="flex" bgcolor="background.light2" borderRadius={8} minHeight="100px" p={3} mb={6}>
+                <Typography variant="h6" className={classes.typography}>
+                    {result.description}
+                </Typography>
             </Box>
             <Typography variant="h4" className={classes.typography}>
-                Comment (2)
+                Comment ({result.comment.length})
             </Typography>
             {answerCardList}
             <Box display="flex" bgcolor="background.light2" borderRadius={8} flexDirection="column" p={4}>
