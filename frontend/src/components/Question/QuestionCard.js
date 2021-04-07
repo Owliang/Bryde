@@ -35,11 +35,11 @@ export default function QuestionCard(props) {
     const [isFollow, setIsFollow] = useState(follow)
 
     const handleFollow = () => {
-        axios.post("/question", {
+        axios.post("http://localhost:4000/question", {
             id: _id,
             username: localStorage.getItem('username')
         }).then(response => {
-            console.log(response.data.description)
+            console.log(response.data)
             if (response.data.description == "follow") {
                 setIsFollow(true)
             } else {
@@ -49,24 +49,6 @@ export default function QuestionCard(props) {
             console.error(err)
         })
     }
-
-    useEffect(() => {
-        // required api just for checking follow/unfollow
-
-        // axios.post("/question", {
-        //     topic: topic,
-        //     username: localStorage.getItem('username')
-        // }).then(response => {
-        //     console.log(response.data.description)
-        //     if (response.data.description == "follow") {
-        //         setIsFollow(true)
-        //     } else {
-        //         setIsFollow(false)
-        //     }
-        // }).catch(err => {
-        //     console.error(err)
-        // })
-    }, []);
 
     const handleMore = () => {
         history.push("/qanda/info?id=" + _id)

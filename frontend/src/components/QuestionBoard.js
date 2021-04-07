@@ -14,41 +14,49 @@ const useStyles = makeStyles((theme) => ({
 
 export default function QuestionBoard() {
 
-    const questionList = [
-        {
-            "_id": "6052b4f4ff4b284d740d0c2d",
-            "topic": "บวกเลขไม่เป็นงับบบ",
-            "subject": "math",
-            "follower": [],
-            "creator": "a"
-        },
-        {
-            "_id": "604f27851e813a34881f9656",
-            "topic": "บวกเลขไม่เป็นงับ",
-            "subject": "math",
-            "follower": [
-                "aa",
-                "bb"
-            ],
-            "creator": "a"
-        },
-        {
-            "_id": "604f26a4995de24b207a3766",
-            "topic": "ant เเปลว่าอะไรอ่ะ",
-            "subject": "english",
-            "follower": [
-                "bbbb",
-                "aaaa",
-                "aa",
-                "owliang"
-            ],
-            "creator": "b"
-        }
-    ]
+    // const questionList = [
+    //     {
+    //         "_id": "6052b4f4ff4b284d740d0c2d",
+    //         "topic": "บวกเลขไม่เป็นงับบบ",
+    //         "subject": "math",
+    //         "follower": [],
+    //         "creator": "a"
+    //     },
+    //     {
+    //         "_id": "604f27851e813a34881f9656",
+    //         "topic": "บวกเลขไม่เป็นงับ",
+    //         "subject": "math",
+    //         "follower": [
+    //             "aa",
+    //             "bb"
+    //         ],
+    //         "creator": "a"
+    //     },
+    //     {
+    //         "_id": "604f26a4995de24b207a3766",
+    //         "topic": "ant เเปลว่าอะไรอ่ะ",
+    //         "subject": "english",
+    //         "follower": [
+    //             "bbbb",
+    //             "aaaa",
+    //             "aa",
+    //             "owliang"
+    //         ],
+    //         "creator": "b"
+    //     }
+    // ]
 
     const classes = useStyles()
-    const subjectList = ['','english','math']
+    const subjectList = ['All Subject', 'Mathematics', 'Sciences', 'Social Studies', 'Languages', 'Arts', 'Others']
+
     const [questionData, setQuestionData] = useState({
+        result: '',
+        isFollow: '',
+        error: '',
+    })
+    const {result, isFollow, error} = questionData
+    const questionList = result
+    const [searchData, setSearchData] = useState({
         topic: '',
         username: '',
         subject: '',
@@ -61,24 +69,33 @@ export default function QuestionBoard() {
         })
     }
 
+    const handleChangeSearch = (key) => (event) => {
+        setSearchData({
+            ...searchData,
+            [key]: event.target.value,
+        })
+    }
+
     const handleSearchQuestion = async () => {
+        console.log(searchData.topic)
         axios.get("http://localhost:4000/question", {
-            topic: '',
-            username: '',
-            subject: '',
+            params: {
+                topic: searchData.topic,
+                username: searchData.username,
+                subject: (searchData.subject == 'All Subject' ? '' : searchData.subject),
+                student_name: localStorage.getItem('username')
+            }
         }).then(response => {
-            console.log(response.data.result)
+            setQuestionData(response.data)
         }).catch(err => {
             console.error(err)
         })
     }
 
-    const questionCardList = questionList.map(question => {
-        const {topic, subject, creator, _id, follower} = question
-        const isFollow = follower.includes(localStorage.getItem('username'))
-        console.log(follower)
+    const questionCardList = (Array.from(Array(questionList.length).keys())).map(num => {
+        const {topic, subject, creator, _id} = questionList[num]
         return (
-            <QuestionCard mb={2} p={2} topic={topic} subject={subject} creator={creator} _id={_id} follow={isFollow} key={_id}/>
+            <QuestionCard mb={2} p={2} topic={topic} subject={subject} creator={creator} _id={_id} follow={isFollow[num]} key={_id}/>
         )
     })
 
@@ -108,8 +125,8 @@ export default function QuestionBoard() {
                 </Grid>
                 <Grid item xs={10}>
                     <TextFieldSmall
-                        value={questionData['topic']}
-                        onChange={handleChangeQuestion('topic')}
+                        value={searchData['topic']}
+                        onChange={handleChangeSearch('topic')}
                     />
                 </Grid>
                 <Grid item xs={1}>
@@ -122,8 +139,8 @@ export default function QuestionBoard() {
                 </Grid>
                 <Grid item xs={10}>
                     <TextFieldSmall
-                        value={questionData['username']}
-                        onChange={handleChangeQuestion('username')}
+                        value={searchData['username']}
+                        onChange={handleChangeSearch('username')}
                     />
                 </Grid>
                 <Grid item xs={1}>
@@ -137,8 +154,8 @@ export default function QuestionBoard() {
                 </Grid>
                 <Grid item xs={6}>
                     <TextFieldSmall
-                        value={questionData['subject']}
-                        onChange={handleChangeQuestion('subject')}
+                        value={searchData['subject']}
+                        onChange={handleChangeSearch('subject')}
                         select
                     >
                         {subjectList.map(subject => (

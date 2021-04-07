@@ -39,20 +39,17 @@ export default function QuestionMore(props) {
         setAnswer(event.target.value)
     }
 
-    const handleFollow = () => {
-        // axios.post("/question", {
-        //     topic: topic,
-        //     username: localStorage.getItem('username')
-        // }).then(response => {
-        //     console.log(response.data.description)
-        //     if (response.data.description == "follow") {
-        //         setIsFollow(true)
-        //     } else {
-        //         setIsFollow(false)
-        //     }
-        // }).catch(err => {
-        //     console.error(err)
-        // })
+    const handleSubmit = () => {
+        axios.post("http://localhost:4000/question_more", {
+            id: props.location.search.split('=')[1],
+            username: localStorage.getItem('username'),
+            comment: answer,
+        }).then(response => {
+            console.log(response.data)
+        }).catch(err => {
+            console.error(err)
+        })
+        window.location.reload();
     }
 
     useEffect(() => {
@@ -66,6 +63,22 @@ export default function QuestionMore(props) {
             console.error(err)
         })
     }, []);
+
+    const handleFollow = () => {
+        axios.post("http://localhost:4000/question", {
+            id: props.location.search.split('=')[1],
+            username: localStorage.getItem('username')
+        }).then(response => {
+            console.log(response.data)
+            if (response.data.description == "follow") {
+                setIsFollow(true)
+            } else {
+                setIsFollow(false)
+            }
+        }).catch(err => {
+            console.error(err)
+        })
+    }
 
     const answerCardList = (Array.from(Array(result.comment.length).keys())).map(index => {
         return (
@@ -117,13 +130,12 @@ export default function QuestionMore(props) {
                 <TextareaAutosize
                     value={answer}
                     onChange={handleChangeAnswer()}
-                    style={{marginBottom: 16}}
-                    height="300px"
+                    style={{marginBottom: 16, height: "300px"}}
                 />
                 <Button
                     variant="outlined"
                     color="primary"
-                    onClick={() => {console.log('yay')}}
+                    onClick={() => {handleSubmit()}}
                     className={classes.button}
                 >
                     Submit
