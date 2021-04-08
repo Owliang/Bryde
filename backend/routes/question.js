@@ -10,10 +10,11 @@ var multer  = require('multer');
 const { abort } = require('process');
 
 router.get('/', function(req, res, next) {
-    var topic = ((req.query.topic=="") ? /^/ : req.query.topic )
-    var creator = ((req.query.username=="") ? /^/ : req.query.username )
+    // var topic = ((req.query.topic=="") ? /^/ : req.query.topic )
+    // var creator = ((req.query.username=="") ? /^/ : req.query.username )
     var subject = ((req.query.subject=="") ? /^/ : req.query.subject )
-    var q = {topic:topic,creator:creator,subject:subject}
+    //var q = {"$text":{"topic":topic,"creator":creator,"subject":subject}}
+    var q = {"subject":subject,"topic":{$regex:new RegExp(req.query.topic)},"creator":{$regex:new RegExp(req.query.username)}}
     MongoClient.connect(url, function(err, db) {
         if (err) {
             res.json({result:false,error:err})

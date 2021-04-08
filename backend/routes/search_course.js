@@ -14,7 +14,7 @@ router.post('/', function(req, res, next) {
     var course_name = ((req.body.course_name=="") ? /^/ : req.body.course_name )
     var tutor_name = ((req.body.tutor_name=="") ? /^/ : req.body.tutor_name )
     var subject = ((req.body.subject=="") ? /^/ : req.body.subject )
-    var q = {name:course_name,tutor:tutor_name,subject:subject,price:{$gte:parseInt(req.body.minprice),$lte:parseInt(req.body.maxprice)}}
+    var q = {name:{$regex:new RegExp(course_name)},tutor:{$regex:new RegExp(tutor_name)},subject:subject,price:{$gte:parseInt(req.body.minprice),$lte:parseInt(req.body.maxprice)}}
     MongoClient.connect(url, function(err, db) {
         if (err) {
             res.json({result:false,error:err})
