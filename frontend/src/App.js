@@ -58,6 +58,11 @@ function App() {
                             <PrivateRoute path='/course_video' component={CourseVideo} />
                             <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/home' component={Home}/>
+
+                            <PrivateRoute path='/qanda/follow' component={QuestionFollow}/>
+                            <PrivateRoute path='/qanda/info' component={QuestionInfo}/>
+                            <PrivateRoute path='/qanda' component={QuestionBoard}/>
+
                             <PrivateRoute path='/mycourses' component={localStorage.getItem('role')==='Tutor'? MyCourses : MyCourseStudent}/>
                             <PrivateRoute path='/search' component ={SearchCourse}/>
                             <PrivateRoute path='/course/:id' component ={CourseScreen}/>

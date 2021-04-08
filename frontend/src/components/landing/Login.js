@@ -33,7 +33,7 @@ export default function Login(props) {
                 if (result) {
                     localStorage.setItem('username', loginData.username)
                     localStorage.setItem('auth', true)
-                    localStorage.setItem('role','Tutor')
+                    localStorage.setItem('role', response.data.isTutor == "on" ? "Tutor" : "Student")
                     history.push("/home")
                     window.location.reload();
                     console.log(response.data)

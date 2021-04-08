@@ -55,7 +55,7 @@ export default function Register(props) {
             lname: registerData.lname,
             email: registerData.email,
             ppnumber: registerData.ppnumber,
-            isTutor: (registerData.role == 'teather' ? 'on' : 'off')
+            isTutor: (registerData.role == 'teacher' ? 'on' : 'off')
         }).then(response => {
             console.log(response.data)
             const result = response.data.result
@@ -135,7 +135,7 @@ export default function Register(props) {
                     onClick={() => {handleChangeRole('teacher')}}
                     className={classes.roleButton}
                 >
-                    Teacher
+                    Tutor
                 </Button>
             </Box>
             <Button

@@ -5,7 +5,7 @@ import CourseForm from "./components/Course/CourseForm";
 import MyDialog from "./components/MyDialog";
 import GetCourseData from "./services/getCourseData";
 
-const myCourseURL = "/myCourse";
+const myCourseURL = "/mycourses";
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {

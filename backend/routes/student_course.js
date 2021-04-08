@@ -1,3 +1,32 @@
+// var express = require('express');
+// var mongo = require('mongodb');
+// var router = express.Router();
+// var mongoose = require('mongoose');
+// var MongoClient = require('mongodb').MongoClient;
+// var url = "mongodb://127.0.0.1:27017/";
+// var Binary = require('mongodb').Binary;
+// var fs = require('fs');
+// /* GET home page. */
+
+// router.get('/', function(req, res, next) {
+//     MongoClient.connect(url, function(err, db) {
+//         if (err) {
+//             res.json({result:false,error:err})
+//         }
+//         else{
+//             var dbo = db.db("BrydeTech");
+//             dbo.collection("courses").find({student:req.query.username}).toArray(function(err, result) {
+//                 if (err) {
+//                     res.json({result:false , error:err})
+//                 }
+//                 res.json({result:result});
+//                 db.close();
+//             })
+//         }
+//     });
+// });
+// module.exports = router;
+
 var express = require('express');
 var mongo = require('mongodb');
 var router = express.Router();
@@ -15,7 +44,7 @@ router.get('/', function(req, res, next) {
         }
         else{
             var dbo = db.db("BrydeTech");
-            dbo.collection("courses").find({student:req.query.username}).toArray(function(err, result) {
+            dbo.collection("courses").find({student:req.query.username}, { projection:{_id:1,name:1,tutor:1,price:1,subject:1,description:1,link:1,photo_buffer:1,rating:1,student:1} }).toArray(function(err, result) {
                 if (err) {
                     res.json({result:false , error:err})
                 }

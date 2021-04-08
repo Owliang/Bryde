@@ -175,7 +175,7 @@ export default function CourseScreen(props) {
                     <Typography className={classes.coursedetail} >Subject : { course.subject }</Typography>
                     <Typography className={classes.coursedetail} >Price : { course.price } Baht</Typography>
                     <Typography className={classes.coursedetail} >Rating : { course.rating }</Typography>
-                    <Typography className={classes.coursedetail} >Number of Video : { course.video_size }</Typography>
+                    <Typography className={classes.coursedetail} >Number of Video : { course.total_video }</Typography>
 
                 </div>
                 <div className={classes.margin} >

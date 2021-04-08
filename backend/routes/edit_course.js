@@ -80,7 +80,7 @@ router.post('/',function(req, res, next) {
             }
             else{
                 var dbo = db.db("BrydeTech");
-                var newvalues = {$set:{name:fields.name,price:fields.price,description:fields.description,subject:fields.subject,link:fields.link,photo_buffer:fs.readFileSync(files.attatch_photo.path)}}
+                var newvalues = {$set:{name:fields.name,price:parseInt(fields.price),description:fields.description,subject:fields.subject,link:fields.link,photo_buffer:fs.readFileSync(files.attatch_photo.path)}}
                 var id = new mongo.ObjectID(fields.id);
                 dbo.collection("courses").updateOne({_id:id},newvalues,function(err,result){
                     if (err) {

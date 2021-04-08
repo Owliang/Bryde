@@ -23,7 +23,7 @@ import {
 } from "@material-ui/core";
 import RenameForm from "./RenameForm.js";
 
-const myCourseURL = "/myCourse";
+const myCourseURL = "/mycourses";
 
 const GridIcon = styled(({ color, ...other }) => <IconButton {...other} />)({
   color: (props) => (props.color === "red" ? "red" : " #00ff23 "),
@@ -162,9 +162,9 @@ const CourseVideo = (props) => {
         if (isSuccess) {
           var cid = response.data.id;
           setAlert({
-            title: "Add Course's Video Success!",
+            title: mode === "create" ? "Add Course's Video Success!" : "Edit Course's Video Success!",
             open: true,
-            message: "Add Video Successfully.",
+            message: mode === "create" ? "Add Video Successfully." : "Edit Video Successfully.",
             optionMessage: "Back",
             optionRefTo: myCourseURL,
           });
@@ -172,9 +172,9 @@ const CourseVideo = (props) => {
           setLoading(false);
           setUploadPercentage(0);
           alert.open != true && setAlert({
-            title: "Add Video Fail!",
+            title: mode + " Video Fail!" ,
             open: true,
-            message: "Add Video not successful. There're something wrong during uploading video to the server. Please contact admin or try again later.",
+            message: mode + " Video not successful. There're something wrong during uploading video to the server. Please contact admin or try again later.",
             submessage: "Error: " + response.data.error.code,
             optionMessage: "Try Again",
           });
