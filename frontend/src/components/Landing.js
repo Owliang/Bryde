@@ -7,6 +7,7 @@ import Verify from './landing/Verify'
 import ForgetEmail from './landing/ForgetEmail'
 import ForgetName from './landing/ForgetName'
 import FadeIn from './transition/FadeIn'
+import CustomSnackbar from './CustomSnackbar'
 
 const useStyles = makeStyles((theme) => ({
     textField: {
@@ -36,6 +37,8 @@ export default function Landing() {
 
     const classes = useStyles()
     const [state, setState] = useState(0)
+    const [alert, setAlert] = useState(false)
+    const [alert2, setAlert2] = useState(false)
     /*
     0 = login
     1 = register
@@ -44,6 +47,17 @@ export default function Landing() {
     4 = forget name
     */
 
+    const handleSetState = (newState) => {
+        if (state == 2 && newState == 0) {
+            setAlert(true)
+        }
+        if (state == 4 && newState == 0) {
+            setAlert2(true)
+        }
+        setState(newState)
+    }
+    console.log('alert')
+    console.log(alert)
     return (
         <Grid container className={classes.grid} justify="space-between">
             <Grid item xs={6}>
@@ -73,22 +87,24 @@ export default function Landing() {
                     // bgcolor="#000080"
                 >
                     <FadeIn condition={state == 0}>
-                        <Login setState={setState} />
+                        <Login setState={handleSetState} />
                     </FadeIn>
                     <FadeIn condition={state == 1}>
-                        <Register setState={setState} />
+                        <Register setState={handleSetState} />
                     </FadeIn>
                     <FadeIn condition={state == 2}>
-                        <Verify setState={setState} />
+                        <Verify setState={handleSetState} />
                     </FadeIn>
                     <FadeIn condition={state == 3}>
-                        <ForgetEmail setState={setState} />
+                        <ForgetEmail setState={handleSetState} />
                     </FadeIn>
                     <FadeIn condition={state == 4}>
-                        <ForgetName setState={setState} />
+                        <ForgetName setState={handleSetState} />
                     </FadeIn>
                 </Box>
             </Grid>
+            <CustomSnackbar makeOpen={alert} severity="success" text='Register Successful'/>
+            <CustomSnackbar makeOpen={alert2} severity="success" text='Reset Successful'/>
         </Grid>
     )
 }
