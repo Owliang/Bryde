@@ -6,7 +6,7 @@ export const CourseData = [{
         img: "https://image.freepik.com/free-vector/math-background_23-2148146270.jpg",
         subject: "math",
         desc: lorem,
-        price: "1000 Bath",
+        price: "1000 Baht",
     },
     {
         id: "2",
@@ -23,7 +23,7 @@ export const CourseData = [{
         img: "http://images.shiksha.com/mediadata/images/articles/1538985491phpKctLgx.jpeg",
         subject:"science",
         desc: lorem,
-        price: "2000 Bath",
+        price: "2000 Baht",
 
     },
     {
@@ -32,6 +32,6 @@ export const CourseData = [{
         img: "https://image.freepik.com/free-vector/english-word-education-banner_66675-157.jpg",
         subject:"english",
         desc: lorem,
-        price: "1000 Bath",
+        price: "1000 Baht",
     },
 ]

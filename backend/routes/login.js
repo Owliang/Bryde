@@ -27,7 +27,7 @@ router.post('/',[check("username","Please enter username").not().isEmpty(),
                 var dbo = db.db("BrydeTech");
                 var user_name = req.body.username;
                 var passwd = req.body.password;
-                dbo.collection("users").find({"username":user_name}, { projection: { _id: 0, username: 1 ,password:1} }).toArray(function(err, result) {
+                dbo.collection("users").find({"username":user_name}, { projection: { _id: 0, username: 1 ,password:1,isTutor:1} }).toArray(function(err, result) {
                     if (err) {
                         res.json({result:false , error:err})
                     }
@@ -47,7 +47,7 @@ router.post('/',[check("username","Please enter username").not().isEmpty(),
                                 if (err) {
                                     res.json({result:false,error:err})
                                 }
-                                res.json({result:true,error:""})
+                                res.json({result:true,error:"",isTutor:result[0].isTutor})
                             });
                         }
                     })

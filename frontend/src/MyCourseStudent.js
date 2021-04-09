@@ -66,7 +66,7 @@ function MyCourseStudent() {
     useEffect(() => {
         axios.get("/student_course", {
             params: {
-                username: student
+                username: localStorage.getItem("username")
             }
         }).then(response => {
                 console.log(response.data.result)
@@ -106,7 +106,7 @@ function MyCourseStudent() {
             <Grid item xs={8}>
                 <Typography variant="h2" color='primary' gutterBottom>
                     <Box fontSize={30}>
-                        Total Course st: {courseList.length}
+                        Total Course : {courseList.length}
                     </Box>
                 </Typography>
             </Grid>

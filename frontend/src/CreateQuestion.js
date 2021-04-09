@@ -28,18 +28,6 @@ const CreateQuestion = () => {
             var username = localStorage.getItem("username");
             var role = localStorage.getItem("role");
             console.log(JSON.stringify({ name: username, role: role }));
-            if (role != "Tutor") {
-                setDialog({
-                    title: "How Student get into this page.",
-                    open: true,
-                    message: "!!!! HOW DID YOU GET IN HERE KIDS !!!!",
-                    mainMessage: "Login to new account",
-                    optionMessage: "Go Home Kids",
-                    optionRefTo: "/",
-                });
-                await new Promise((resolve) => setTimeout(resolve, 20000));
-                window.location.href = "/";
-            }
             setUser(username);
         } catch {
             setDialog({

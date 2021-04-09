@@ -13,21 +13,38 @@ const useStyles = makeStyles((theme) => ({
 export default function ForgetName(props) {
 
     const classes = useStyles()
-    const [name, setName] = useState({
-        'Firstname': '',
-        'Lastname': '',
+    const [data, setData] = useState({
+        fname: '',
+        lname: '',
+        username: '',
+        password: '',
+        confirmPassword: '',
+        code: '',
     })
 
-    const handleChangeName = (key) => (event) => {
-        setName({
-            ...name,
+    const handleChangeData = (key) => (event) => {
+        setData({
+            ...data,
             [key]: event.target.value,
         })
     }
 
     const handleForget = () => {
-        // axios here
-        console.log('FORGET!')
+        if (data.password != data.confirmPassword) {
+            console.log('pass not match')
+            return
+        }
+        axios.post("http://localhost:4000/reset_password", {
+            fname: data.fname,
+            lname: data.lname,
+            username: data.username,
+            password: data.password,
+            code: data.code,
+        }).then(response => {
+            props.setState(0)
+        }).catch(err => {
+            console.log("can't reset")
+        })
     }
 
     return (
@@ -40,21 +57,41 @@ export default function ForgetName(props) {
             </Typography>
             <TextFieldSmall
                 display='Firstname'
-                type='password'
-                value={name['Firstname']}
-                onChange={handleChangeName('Firstname')}
+                value={data['fname']}
+                onChange={handleChangeData('fname')}
             />
             <TextFieldSmall
                 display='Lastname'
+                value={data['lname']}
+                onChange={handleChangeData('lname')}
+            />
+            <TextFieldSmall
+                display='Username'
+                value={data['username']}
+                onChange={handleChangeData('username')}
+            />
+            <TextFieldSmall
+                display='New Password'
                 type='password'
-                value={name['Lastname']}
-                onChange={handleChangeName('Lastname')}
+                value={data['password']}
+                onChange={handleChangeData('password')}
+            />
+            <TextFieldSmall
+                display='Confirm New Password'
+                type='password'
+                value={data['confirmPassword']}
+                onChange={handleChangeData('confirmPassword')}
+            />
+            <TextFieldSmall
+                display='Verification Code'
+                value={data['code']}
+                onChange={handleChangeData('code')}
                 style={{ marginBottom: 32 }}
             />
             <Button
                 variant="outlined"
                 color="primary"
-                onClick={() => {props.setState(0)}}
+                onClick={() => {handleForget()}}
             >
                 Continue
             </Button>

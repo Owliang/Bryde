@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
             color: '#000',
          },
     },
+    courseImage: {
+        maxWidth: '50%',
+    },
 }));
 
 export default function QuestionMore(props) {
@@ -39,20 +42,17 @@ export default function QuestionMore(props) {
         setAnswer(event.target.value)
     }
 
-    const handleFollow = () => {
-        // axios.post("/question", {
-        //     topic: topic,
-        //     username: localStorage.getItem('username')
-        // }).then(response => {
-        //     console.log(response.data.description)
-        //     if (response.data.description == "follow") {
-        //         setIsFollow(true)
-        //     } else {
-        //         setIsFollow(false)
-        //     }
-        // }).catch(err => {
-        //     console.error(err)
-        // })
+    const handleSubmit = () => {
+        axios.post("http://localhost:4000/question_more", {
+            id: props.location.search.split('=')[1],
+            username: localStorage.getItem('username'),
+            comment: answer,
+        }).then(response => {
+            console.log(response.data)
+        }).catch(err => {
+            console.error(err)
+        })
+        window.location.reload();
     }
 
     useEffect(() => {
@@ -66,6 +66,22 @@ export default function QuestionMore(props) {
             console.error(err)
         })
     }, []);
+
+    const handleFollow = () => {
+        axios.post("http://localhost:4000/question", {
+            id: props.location.search.split('=')[1],
+            username: localStorage.getItem('username')
+        }).then(response => {
+            console.log(response.data)
+            if (response.data.description == "follow") {
+                setIsFollow(true)
+            } else {
+                setIsFollow(false)
+            }
+        }).catch(err => {
+            console.error(err)
+        })
+    }
 
     const answerCardList = (Array.from(Array(result.comment.length).keys())).map(index => {
         return (
@@ -90,7 +106,7 @@ export default function QuestionMore(props) {
                     </Typography>
                 </Box>
                 <Box className={classes.grow} />
-                <Box display="flex" flexDirection="column" alignItems="spacce-between" mb={4}>
+                {/* <Box display="flex" flexDirection="column" alignItems="spacce-between" mb={4}>
                     <Button
                         variant={isFollow ? "contained" : "outlined"}
                         color={isFollow ? "primary" : "#000"}
@@ -99,12 +115,13 @@ export default function QuestionMore(props) {
                     >
                         {isFollow ? 'Followed' : 'Follow'}
                     </Button>
-                </Box>
+                </Box> */}
             </Box>
-            <Box display="flex" bgcolor="background.light2" borderRadius={8} minHeight="100px" p={3} mb={6}>
+            <Box display="flex" bgcolor="background.light2" borderRadius={8} minHeight="100px" p={3} mb={6} flexDirection="column">
                 <Typography variant="h6" className={classes.typography}>
                     {result.description}
                 </Typography>
+                <img src= {'data:image/jpg;base64,'+ result.buffer } className={classes.courseImage} />
             </Box>
             <Typography variant="h4" className={classes.typography}>
                 Comment ({result.comment.length})
@@ -117,13 +134,12 @@ export default function QuestionMore(props) {
                 <TextareaAutosize
                     value={answer}
                     onChange={handleChangeAnswer()}
-                    style={{marginBottom: 16}}
-                    height="300px"
+                    style={{marginBottom: 16, height: "300px"}}
                 />
                 <Button
                     variant="outlined"
                     color="primary"
-                    onClick={() => {console.log('yay')}}
+                    onClick={() => {handleSubmit()}}
                     className={classes.button}
                 >
                     Submit

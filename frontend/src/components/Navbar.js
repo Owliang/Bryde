@@ -206,7 +206,7 @@ export default function Navbar() {
                             />
                         }
                     >
-                        <Box>Loggin as : {localStorage.getItem('username')}</Box>
+                        <Box>Login as : {localStorage.getItem('username')}</Box>
                         <Box onClick={handleProfile}>Profile</Box>
                         <Box onClick={handleLogout}>Logout</Box>
                     </DropDownMenu>
