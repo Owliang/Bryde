@@ -54,9 +54,10 @@ router.post('/',function(req, res, next) {
                         video_buffer:[],
                         video_size:[],
                         video_type:[],
-                        rating:7,
+                        rating:parseFloat(7),
                         enrolled_date:'-',
-                        student:[]};
+                        student:[],
+                        score:[]};
                     dbo.collection("courses").insertOne(myobj,function(err,result){
                         if (err) {
                             res.json({result:false , error:err})
