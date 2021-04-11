@@ -21,6 +21,7 @@ function GetCourseData(props) {
   return new Promise((resolve, reject) => {
     if (mode == "edit") {
       console.log(`CID from getData`, CID == 'undefined');
+      console.log(`CID from getData`, CID);
       if (CID == 'undefined') {
         setAlert({
           title: "We probably dont know what course you are looking for",

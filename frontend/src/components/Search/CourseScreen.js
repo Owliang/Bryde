@@ -175,7 +175,7 @@ export default function CourseScreen(props) {
                     <Typography className={classes.coursedetail} >Subject : { course.subject }</Typography>
                     <Typography className={classes.coursedetail} >Price : { course.price } Baht</Typography>
                     <Typography className={classes.coursedetail} >Rating : { course.rating }</Typography>
-                    <Typography className={classes.coursedetail} >Number of Video : { course.video_size }</Typography>
+                    <Typography className={classes.coursedetail} >Number of Video : { course.total_video }</Typography>
 
                 </div>
                 <div className={classes.margin} >
@@ -188,7 +188,10 @@ export default function CourseScreen(props) {
         </Paper>
     
         <div className={classes.ButtonBlock} >
-        {course.Isenroll === true ? <br/> : showQRcode === false ?
+        {localStorage.getItem('role') === 'Tutor' ? 
+            <br/>
+            :
+            course.Isenroll === true ? <br/> : showQRcode === false ?
                     
                     <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={() => {handleEnroll()}} >enroll</Button>
                     :
@@ -201,6 +204,9 @@ export default function CourseScreen(props) {
             <Typography className={classes.typography} >You've already enrolled in this class</Typography>
             
             
+        }
+        {localStorage.getItem('role') === 'Tutor' &&
+            <Typography className={classes.typography} >Tutor cannot enroll to any course </Typography>
         }
 
 

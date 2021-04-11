@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Container, Grid, ListItem, Paper, Typography , Button , Select ,MenuItem ,FormControl,InputLabel} from '@material-ui/core'
+import { Box, Container, Grid, ListItem, Paper, Typography , Button , Select ,MenuItem ,FormControl,InputLabel,CircularProgress,} from '@material-ui/core'
 import axios from 'axios'
+import b64toBlob from "../../services/b64toBlob";
+import { Player } from 'video-react';
+import FormComponents from "../FormComponents/FormComponents.js";
+import { Form, useForm } from "../useForm.js";
+import GetCourseData from "../../services/getCourseData";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     ButtonBlock: {
         display:'flex',
         justifyContent:'flex-end',
-        // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
       },
     paper: {
         padding: theme.spacing(2),
@@ -43,7 +47,8 @@ const useStyles = makeStyles((theme) => ({
     },
     dropdown: {
         marginBottom: 8,
-        height:40,
+        width: '100%',
+        height:50,
         "& .MuiOutlinedInput-root": {
             "& fieldset": { 
                 borderRadius: "10px",
@@ -104,27 +109,50 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: '#212121',
             boxShadow: 'none',
           },
+    },
+    videoFrame:{
+        border:'1.5px solid',
+        width:'80%',
+        height:'800',
+        paddingTop:'10'
     }
 }));
 
 export default function Lesson(props) {
 
     const classes = useStyles();
-    const [course,setCourse] = useState([]);
+    const [course,setCourse] = useState({
+        status: "loading",
+      });
+    const [videos,setVideos] = useState([]);
+    const [VIDs,setVIDs] = useState([]);
+    const getInitialCourseData = () => GetCourseData({ CID: props.match.params.id , mode: "edit"  });
 
     useEffect(() => {
-        const fecthCourse = async () => {
-            const { data } = await axios.get('/course',{params:{
-                id : props.match.params.id,
-                student_name : localStorage.getItem('username')
-            }    
-            });
-            setCourse( data.data );
-
-            
-        };
-        fecthCourse();
-    },[]);  
+        console.log("begin Init");
+        getInitialCourseData().then((initData) => {
+            console.log(`initialCourseData from useEffect`, initData);
+            setCourse(initData);
+            console.log("set init Video");
+            setVideos(initData.attatch_video);
+            let n = initData.total_video;
+            let tempID = []
+            for (let i = 0; i < n; i++) tempID.push({label:"Video "+(i+1)+": "+initData.attatch_video[i].name,value:i})
+            setVIDs(tempID)
+        }).catch(async (err) => {
+          await new Promise((resolve) => setTimeout(resolve, 20000));
+          window.location.href = "/";
+        });
+      }, [1]);
+    
+    const {
+        values,
+        setValues,
+        errors,
+        setErrors,
+        handleInputChange,
+        resetForm,
+      } = useForm({id: "0"},false);
       
 
     if(!course){
@@ -135,7 +163,10 @@ export default function Lesson(props) {
     }
 
     return (
-        
+        <div>
+      {course.status == "loading" ? (
+        <CircularProgress size={150} />
+      ) : (
       <Container fixed>
         <Paper className={classes.paper}>
             <Grid className={classes.margin} >
@@ -144,25 +175,48 @@ export default function Lesson(props) {
 
             <div className='row'padding='1rem'>
                 <div className='col'>
-                    <img src={'data:image/jpg;base64,'+ course.photo_buffer } className={classes.courseImage} />
+                    <img src = {course.attatch_photo.source} className={classes.courseImage} />
                 </div>
                 <div className='col'>
                     <Typography className={classes.coursedetail} >By : { course.tutor }</Typography>
                     <Typography className={classes.coursedetail} >Subject : { course.subject }</Typography>
                     <Typography className={classes.coursedetail} >Price : { course.price } Baht</Typography>
                     <Typography className={classes.coursedetail} >Rating : { course.rating }</Typography>
-                    <Typography className={classes.coursedetail} >Number of Video : { course.video_size }</Typography>
+                    <Typography className={classes.coursedetail} >Number of Video : { VIDs.length }</Typography>
 
                 </div>
                 <div className={classes.margin} >
                     <Typography className={classes.typography} variant='h6'>Description :</Typography>
                     
                 </div>
-                    <Typography className={classes.coursedetail}  > course.description </Typography>
+                    <Typography className={classes.coursedetail}  > {course.description} </Typography>
                 
             </div>
         </Paper>
-
+        <Grid container spacing={3} className={classes.grid}>
+            <Grid item xs={6}>
+                <FormComponents.Select
+                    fullWidth 
+                    className={classes.dropdown}
+                    label="Select Video"
+                    name="subject"
+                    onChange={handleInputChange}
+                    value={values.id}
+                    options={VIDs}
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} target="_blank" href={course.link} > Download course material </Button>
+            </Grid>
+            <Grid item xs={12}>
+                {videos[values.id]?.source &&
+                <Player
+                    className={classes.videoFrame}
+                    playsInline
+                    src={videos[values.id].source}
+                />}
+            </Grid>
+        </Grid>
 
         {localStorage.getItem('role') === 'tutor' &&
             <Typography className={classes.typography}>Enrolled students</Typography>
@@ -170,5 +224,7 @@ export default function Lesson(props) {
         
 
       </Container>
+      )}
+      </div>
     )
 }

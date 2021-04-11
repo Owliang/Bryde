@@ -22,18 +22,8 @@ export default function ForgetEmail(props) {
     const handleForget = () => {
         axios.post("http://localhost:4000/forget_password", {
             email: email
-        }).then(response => {
-            console.log(response.data)
-            const result = response.data.result
-            if (result) {
-                // props.setState(2)
-                console.log("set state")
-            } else {
-                console.log("can't reg")
-            }
-        }).catch(err => {
-            console.error(err)
         })
+        props.setState(4)
     }
 
     return (

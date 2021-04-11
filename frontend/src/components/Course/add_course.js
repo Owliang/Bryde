@@ -376,7 +376,7 @@ function AddCourse() {
                       onChange={handleChangeInput}
                       value = {courseData.price}
                       InputProps={{
-                        endAdornment: <InputAdornment position="end">Bath</InputAdornment>,
+                        endAdornment: <InputAdornment position="end">Baht</InputAdornment>,
                       }}
                       {...(errors.price && {error:true,helperText:errors.price})}
                     />
