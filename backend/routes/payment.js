@@ -28,7 +28,7 @@ router.post('/done',[check("username","Please Input username"),check("id","Pleas
       else{
           var dbo = db.db("BrydeTech");
           var id = new mongo.ObjectID(req.body.id)
-          dbo.collection("courses").updateOne({_id:id},{$push:{student:req.body.username,score:parseFloat(7)}}),(function(err, result) {
+          dbo.collection("courses").updateOne({_id:id},{$push:{student:req.body.username,score:parseFloat(-1),review:""}}),(function(err, result) {
             if (err) {
               res.json({result:false , error:err})
             }
