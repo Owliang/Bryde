@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Container, Grid, ListItem, Paper, Typography , Button , Select ,MenuItem ,FormControl,InputLabel,CircularProgress,} from '@material-ui/core'
-import axios from 'axios'
-import b64toBlob from "../../services/b64toBlob";
-import { Player } from 'video-react';
 import FormComponents from "../FormComponents/FormComponents.js";
 import { Form, useForm } from "../useForm.js";
+import MyVideoPlayer from "./MyVideoPlayer"
 import GetCourseData from "../../services/getCourseData";
 
 
@@ -112,8 +110,6 @@ const useStyles = makeStyles((theme) => ({
     },
     videoFrame:{
         border:'1.5px solid',
-        width:'80%',
-        height:'800',
         paddingTop:'10'
     }
 }));
@@ -126,7 +122,7 @@ export default function Lesson(props) {
       });
     const [videos,setVideos] = useState([]);
     const [VIDs,setVIDs] = useState([]);
-    const getInitialCourseData = () => GetCourseData({ CID: props.match.params.id , mode: "edit"  });
+    const getInitialCourseData = () => GetCourseData({ CID: props.match.params.id , mode: "read", student: props.match.params.student });
 
     useEffect(() => {
         console.log("begin Init");
@@ -137,13 +133,15 @@ export default function Lesson(props) {
             setVideos(initData.attatch_video);
             let n = initData.total_video;
             let tempID = []
-            for (let i = 0; i < n; i++) tempID.push({label:"Video "+(i+1)+": "+initData.attatch_video[i].name,value:i})
+            for (let i = 0; i < n; i++){
+                 tempID.push({label:"Video "+(i+1)+": "+initData.attatch_video[i].name, value:i})
+            }
             setVIDs(tempID)
         }).catch(async (err) => {
           await new Promise((resolve) => setTimeout(resolve, 20000));
           window.location.href = "/";
         });
-      }, [1]);
+    }, [1]);
     
     const {
         values,
@@ -152,8 +150,11 @@ export default function Lesson(props) {
         setErrors,
         handleInputChange,
         resetForm,
-      } = useForm({id: "0"},false);
+      } = useForm({ id: "0" },false);
       
+      useEffect(() => {
+        console.log(`values.id`, values.id)
+    },[values.id])
 
     if(!course){
         return (
@@ -199,7 +200,7 @@ export default function Lesson(props) {
                     fullWidth 
                     className={classes.dropdown}
                     label="Select Video"
-                    name="subject"
+                    name="id"
                     onChange={handleInputChange}
                     value={values.id}
                     options={VIDs}
@@ -210,10 +211,8 @@ export default function Lesson(props) {
             </Grid>
             <Grid item xs={12}>
                 {videos[values.id]?.source &&
-                <Player
-                    className={classes.videoFrame}
-                    playsInline
-                    src={videos[values.id].source}
+                <MyVideoPlayer
+                    url={videos[values.id].source}
                 />}
             </Grid>
         </Grid>
