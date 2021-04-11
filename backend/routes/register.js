@@ -23,7 +23,12 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/'/*,upload.single('file')*/,[check("username","Please enter username").not().isEmpty(),
-            check("password","Please enter password").not().isEmpty()
+            check("password","Please enter password").not().isEmpty(),
+            check("fname","Please enter fname").not().isEmpty(),
+            check("lname","Please enter lname").not().isEmpty(),
+            check("email","Please enter email").not().isEmpty(),
+            check("ppnumber","Please enter ppnumber").not().isEmpty(),
+            check("isTutor","Please enter isTutor").not().isEmpty()
             ], function(req, res, next) {
         const result = validationResult(req);
         var errors = result.errors;
@@ -38,7 +43,7 @@ router.post('/'/*,upload.single('file')*/,[check("username","Please enter userna
                 }
                 else{
                     var dbo = db.db("BrydeTech");
-                    dbo.collection("users").find({"username":req.body.username}, { projection: { _id: 0, username: 1} }).toArray(function(err, result) {
+                dbo.collection("users").find({$or:[{"username":req.body.username},{"email":req.body.email},{"ppnumber":req.body.ppnumber}/*,{$and:[{"fname":req.body.fname},{"lname":req.body.lname}]}*/]}, { projection: { _id: 0, username: 1} }).toArray(function(err, result) {
                         if (err) {
                             res.json({result:false , error:err})
                         }
@@ -71,7 +76,7 @@ router.post('/'/*,upload.single('file')*/,[check("username","Please enter userna
                               })
                         }
                         else{
-                            res.json({result:false, error:"๊U already have an account"})
+                            res.json({result:false, error:"U already have an account"})
                         }
                         db.close();
                     });

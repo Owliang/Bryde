@@ -26,7 +26,7 @@ router.get('/', function(req, res, next) {
   res.render('verification');
   //res.json({ result : 'Response from verification page' })  
 });
-router.post('/',[check("code","Please Input code")], function(req, res, next) {
+router.post('/',[check("code","Please Input code").not().isEmpty()], function(req, res, next) {
   const result = validationResult(req);
   var errors = result.errors;
   if (!result.isEmpty()) {

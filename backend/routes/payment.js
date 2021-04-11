@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
   res.json({ result : 'Response from login page'})  
   //res.render('payment_detail');
 });
-router.post('/done',[check("username","Please Input username"),check("id","Please Input course id")], function(req, res, next) {
+router.post('/done',[check("username","Please Input username").not().isEmpty(),check("id","Please Input course id").not().isEmpty().isMongoId()], function(req, res, next) {
   const result = validationResult(req);
   var errors = result.errors;
   if (!result.isEmpty()) {

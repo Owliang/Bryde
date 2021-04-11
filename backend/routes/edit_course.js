@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
 var Binary = require('mongodb').Binary;
+const { query,param,body, validationResult, check } = require('express-validator');
 var fs = require('fs');
 var formidable = require('formidable')
 var multer  = require('multer')
@@ -23,27 +24,34 @@ var upload = multer({
 })
 /* GET home page. */
 
-router.get('/', function(req, res, next) {
-    res.render('edit_course');
-    MongoClient.connect(url, function(err, db) {
-        if (err) {
-          res.json({result:false,error:err})
-        }
-        else{
-            var dbo = db.db("BrydeTech");
-            var id = new mongo.ObjectID(req.query.id);
-            var myquery = {_id:id};
-            dbo.collection("courses").findOne(myquery,function(err,response){
-                if (err) {
-                    res.json({result:false , error:err})
-                }
-                else{
-                    res.json({result:true,error:"",data:response})
-                }
-                db.close();
-            });
-        }
-    });  
+router.get('/',[query('id').notEmpty().exists().isMongoId()] ,function(req, res, next) {
+    //res.render('edit_course');
+    const result = validationResult(req);
+    var errors = result.errors;
+    if (!result.isEmpty()) {
+        res.json({result:false,error:errors})
+    }
+    else{
+        MongoClient.connect(url, function(err, db) {
+            if (err) {
+            res.json({result:false,error:err})
+            }
+            else{
+                var dbo = db.db("BrydeTech");
+                var id = new mongo.ObjectID(req.query.id);
+                var myquery = {_id:id};
+                dbo.collection("courses").findOne(myquery,function(err,response){
+                    if (err) {
+                        res.json({result:false , error:err})
+                    }
+                    else{
+                        res.json({result:true,error:"",data:response})
+                    }
+                    db.close();
+                });
+            }
+        });  
+    }
 });
 /*router.post('/',course_upload,function(req, res, next) {
         MongoClient.connect(url, function(err, db) {

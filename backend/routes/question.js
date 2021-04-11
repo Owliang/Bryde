@@ -3,74 +3,86 @@ var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
-const { body, validationResult, check } = require('express-validator');
+const { query,body, validationResult, check } = require('express-validator');
 const { UnavailableForLegalReasons } = require('http-errors');
 var fs = require('fs');
 var multer  = require('multer');
 const { abort } = require('process');
 
-router.get('/', function(req, res, next) {
+router.get('/',[query('topic').notEmpty().exists(),query('subject').notEmpty().exists(),query('username').notEmpty().exists()],function(req, res, next) {
     // var topic = ((req.query.topic=="") ? /^/ : req.query.topic )
     // var creator = ((req.query.username=="") ? /^/ : req.query.username )
-    var subject = ((req.query.subject=="") ? /^/ : req.query.subject )
-    var q = {"subject":subject,"topic":{$regex:new RegExp(req.query.topic),$options:'i'},"creator":{$regex:new RegExp(req.query.username),$options:'i'}}
-    MongoClient.connect(url, function(err, db) {
-        if (err) {
-            res.json({result:false,error:err})
-        }
-        else{
+    const result = validationResult(req);
+    var errors = result.errors;
+    if (!result.isEmpty()) {
+        res.json({result:false,error:errors})
+    }else{
+        var subject = ((req.query.subject=="") ? /^/ : req.query.subject )
+        var q = {"subject":subject,"topic":{$regex:new RegExp(req.query.topic),$options:'i'},"creator":{$regex:new RegExp(req.query.username),$options:'i'}}
+        MongoClient.connect(url, function(err, db) {
+            if (err) {
+                res.json({result:false,error:err})
+            }
+            else{
+                var dbo = db.db("BrydeTech");
+                dbo.collection("Q&A").find(q,{ projection: { _id:1,topic:1,creator:1,subject:1,follower:1} }).sort({topic:-1}).toArray(function(err, result) {
+                    if (err){
+                        res.json({result:false , error:err})
+                    }
+                    var isFollow = []
+                    for(i=0;i<result.length;i++){
+                        follow = result[i].follower.findIndex(student => student == req.query.student_name);
+                        isFollow[i] = (follow == -1) ? false:true;
+                    }
+                    res.json({result:result,error:"",isFollow:isFollow});
+                    db.close();
+                })
+            }
+        });
+    }
+});
+router.get('/suggestion',[query('student_name').notEmpty().exists()], function(req, res, next) {
+    const result = validationResult(req);
+    var errors = result.errors;
+    if (!result.isEmpty()) {
+        res.json({result:false,error:errors})
+    }else{
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
             var dbo = db.db("BrydeTech");
-            dbo.collection("Q&A").find(q,{ projection: { _id:1,topic:1,creator:1,subject:1,follower:1} }).sort({topic:-1}).toArray(function(err, result) {
+            dbo.collection('Q&A').aggregate([
+            { $project:
+                {
+                "_id":1,
+                "topic":1,
+                "subject":1,
+                "creator":1,
+                "size":{"$size":"$follower"},
+                "follower":1
+                }
+            },
+            {
+                "$sort":{"size":-1}
+            }
+            ]).toArray(function(err, result) {
                 if (err){
                     res.json({result:false , error:err})
+                }else{
+                    var isFollow = []
+                    for(i=0;i<result.length;i++){
+                        follow = result[i].follower.findIndex(student => student == req.query.student_name);
+                        isFollow[i] = (follow == -1) ? false:true;
+                    }
+                    res.json({result:result , error:"",isFollow:isFollow})
                 }
-                var isFollow = []
-                for(i=0;i<result.length;i++){
-                    follow = result[i].follower.findIndex(student => student == req.query.student_name);
-                    isFollow[i] = (follow == -1) ? false:true;
-                }
-                res.json({result:result,error:"",isFollow:isFollow});
-                db.close();
-            })
-        }
-    });
-});
-router.get('/suggestion', function(req, res, next) {
-    MongoClient.connect(url, function(err, db) {
-        if (err) throw err;
-        var dbo = db.db("BrydeTech");
-        dbo.collection('Q&A').aggregate([
-          { $project:
-             {
-               "_id":1,
-               "topic":1,
-               "subject":1,
-               "creator":1,
-               "size":{"$size":"$follower"},
-               "follower":1
-             }
-           },
-           {
-               "$sort":{"size":-1}
-           }
-          ]).toArray(function(err, result) {
-            if (err){
-                res.json({result:false , error:err})
-            }else{
-                var isFollow = []
-                for(i=0;i<result.length;i++){
-                    follow = result[i].follower.findIndex(student => student == req.query.student_name);
-                    isFollow[i] = (follow == -1) ? false:true;
-                }
-                res.json({result:result , error:"",isFollow:isFollow})
-            }
-            //console.log(JSON.stringify(result));
-          db.close();
+                //console.log(JSON.stringify(result));
+            db.close();
+            });
         });
-      });
+    }
 });
 router.post('/',[check("username","Please enter username").not().isEmpty(),
-                check("id","Please enter id").not().isEmpty()]
+                check("id","Please enter id").not().isEmpty().isMongoId()]
 ,function(req, res, next) {
     const result = validationResult(req);
     var errors = result.errors;

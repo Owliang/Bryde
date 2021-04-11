@@ -4,13 +4,19 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
-const { body, validationResult, check } = require('express-validator');
+const { query,body, validationResult, check } = require('express-validator');
 const { UnavailableForLegalReasons } = require('http-errors');
 var Binary = require('mongodb').Binary;
 var fs = require('fs');
 /* GET home page. */
 
-router.get('/', function(req, res, next) {
+router.get('/',[query('id').notEmpty().exists().isMongoId(),query('student_name').notEmpty().exists()], function(req, res, next) {
+    const result = validationResult(req);
+    var errors = result.errors;
+    if (!result.isEmpty()) {
+        res.json({result:false,error:errors})
+    }
+    else{
         MongoClient.connect(url, function(err, db) {
             if (err) {
                 res.json({result:false,error:err})
@@ -29,9 +35,10 @@ router.get('/', function(req, res, next) {
                 })
             }
         });
+    }
 });
 router.post('/',[check("username","Please enter username").not().isEmpty(),
-check("id","Please enter id").not().isEmpty(),check("comment","Please enter comment").not().isEmpty()], function(req, res, next) {
+check("id","Please enter id").isMongoId(),check("comment","Please enter comment").not().isEmpty()], function(req, res, next) {
     const result = validationResult(req);
     var errors = result.errors;
     if (!result.isEmpty()) {

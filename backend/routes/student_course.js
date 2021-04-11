@@ -35,29 +35,36 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
 var Binary = require('mongodb').Binary;
 var fs = require('fs');
-const { body, validationResult, check } = require('express-validator');
+const { query,param,body, validationResult, check } = require('express-validator');
 const { UnavailableForLegalReasons } = require('http-errors');
 /* GET home page. */
 
-router.get('/', function(req, res, next) {
-    MongoClient.connect(url, function(err, db) {
-        if (err) {
-            res.json({result:false,error:err})
-        }
-        else{
-            var dbo = db.db("BrydeTech");
-            dbo.collection("courses").find({student:req.query.username}, { projection:{_id:1,name:1,tutor:1,price:1,subject:1,description:1,link:1,photo_buffer:1,rating:1,student:1} }).toArray(function(err, result) {
-                if (err) {
-                    res.json({result:false , error:err})
-                }
-                res.json({result:result});
-                db.close();
-            })
-        }
-    });
+router.get('/',[query('username').notEmpty().exists()], function(req, res, next) {
+    const result = validationResult(req);
+    var errors = result.errors;
+    if (!result.isEmpty()) {
+        res.json({result:false,error:errors})
+    }
+    else{
+        MongoClient.connect(url, function(err, db) {
+            if (err) {
+                res.json({result:false,error:err})
+            }
+            else{
+                var dbo = db.db("BrydeTech");
+                dbo.collection("courses").find({student:req.query.username}, { projection:{_id:1,name:1,tutor:1,price:1,subject:1,description:1,link:1,photo_buffer:1,rating:1,student:1} }).toArray(function(err, result) {
+                    if (err) {
+                        res.json({result:false , error:err})
+                    }
+                    res.json({result:result});
+                    db.close();
+                })
+            }
+        });
+    }
 });
 router.post('/',[check("student_name","Please enter student name").not().isEmpty(),check("score","Please enter score").not().isEmpty(),
-    check("review","Please enter review").not().isEmpty(),check("id","Please enter id").not().isEmpty()], function(req, res, next) {
+    check("review","Please enter review").not().isEmpty(),check("id","Please enter id").not().isEmpty().isMongoId()], function(req, res, next) {
         const result = validationResult(req);
         var errors = result.errors;
         if (!result.isEmpty()) {
