@@ -8,24 +8,10 @@ var Binary = require('mongodb').Binary;
 const { query,param,body, validationResult, check } = require('express-validator');
 var fs = require('fs');
 var formidable = require('formidable')
-var multer  = require('multer')
-var upload = multer({ 
-    storage:multer.diskStorage({
-        destination: function (req, file, cb) {
-            // ใช้งาน path module กำหนดโฟลเดอร์ที่จะบันทึกไฟล์
-            cb(null, 'uploads/')
-        },
-        filename: function (req, file, cb) {
-            // เปลี่ยนชื่อไฟล์ ในที่นี้ใช้เวลา timestamp ต่อด้วยชือ่ไฟล์เดิม
-            // เช่นไฟล์เดิมเป็น bird.png ก็จะได้เป็น  1558631524415-bird.png
-            cb(null, file.originalname)
-        }
-    })
-})
+
 /* GET home page. */
 
 router.get('/',[query('id').notEmpty().exists().isMongoId()] ,function(req, res, next) {
-    //res.render('edit_course');
     const result = validationResult(req);
     var errors = result.errors;
     if (!result.isEmpty()) {
@@ -53,32 +39,7 @@ router.get('/',[query('id').notEmpty().exists().isMongoId()] ,function(req, res,
         });  
     }
 });
-/*router.post('/',course_upload,function(req, res, next) {
-        MongoClient.connect(url, function(err, db) {
-            if (err) {
-              res.json({result:false,error:err})
-            }
-            else{
-                var dbo = db.db("BrydeTech");
-                var idd = new mongo.ObjectID(req.body.id);
-                var myquery = {_id:idd};
-                var newvalues = {$set:{name:req.body.name,
-                  price:parseInt(req.body.price),
-                  subject:req.body.subject,
-                  description:req.body.description,
-                  link:req.body.link,
-                photo_buffer:fs.readFileSync('uploads/'+req.files['attach_photo'][0].originalname),
-                video_buffer:video}}
-                dbo.collection("courses").updateOne(myquery,newvalues,function(err,response){
-                    if (err) {
-                        res.json({result:false , error:err})
-                    }
-                    db.close();
-                });
-                res.json({result:true,error:""})
-            }
-        });
-});*/
+
 router.post('/',function(req, res, next) {
     var form = new formidable.IncomingForm();
     form.parse(req, function(err, fields, files) {

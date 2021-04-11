@@ -8,9 +8,6 @@ var Binary = require('mongodb').Binary;
 const { query,param,body, validationResult, check } = require('express-validator');
 var fs = require('fs');
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('search_course')
-});
 router.post('/',[check("course_name","Please enter course_name").not().isEmpty(),
                 check("tutor_name","Please enter tutor_name").not().isEmpty(),
                 check("subject","Please enter subject").not().isEmpty()],function(req, res, next) {

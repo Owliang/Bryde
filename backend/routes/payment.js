@@ -7,13 +7,9 @@ var mongo = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
 const { body, validationResult, check } = require('express-validator');
-const { UnavailableForLegalReasons } = require('http-errors');
 const { parse } = require('path');
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.json({ result : 'Response from login page'})  
-  //res.render('payment_detail');
-});
+
 router.post('/done',[check("username","Please Input username").not().isEmpty(),check("id","Please Input course id").not().isEmpty().isMongoId()], function(req, res, next) {
   const result = validationResult(req);
   var errors = result.errors;
@@ -71,7 +67,6 @@ router.post('/',[check("tutor","Please Input tutor"),check("price","Please Input
             })
             db.close();
           });
-          //res.json({result:true,error:""})
       }
     });
   }

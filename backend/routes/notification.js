@@ -4,7 +4,6 @@ var mongo = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
 const { query, validationResult, check } = require('express-validator');
-const { UnavailableForLegalReasons } = require('http-errors');
 /* GET home page. */
 router.get('/',[query('status').notEmpty().exists().isIn(['all','read','unread']),query('username').notEmpty().exists()] , function(req, res, next) {
     const result = validationResult(req);

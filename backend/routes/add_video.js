@@ -4,18 +4,11 @@ var router = express.Router();
 var MongoClient = require("mongodb").MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
 const { body, validationResult, check } = require("express-validator");
-const { UnavailableForLegalReasons } = require("http-errors");
 var fs = require("fs");
 var formidable = require("formidable");
 
 /* GET home page. */
 
-router.get("/", function (req, res, next) {
-  //res.render('upload');
-  res.json({ result: "Response from create course page" });
-});
-
-//router.post('/',course_upload,function(req, res, next) {
 router.post("/", function (req, res, next) {
   var form = new formidable.IncomingForm();
   form.parse(req, function (err, fields, files) {

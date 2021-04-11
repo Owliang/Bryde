@@ -5,7 +5,6 @@ var mongoose = require('mongoose');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
 const { query,body, validationResult, check } = require('express-validator');
-const { UnavailableForLegalReasons } = require('http-errors');
 var Binary = require('mongodb').Binary;
 var fs = require('fs');
 /* GET home page. */

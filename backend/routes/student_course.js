@@ -36,7 +36,6 @@ var url = "mongodb://127.0.0.1:27017/";
 var Binary = require('mongodb').Binary;
 var fs = require('fs');
 const { query,param,body, validationResult, check } = require('express-validator');
-const { UnavailableForLegalReasons } = require('http-errors');
 /* GET home page. */
 
 router.get('/',[query('username').notEmpty().exists()], function(req, res, next) {

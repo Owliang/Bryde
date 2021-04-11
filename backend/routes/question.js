@@ -4,9 +4,7 @@ var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
 const { query,body, validationResult, check } = require('express-validator');
-const { UnavailableForLegalReasons } = require('http-errors');
 var fs = require('fs');
-var multer  = require('multer');
 const { abort } = require('process');
 
 router.get('/',[query('topic').notEmpty().exists(),query('subject').notEmpty().exists(),query('username').notEmpty().exists()],function(req, res, next) {
@@ -82,8 +80,7 @@ router.get('/suggestion',[query('student_name').notEmpty().exists()], function(r
     }
 });
 router.post('/',[check("username","Please enter username").not().isEmpty(),
-                check("id","Please enter id").not().isEmpty().isMongoId()]
-,function(req, res, next) {
+                check("id","Please enter id").not().isEmpty().isMongoId()],function(req, res, next) {
     const result = validationResult(req);
     var errors = result.errors;
     if (!result.isEmpty()) {

@@ -3,11 +3,9 @@ var express = require('express');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
-var passwordHash = require('password-hash');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const { body, validationResult, check } = require('express-validator');
-const { UnavailableForLegalReasons } = require('http-errors');
 var fs = require('fs');
 //for send email
 'use strict';
@@ -16,11 +14,6 @@ const { render } = require('ejs');
 //
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('regis');
-    //res.render('register',{param:img});
-    //res.json({ result : 'Response from register page' })  
-});
 
 router.post('/'/*,upload.single('file')*/,[check("username","Please enter username").not().isEmpty(),
             check("password","Please enter password").not().isEmpty(),
