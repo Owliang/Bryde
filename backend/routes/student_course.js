@@ -58,48 +58,55 @@ router.get('/', function(req, res, next) {
 });
 router.post('/',[check("student_name","Please enter student name").not().isEmpty(),check("score","Please enter score").not().isEmpty(),
     check("review","Please enter review").not().isEmpty(),check("id","Please enter id").not().isEmpty()], function(req, res, next) {
-        MongoClient.connect(url, function(err, db) {
-            if (err) {
-                res.json({result:false,error:err})
-            }
-            var dbo = db.db("BrydeTech");
-            var id = new mongo.ObjectID(req.body.id)
-            var rating = parseFloat(0);
-            var index = -1;
-            dbo.collection("courses").find({_id:id},{projection:{_id:1,student:1,score:1,review:1}}).toArray(function(err, result) {
+        const result = validationResult(req);
+        var errors = result.errors;
+        if (!result.isEmpty()) {
+            res.json({result:false,error:errors})
+        }
+        else{ 
+            MongoClient.connect(url, function(err, db) {
                 if (err) {
-                    res.json({result:false , error:err})
+                    res.json({result:false,error:err})
                 }
-                var new_score = result[0].score
-                var new_review = result[0].review
-                index = result[0].student.findIndex(student => student == req.body.student_name);
-                new_score[index] = parseFloat(req.body.score)
-                new_review[index] = req.body.review
-                var total = parseFloat(0)
-                var n = parseFloat(0)
-                for(i=0;i<result[0].student.length;i++){
-                    if(i==index){
-                        total = total + parseFloat(req.body.score);
-                        n++
-                    }
-                    else if(result[0].score[i] != -1){
-                        total = total + parseFloat(result[0].score[i]);
-                        n++
-                    }
-                }
-                console.log(total,n)
-                rating = parseFloat(total/n)
                 var dbo = db.db("BrydeTech");
-                var myquery = { _id: id };
-                var newvalues = { $set: {score:new_score,rating:rating,review:new_review} };
-                dbo.collection("courses").updateOne(myquery, newvalues, function(err, result2) {
+                var id = new mongo.ObjectID(req.body.id)
+                var rating = parseFloat(0);
+                var index = -1;
+                dbo.collection("courses").find({_id:id},{projection:{_id:1,student:1,score:1,review:1}}).toArray(function(err, result) {
                     if (err) {
                         res.json({result:false , error:err})
                     }
-                    res.json({result:true,error:"",_id:result[0]._id,new_rating:rating});
-                });
-                db.close();
-            })
-        });
+                    var new_score = result[0].score
+                    var new_review = result[0].review
+                    index = result[0].student.findIndex(student => student == req.body.student_name);
+                    new_score[index] = parseFloat(req.body.score)
+                    new_review[index] = req.body.review
+                    var total = parseFloat(0)
+                    var n = parseFloat(0)
+                    for(i=0;i<result[0].student.length;i++){
+                        if(i==index){
+                            total = total + parseFloat(req.body.score);
+                            n++
+                        }
+                        else if(result[0].score[i] != -1){
+                            total = total + parseFloat(result[0].score[i]);
+                            n++
+                        }
+                    }
+                    console.log(total,n)
+                    rating = parseFloat(total/n)
+                    var dbo = db.db("BrydeTech");
+                    var myquery = { _id: id };
+                    var newvalues = { $set: {score:new_score,rating:rating,review:new_review} };
+                    dbo.collection("courses").updateOne(myquery, newvalues, function(err, result2) {
+                        if (err) {
+                            res.json({result:false , error:err})
+                        }
+                        res.json({result:true,error:"",_id:result[0]._id,new_rating:rating});
+                    });
+                    db.close();
+                })
+            });
+        }
 });
 module.exports = router;
