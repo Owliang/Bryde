@@ -13,8 +13,7 @@ router.get('/', function(req, res, next) {
     // var topic = ((req.query.topic=="") ? /^/ : req.query.topic )
     // var creator = ((req.query.username=="") ? /^/ : req.query.username )
     var subject = ((req.query.subject=="") ? /^/ : req.query.subject )
-    //var q = {"$text":{"topic":topic,"creator":creator,"subject":subject}}
-    var q = {"subject":subject,"topic":{$regex:new RegExp(req.query.topic)},"creator":{$regex:new RegExp(req.query.username)}}
+    var q = {"subject":subject,"topic":{$regex:new RegExp(req.query.topic),$options:'i'},"creator":{$regex:new RegExp(req.query.username),$options:'i'}}
     MongoClient.connect(url, function(err, db) {
         if (err) {
             res.json({result:false,error:err})
@@ -35,6 +34,40 @@ router.get('/', function(req, res, next) {
             })
         }
     });
+});
+router.get('/suggestion', function(req, res, next) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("BrydeTech");
+        dbo.collection('Q&A').aggregate([
+          { $project:
+             {
+               "_id":1,
+               "topic":1,
+               "subject":1,
+               "creator":1,
+               "size":{"$size":"$follower"},
+               "follower":1
+             }
+           },
+           {
+               "$sort":{"size":-1}
+           }
+          ]).toArray(function(err, result) {
+            if (err){
+                res.json({result:false , error:err})
+            }else{
+                var isFollow = []
+                for(i=0;i<result.length;i++){
+                    follow = result[i].follower.findIndex(student => student == req.query.student_name);
+                    isFollow[i] = (follow == -1) ? false:true;
+                }
+                res.json({result:result , error:"",isFollow:isFollow})
+            }
+            //console.log(JSON.stringify(result));
+          db.close();
+        });
+      });
 });
 router.post('/',[check("username","Please enter username").not().isEmpty(),
                 check("id","Please enter id").not().isEmpty()]

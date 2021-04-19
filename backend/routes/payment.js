@@ -8,6 +8,7 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://127.0.0.1:27017/";
 const { body, validationResult, check } = require('express-validator');
 const { UnavailableForLegalReasons } = require('http-errors');
+const { parse } = require('path');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.json({ result : 'Response from login page'})  
@@ -27,7 +28,7 @@ router.post('/done',[check("username","Please Input username"),check("id","Pleas
       else{
           var dbo = db.db("BrydeTech");
           var id = new mongo.ObjectID(req.body.id)
-          dbo.collection("courses").updateOne({_id:id},{$push:{student:req.body.username}}),(function(err, result) {
+          dbo.collection("courses").updateOne({_id:id},{$push:{student:req.body.username,score:parseFloat(7)}}),(function(err, result) {
             if (err) {
               res.json({result:false , error:err})
             }
