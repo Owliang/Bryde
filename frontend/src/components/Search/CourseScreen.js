@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Grid, Paper, Typography , Button } from '@material-ui/core'
+import { Container, Grid, Paper, Typography , Button ,Avatar} from '@material-ui/core'
 import axios from 'axios'
 
 
@@ -69,8 +69,8 @@ const useStyles = makeStyles((theme) => ({
     },
     courseImage:{
         margin: 'auto',
-
-        maxWidth: '100%',
+        width:'90%',
+        height:theme.spacing(25),
 
         
     },
@@ -136,14 +136,14 @@ export default function CourseScreen(props) {
         };
         
     const enroll = async () => {
-        const {data} = await axios.post('/payment/done',{
+        await axios.post('/payment/done',{
             id: props.match.params.id,
             username: localStorage.getItem('username')
             });  
         };
 
 
-    const handleEnroll = () => {
+    const handleQRcode = () => {
         fecthQRcode();
         setShowQRcode(true);
         console.log(QRcode);
@@ -168,7 +168,7 @@ export default function CourseScreen(props) {
 
             <div className='row'padding='1rem'>
                 <div className='col'>
-                    <img src={'data:image/jpg;base64,'+ course.photo_buffer } className={classes.courseImage} />
+                    <Avatar src={'data:image/jpg;base64,'+ course.photo_buffer } variant='square' className={classes.courseImage} />
                 </div>
                 <div className='col'>
                     <Typography className={classes.coursedetail} >By : { course.tutor }</Typography>
@@ -193,7 +193,7 @@ export default function CourseScreen(props) {
             :
             course.Isenroll === true ? <br/> : showQRcode === false ?
                     
-                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={() => {handleEnroll()}} >enroll</Button>
+                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={handleQRcode()} >enroll</Button>
                     :
                     <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={enroll()} href='/' >done</Button>
                 }

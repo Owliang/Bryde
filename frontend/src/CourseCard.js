@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
-import { Button ,Box, withStyles, CardHeader, CardContent, Grid ,Paper} from '@material-ui/core';
+import { Button ,Box, withStyles, CardHeader, CardContent, Grid ,Paper,Avatar} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -102,9 +102,9 @@ const useStyles = makeStyles((theme) => ({
 
   },
   courseImage:{
-      margin: 'auto',
-      display: 'block',
-      maxWidth: '100%',
+    margin: 'auto',
+    width:'100%',
+    height:theme.spacing(20),
       
   },
   courseText:{
@@ -224,7 +224,7 @@ export default function CourseCard(props){
         <Paper className = {classes.paper}>
         <Grid container spacing={3}>
             <Grid item xs={4}>
-                <img src= {'data:image/jpg;base64,'+ props.course.photo_buffer } className={classes.courseImage}/>
+                <Avatar src= {'data:image/jpg;base64,'+ props.course.photo_buffer } variant='square' className={classes.courseImage}/>
             </Grid>
             <Grid item xs={4} className={classes.gridItem} direction='column' justify='flex-start' alignContent='flex-start' >
                 <Typography variant="h4" className={classes.coursedetail}> {props.course.name} </Typography>

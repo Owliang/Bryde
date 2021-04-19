@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Grid, Paper, Typography , Button , Select ,MenuItem } from '@material-ui/core'
+import { Container, Grid, Paper, Typography , Button , Select ,MenuItem,Avatar } from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
 import axios from 'axios';
 
@@ -68,8 +68,8 @@ const useStyles = makeStyles((theme) => ({
     },
     courseImage:{
         margin: 'auto',
-        display: 'block',
-        maxWidth: '100%',
+        width:'100%',
+        height:theme.spacing(20),
         
     },
     courseText:{
@@ -223,7 +223,7 @@ export default function SearchCourse() {
                 <Paper className = {classes.paper}>
                     <Grid container spacing={3}>
                         <Grid item xs={4}>
-                            <img src= {'data:image/jpg;base64,'+ course.photo_buffer } className={classes.courseImage}/>
+                            <Avatar src= {'data:image/jpg;base64,'+ course.photo_buffer } variant='square' className={classes.courseImage}/>
                         </Grid>
                         <Grid item xs={4} className={classes.gridItem} direction='column' justify='flex-start' alignContent='flex-start' >
                             <Typography variant="h4" className={classes.coursedetail}> {course.name} </Typography>

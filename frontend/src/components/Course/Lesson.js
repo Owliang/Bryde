@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Container, Grid, ListItem, Paper, Typography , Button , Select ,MenuItem ,FormControl,InputLabel,CircularProgress,} from '@material-ui/core'
+import { Box, Container, Grid,Avatar, ListItem, Paper, Typography , Button , Select ,MenuItem ,FormControl,InputLabel,CircularProgress,} from '@material-ui/core'
 import axios from 'axios'
 import b64toBlob from "../../services/b64toBlob";
 import { Player } from 'video-react';
@@ -75,8 +75,8 @@ const useStyles = makeStyles((theme) => ({
     },
     courseImage:{
         margin: 'auto',
-
-        maxWidth: '100%',
+        width:'90%',
+        height:theme.spacing(25),
 
         
     },
@@ -175,7 +175,7 @@ export default function Lesson(props) {
 
             <div className='row'padding='1rem'>
                 <div className='col'>
-                    <img src = {course.attatch_photo.source} className={classes.courseImage} />
+                    <Avatar src = {course.attatch_photo.source} variant='square' className={classes.courseImage} />
                 </div>
                 <div className='col'>
                     <Typography className={classes.coursedetail} >By : { course.tutor }</Typography>
