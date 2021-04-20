@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { makeStyles, Box, Button } from '@material-ui/core'
+import { makeStyles, Box, Button, Typography } from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
 import axios from 'axios'
 
@@ -7,20 +7,26 @@ const useStyles = makeStyles((theme) => ({
     textFieldSmall: {
         marginBottom: 8,
     },
+    typography: {
+        color: '#FFFFFF',
+    },
+    roleButton: {
+        width: '47.5%',
+    },
 }));
 
 export default function Register(props) {
 
     const classes = useStyles()
     const [registerData, setRegisterData] = useState({
-        'firstname': '',
-        'lastname': '',
-        'username': '',
-        'email': '',
-        'password': '',
-        'confirmpassword': '',
-        'promptpay': '',
-        'role': '',
+        fname: '',
+        lname: '',
+        username: '',
+        email: '',
+        password: '',
+        confirmpassword: '',
+        ppnumber: '',
+        role: '',
     })
 
     const handleChangeRegister = (key) => (event) => {
@@ -29,10 +35,38 @@ export default function Register(props) {
             [key]: event.target.value,
         })
     }
+    console.log(registerData)
+    const handleChangeRole = (role) => {
+        setRegisterData({
+            ...registerData,
+            'role': role,
+        })
+    }
 
     const handleRegister = () => {
-        // axios here
-        console.log('REGISTER!')
+        if (registerData.password != registerData.confirmpassword) {
+            console.log('pass not match')
+            return
+        }
+        axios.post("http://localhost:4000/register", {
+            username: registerData.username,
+            password: registerData.password,
+            fname: registerData.fname,
+            lname: registerData.lname,
+            email: registerData.email,
+            ppnumber: registerData.ppnumber,
+            isTutor: (registerData.role == 'teacher' ? 'on' : 'off')
+        }).then(response => {
+            console.log(response.data)
+            const result = response.data.result
+            if (result) {
+                props.setState(2)
+            } else {
+                console.log("can't reg")
+            }
+        }).catch(err => {
+            console.error(err)
+        })
     }
 
     return (
@@ -40,14 +74,14 @@ export default function Register(props) {
             <TextFieldSmall
                 display="First name"
                 type='tel'
-                value={registerData['firstname']}
-                onChange={handleChangeRegister('firstname')}
+                value={registerData['fname']}
+                onChange={handleChangeRegister('fname')}
             />
             <TextFieldSmall
                 display='Last name'
                 type='tel'
-                value={registerData['lastname']}
-                onChange={handleChangeRegister('lastname')}
+                value={registerData['lname']}
+                onChange={handleChangeRegister('lname')}
             />
             <TextFieldSmall
                 display='Username'
@@ -76,14 +110,39 @@ export default function Register(props) {
             <TextFieldSmall
                 display='Promptpay Number'
                 type='tel'
-                style={{marginBottom: 24}}
-                value={registerData['promptpay']}
-                onChange={handleChangeRegister('promptpay')}
+                value={registerData['ppnumber']}
+                onChange={handleChangeRegister('ppnumber')}
             />
+            <Typography variant="h6" className={classes.typography}>
+                Register as
+            </Typography>
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                mb={4}
+            >
+                <Button
+                    variant={registerData.role == "student" ? "contained" : "outlined"}
+                    color="primary"
+                    onClick={() => {handleChangeRole('student')}}
+                    className={classes.roleButton}
+                >
+                    Student
+                </Button>
+                <Button
+                    variant={registerData.role == "teacher" ? "contained" : "outlined"}
+                    color="primary"
+                    onClick={() => {handleChangeRole('teacher')}}
+                    className={classes.roleButton}
+                >
+                    Tutor
+                </Button>
+            </Box>
             <Button
                 variant="outlined"
                 color="primary"
-                onClick={() => {props.setState(2)}}
+                onClick={() => {handleRegister()}}
+                // onClick={() => {props.setState(2)}}
             >
                 Create account
             </Button>

@@ -1,16 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const { body, validationResult, check } = require('express-validator');
-const { UnavailableForLegalReasons } = require('http-errors');
 //for send email
 'use strict';
 const nodemailer = require('nodemailer');
 const { render } = require('ejs');
 //
-router.get('/', function(req, res, next) {
-    res.render('forget_password');
-    //res.send("Response from forget password")
-});
+
 router.post('/',[check("email","Please Input your email").not().isEmpty()], function(req, res, next) {
     const result = validationResult(req);
     var errors = result.errors;

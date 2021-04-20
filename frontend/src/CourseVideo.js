@@ -31,7 +31,6 @@ const CourseVideo = (props) => {
   const [tutor, setTutor] = useState();
   const [dialog, setDialog] = useState("");
   const getInitialCourseData = () => GetCourseData({ CID: CID, mode: mode , setAlert: setDialog });
-  const [initialCourseData, setinitialCourseData] = useState(getInitialCourseData);
 
 
   useEffect(async () => {
@@ -50,18 +49,6 @@ const CourseVideo = (props) => {
         });
         await new Promise((resolve) => setTimeout(resolve, 20000));
         window.location.href = "/";
-      } else if (CID == null) {
-        setDialog({
-          title: "We dont know what course you are looking for",
-          open: true,
-          message:
-            "We dont know what course you are looking for. Please try again later.",
-          mainMessage: "Go Home",
-          optionMessage: "Go to My Course",
-          optionRefTo: myCourseURL,
-        });
-        await new Promise((resolve) => setTimeout(resolve, 20000));
-        window.location.href = myCourseURL;
       }
       setTutor(username);
     } catch {
@@ -97,7 +84,7 @@ const CourseVideo = (props) => {
           message={dialog.message}
           buttonOneRefTo={dialog.mainRefTo}
           buttonOneMessage={dialog.mainMessage}
-          buttonTOneOnClick={dialog.mainOnClick}
+          buttonOneOnClick={dialog.mainOnClick}
           buttonTwoRefTo={dialog.optionRefTo}
           buttonTwoMessage={dialog.optionMessage}
           buttonTwoOnClick={dialog.optionOnClick}
@@ -117,8 +104,9 @@ const CourseVideo = (props) => {
           elevation={3}
         >
           <VideoForm
-            initialCourseData={{ name: cName}}
+            getInitialCourseData={getInitialCourseData}
             className={classes.root}
+            cName = {cName}
             tutor={tutor}
             setDialog={setDialog}
             mode={mode}

@@ -14,16 +14,7 @@ import {
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import axios from "axios";
 
-const myCourseURL = "/myCourse";
-
-const initialCourseData = {
-  tutor: "",
-  name: "",
-  subject: "",
-  description: "",
-  price: "",
-  link: "",
-};
+const myCourseURL = "/mycourses";
 
 const useStyles = makeStyles((theme) => ({
   textRoot: {
@@ -49,11 +40,18 @@ const subject = [
 ];
 
 const CourseForm = (props) => {
-  const { tutor: curTutor, setDialog: setAlert, mode, initialCourseData: propsCourseData } = props;
+  const {
+    tutor: curTutor,
+    setDialog: setAlert,
+    mode,
+    initialCourseData,
+  } = props;
   const [photo, selectPhoto] = useFileUpload();
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
+  const [uploadPercentage, setUploadPercentage] = useState(0);
   console.log(`cur tutorfrom course Form ${curTutor}`);
-  console.log(`initialCourseData from Form`, propsCourseData)
+  console.log(`initialCourseData from Form`, initialCourseData);
 
   const validate = (fieldValues = { ...courseData }) => {
     let temp = { ...errors };
@@ -70,7 +68,7 @@ const CourseForm = (props) => {
           ? temp.price
           : "Price should be integer.";
       temp.price =
-        temp.price || fieldValues.price.length < 6
+        temp.price || fieldValues.price.toString().length < 6
           ? temp.price
           : "Price is too expensive.";
     }
@@ -82,7 +80,9 @@ const CourseForm = (props) => {
           ? ""
           : "URL is not valid.";
     if ("attatch_photo" in fieldValues)
-      temp.attatch_photo = fieldValues.attatch_photo ? "" : "Course's Image is required.";
+      temp.attatch_photo = fieldValues.attatch_photo
+        ? ""
+        : "Course's Image is required.";
     setErrors((errors) => ({
       ...temp,
     }));
@@ -106,16 +106,15 @@ const CourseForm = (props) => {
     setErrors,
     handleInputChange,
     resetForm,
-  } = useForm(propsCourseData || initialCourseData, true, validate);
+  } = useForm(initialCourseData, true, validate);
 
   useEffect(() => {
     if (photo) {
-      validate({ attatch_photo: photo })
+      validate({ attatch_photo: photo });
       setCourseData({ ...courseData, attatch_photo: photo });
     } else {
       validate({ foo: "" });
     }
-
   }, [photo]);
 
   useEffect(() => {
@@ -148,37 +147,60 @@ const CourseForm = (props) => {
       formData.append("attatch_photo", courseData.attatch_photo.file);
       console.log(attatch_videos);
       console.log([...formData]);
+      setLoading(true)
+      let apiURL = mode == "create" ? "http://localhost:4000/create_course" : "http://localhost:4000/edit_course"
+      console.log(apiURL)
       axios
-        .post("http://localhost:4000/create_course", formData, { crossdomain: true, })
+        .post(apiURL, formData, {
+          crossdomain: true,
+          onUploadProgress: progressEvent => {
+            setUploadPercentage(
+              parseInt(
+                Math.round((progressEvent.loaded * 100) / progressEvent.total)
+              )
+            );
+          }
+        })
         .then((response) => {
           console.log("response: ", response);
           var isSuccess = response.data.result;
           if (isSuccess) {
-            var cid = response.data.id;
+            var cid = mode ==="create" ? response.data.id : initialCourseData.id;
             setAlert({
-              title: mode === "create" ? "Create Course Success!" : "Edit Course Success!",
+              title:
+                mode === "create"
+                  ? "Create Course Success!"
+                  : "Edit Course Success!",
               open: true,
-              message: mode === "create" ?
-                "Create Successfully. Do you want to upload course's video now or later" :
-                "Edit Successfully. Do you want to edit course's video",
+              message:
+                mode === "create"
+                  ? "Create Successfully. Do you want to upload course's video now or later"
+                  : "Edit Successfully. Do you want to edit course's video",
               optionMessage: mode === "create" ? "Add Now" : "Edit Video",
               optionRefTo: `/course_video?cid=${cid}&mode=${mode}&cname=${courseData.name}`,
               mainMessage: mode === "create" ? "Add Later" : "Back",
               mainRefTo: myCourseURL,
             });
           } else {
+            setLoading(false)
             setAlert({
-              title: mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
+              title:
+                mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
               open: true,
-              message: mode === "create" ? "Create Course Failed" : "Edit Course Failed",
-              submessage: response.data.error,
+              message:
+                mode === "create"
+                  ? "Create Course Failed"
+                  : "Edit Course Failed",
+              submessage: "Error: " + response.data.error.code,
               optionMessage: "Try Again",
             });
           }
         })
         .catch((err) => {
+          setLoading(false)
           setAlert({
-            title: mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
+            title:
+              mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
             open: true,
             message:
               "An error occured during sending results to server, Please try again later and make sure that server is on.",
@@ -201,7 +223,8 @@ const CourseForm = (props) => {
         window.location.href = "/";
       } else {
         setAlert({
-          title: mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
+          title:
+            mode === "create" ? "Create Course Fail!" : "Edit Course Fail!",
           open: true,
           message: "Some Fields Are Not Valid",
         });
@@ -257,7 +280,9 @@ const CourseForm = (props) => {
               <FormComponents.TextInput
                 className={classes.textRoot}
                 variant="outlined"
-                label={errors.attatch_photo ? "!!    Please Upload Image    !!" : ""}
+                label={
+                  errors.attatch_photo ? "!!    Please Upload Image    !!" : ""
+                }
                 error={errors.attatch_photo}
                 disabled
                 fullWidth
@@ -288,7 +313,7 @@ const CourseForm = (props) => {
             value={courseData.price}
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">Bath</InputAdornment>
+                <InputAdornment position="end">Baht</InputAdornment>
               ),
             }}
             error={errors.price}
@@ -328,6 +353,10 @@ const CourseForm = (props) => {
         />
       </Grid>
       <br />
+      {loading &&
+        (<Grid item xs={12}>
+        <FormComponents.MyProgressBar value={uploadPercentage} />
+        </Grid>)}
       <br />
       <Grid
         container
@@ -340,10 +369,11 @@ const CourseForm = (props) => {
           <FormComponents.SimpleButton
             text={mode === "create" ? "Create" : "Save Changes"}
             onClick={handleSubmit}
+            disabled={loading}
           />
         </Grid>
       </Grid>
-    </Form >
+    </Form>
   );
 };
 

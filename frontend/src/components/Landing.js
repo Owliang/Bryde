@@ -4,7 +4,8 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import Login from './landing/Login'
 import Register from './landing/Register'
 import Verify from './landing/Verify'
-import Forget from './landing/Forget'
+import ForgetEmail from './landing/ForgetEmail'
+import ForgetName from './landing/ForgetName'
 import FadeIn from './transition/FadeIn'
 
 const useStyles = makeStyles((theme) => ({
@@ -26,12 +27,22 @@ const useStyles = makeStyles((theme) => ({
     textFieldSmall: {
         marginBottom: 8,
     },
+    logo: {
+        fontSize: 300
+    },
 }));
 
 export default function Landing() {
 
     const classes = useStyles()
-    const [state, setState] = useState(0) // 0 = login, 1 = register, 2 = verify, 3 = forget pass
+    const [state, setState] = useState(0)
+    /*
+    0 = login
+    1 = register
+    2 = verify
+    3 = forget email
+    4 = forget name
+    */
 
     return (
         <Grid container className={classes.grid} justify="space-between">
@@ -41,10 +52,10 @@ export default function Landing() {
                     flexDirection="column"
                     justifyContent="center"
                     alignItems="center"
-                    // bgcolor="#800000"
                     height="100%"
+                    // bgcolor="#800000"
                 >
-                    <PowerSettingsNewIcon color="primary" style={{ fontSize: 300 }}/>
+                    <PowerSettingsNewIcon color="primary" className={classes.logo} />
                     <Typography variant="h1" className={classes.typography}>
                         OffDemand
                     </Typography>
@@ -71,7 +82,10 @@ export default function Landing() {
                         <Verify setState={setState} />
                     </FadeIn>
                     <FadeIn condition={state == 3}>
-                        <Forget setState={setState} />
+                        <ForgetEmail setState={setState} />
+                    </FadeIn>
+                    <FadeIn condition={state == 4}>
+                        <ForgetName setState={setState} />
                     </FadeIn>
                 </Box>
             </Grid>

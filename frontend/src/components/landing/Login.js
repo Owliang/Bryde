@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { Box, Button, Link } from '@material-ui/core'
-import TextFieldSmall from '../TextFieldSmall'
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
+import { Box, Button, Link } from '@material-ui/core'
+import TextFieldSmall from '../TextFieldSmall'
 
 export default function Login(props) {
 
@@ -17,11 +17,10 @@ export default function Login(props) {
             ...loginData,
             [key]: event.target.value,
         })
-        
     }
 
     const handleLogin = async () => {
-        axios.post("/login", {
+        axios.post("http://localhost:4000/login", {
                 username: loginData.username,
                 password: loginData.password
             },{
@@ -34,7 +33,7 @@ export default function Login(props) {
                 if (result) {
                     localStorage.setItem('username', loginData.username)
                     localStorage.setItem('auth', true)
-                    localStorage.setItem('role','Tutor')
+                    localStorage.setItem('role', response.data.isTutor == "on" ? "Tutor" : "Student")
                     history.push("/home")
                     window.location.reload();
                     console.log(response.data)
@@ -64,7 +63,7 @@ export default function Login(props) {
                 onChange={handleChangeLogin('password')}
             />
             <Link
-                style={{marginBottom: 16}}
+                style={{marginBottom: 32}}
                 align="right"
                 component="button"
                 variant="body2"
@@ -81,7 +80,7 @@ export default function Login(props) {
                 Login
             </Button>
             <Button
-                variant="outlined"
+                variant="contained"
                 color="primary"
                 onClick={() => {props.setState(1)}}
             >
