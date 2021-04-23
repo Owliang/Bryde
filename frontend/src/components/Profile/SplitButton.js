@@ -60,8 +60,8 @@ export default function SplitButton() {
               {...TransitionProps}
               style={{
                 transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-                backgroundColor : '#0EED0E',
-                color: '#191919',
+                backgroundColor : '#191919',
+                color: '#0EED0E',
                 borderRadius: 10
               }}
             >
