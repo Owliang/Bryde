@@ -5,6 +5,7 @@ import Select from './Select.js'
 import ActionButton from './ActionButton'
 import SingleFieldPopup from './SingleFieldPopup.js'
 import MyProgressBar from './MyProgressBar'
+import RatingStar from "./RatingStar";
 
 
 const FormComponents = {
@@ -14,7 +15,8 @@ const FormComponents = {
     Select,
     ActionButton,
     SingleFieldPopup,
-    MyProgressBar
+    MyProgressBar,
+    RatingStar
 }
 
 export default FormComponents;
