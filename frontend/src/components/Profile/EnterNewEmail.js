@@ -1,6 +1,9 @@
-import React , { useState } from "react";
+import React , { useState,useEffect } from "react";
 import { Button, Grid, makeStyles} from '@material-ui/core'
 import EditTextField from './EditTextField'
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import "@fontsource/roboto";
 
 const useStyles = makeStyles((theme) => ({
     typography: {
@@ -29,10 +32,23 @@ const useStyles = makeStyles((theme) => ({
 export default function EnterNewEmail(props) {
 
     const classes = useStyles()
+    const history = useHistory()
     const [emailData, setEmailData] = useState({
         'email': '',
     })
-
+    useEffect(() => {
+        const fecthEmailData = async () => {
+            axios.get('http://localhost:4000/profile',{params:{
+                username : localStorage.getItem('username')
+            }    
+            }).then(response => {
+                console.log(response.data["data"][0])
+                setEmailData(response.data["data"][0])
+            });
+            //setProfileData( data.data );
+        };
+        fecthEmailData();
+    },[]);
     const handleChangeEmail = (key) => (event) => {
         setEmailData({
             ...emailData,
@@ -41,10 +57,25 @@ export default function EnterNewEmail(props) {
         
     }
     const handleResetEmail = () => {
+        console.log(emailData)
+        axios.post("/profile/change_email", {
+            id: emailData._id,
+            email: emailData.email,
+        }).then(response => {
+            console.log(response.data)
+        }).catch(err => {
+            console.error(err)
+        })
         props.setState(1)
         // call backend
         // submit สำเร็จ ใส่ props.setState(1) ด้วย
     }
+    const handleCancel = () => {
+        
+        history.push("/profile");
+        window.location.reload();
+      
+  };
 
     return (
         <React.Fragment>
@@ -68,6 +99,7 @@ export default function EnterNewEmail(props) {
                     variant= "contained"
                     color="primary"
                     className={classes.roleButton}
+                    onClick={() => {handleCancel()}}
                 >
                     Cancel
                 </Button>

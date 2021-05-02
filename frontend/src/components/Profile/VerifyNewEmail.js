@@ -1,6 +1,8 @@
-import React , { useState } from "react";
+import React , { useState,useEffect } from "react";
 import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import EditTextField from './EditTextField'
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     typography: {
@@ -20,10 +22,23 @@ const useStyles = makeStyles((theme) => ({
 export default function VerfifyNewEmail() {
 
     const classes = useStyles()
+    const history = useHistory()
     const [verifyData, setVerifyData] = useState({
         'code': '',
     })
-
+    useEffect(() => {
+        const fecthVerifyData = async () => {
+            axios.get('http://localhost:4000/profile',{params:{
+                username : localStorage.getItem('username')
+            }    
+            }).then(response => {
+                console.log(response.data["data"][0])
+                setVerifyData(response.data["data"][0])
+            });
+            //setProfileData( data.data );
+        };
+        fecthVerifyData();
+    },[]);
     const handleChangeVerify = (key) => (event) => {
         setVerifyData({
             ...verifyData,
@@ -32,8 +47,30 @@ export default function VerfifyNewEmail() {
         
     }
     const handleVerifyEmail = () => {
-        // call backend
+        console.log(verifyData)
+        axios.post("http://localhost:4000/verification", {
+                id: verifyData._id,
+                code: verifyData.code,
+            }).then(response => {
+                console.log(response.data)
+                const result = response.data.result
+                if (result) {
+                    history.push("/profile");
+                    window.location.reload();
+                } else {
+                    console.log("can't verify")
+                }
+            }).catch(err => {
+                console.error(err)
+            })
     }
+
+    const handleCancel = () => {
+        
+        history.push("/profile");
+        window.location.reload();
+      
+  };
 
     return (
         <React.Fragment>
@@ -60,6 +97,7 @@ export default function VerfifyNewEmail() {
                     variant= "contained"
                     color="primary"
                     className={classes.roleButton}
+                    onClick={() => {handleCancel()}}
                 >
                     Cancel
                 </Button>

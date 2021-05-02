@@ -1,6 +1,8 @@
-import React , { useState } from "react";
+import React , { useState,useEffect } from "react";
 import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import EditTextField from './EditTextField'
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     typography: {
@@ -29,11 +31,26 @@ const useStyles = makeStyles((theme) => ({
 export default function ChangePassword() {
 
     const classes = useStyles()
+    const history = useHistory()
     const [passwordData, setPasswordData] = useState({
-        'current': '',
-        'new': '',
-        'confirm': '',
+        current_password: '',
+        new_password: '',
+        confirm: '',
     })
+
+    useEffect(() => {
+        const fecthPasswordData = async () => {
+            axios.get('http://localhost:4000/profile',{params:{
+                username : localStorage.getItem('username')
+            }    
+            }).then(response => {
+                console.log(response.data["data"][0])
+                setPasswordData(response.data["data"][0])
+            });
+            //setProfileData( data.data );
+        };
+        fecthPasswordData();
+    },[]);
 
     const handleChangePassword = (key) => (event) => {
         setPasswordData({
@@ -43,12 +60,31 @@ export default function ChangePassword() {
         
     }
     const handleResetPassword = () => {
-        if (passwordData.new != passwordData.confirm) {
+        if (passwordData.new_password != passwordData.confirm) {
             console.log('password not match')
             return
         }
         // call backend
+        console.log(passwordData)
+        axios.post("/profile/change_password", {
+            id: passwordData._id,
+            current_password: passwordData.current_password,
+            new_password: passwordData.new_password,
+        }).then(response => {
+            console.log(response.data)
+            history.push("/profile");
+            window.location.reload();
+        }).catch(err => {
+            console.error(err)
+        })
     }
+
+    const handleCancel = () => {
+        
+        history.push("/profile");
+        window.location.reload();
+      
+  };
 
     return (
         <Grid
@@ -75,7 +111,7 @@ export default function ChangePassword() {
                         <EditTextField
                             display='Current Password'
                             type='password'
-                            onChange={handleChangePassword('current')}
+                            onChange={handleChangePassword('current_password')}
                         />
                     </Grid>
                     <br/>
@@ -83,7 +119,7 @@ export default function ChangePassword() {
                         <EditTextField
                             display='New Password'
                             type='password'
-                            onChange={handleChangePassword('new')}
+                            onChange={handleChangePassword('new_password')}
                         />
                     </Grid>
                     <Grid container item>
@@ -106,6 +142,7 @@ export default function ChangePassword() {
                             variant= "contained"
                             color="primary"
                             className={classes.roleButton}
+                            onClick={() => {handleCancel()}}
                         >
                             Cancel
                         </Button>
