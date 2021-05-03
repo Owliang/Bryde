@@ -48,7 +48,7 @@ export default function VerfifyNewEmail() {
     }
     const handleVerifyEmail = () => {
         console.log(verifyData)
-        axios.post("http://localhost:4000/verification", {
+        axios.post("/profile/verify_email", {
                 id: verifyData._id,
                 code: verifyData.code,
             }).then(response => {

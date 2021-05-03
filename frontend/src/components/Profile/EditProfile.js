@@ -74,9 +74,12 @@ export default function EditProfile() {
             username: editProfileData.username,
         }).then(response => {
             console.log(response.data)
+            if(response.data.result)
+            {
             localStorage.setItem('username',editProfileData.username)
             history.push("/profile");
             window.location.reload();
+            }
         }).catch(err => {
             console.error(err)
         })

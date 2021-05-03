@@ -52,7 +52,7 @@ export default function Profile() {
         'username': '',
         'email': '',
         'ppnumber': '',
-        'role': '',
+        'isTutor': '',
     })
 
     useEffect(() => {
@@ -99,7 +99,7 @@ export default function Profile() {
                                 {profileData['username']}
                             </Typography>
                             <Typography variant="h6" className={classes.typography}>
-                                ({profileData['role']})
+                                ({profileData['isTutor']})
                             </Typography>
                         </Box>
                     </Grid>

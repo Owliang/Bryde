@@ -9,6 +9,7 @@ const { query,body, validationResult, check } = require('express-validator');
 'use strict';
 const nodemailer = require('nodemailer');
 const { render } = require('ejs');
+const { request } = require('express');
 var code =  1000000
 var new_email = ''
 /* GET home page. */
@@ -26,7 +27,7 @@ router.get('/',[query('username').notEmpty().exists()], function(req, res, next)
           }
           else {
             var dbo = db.db("BrydeTech");
-            dbo.collection("users").find({username:req.query.username},{ projection: {_id:1,fname:1,lname:1,username:1,email:1,ppnumber:1,role:1} }).toArray(function(err, result) {
+            dbo.collection("users").find({username:req.query.username},{ projection: {_id:1,fname:1,lname:1,username:1,email:1,ppnumber:1,isTutor:1} }).toArray(function(err, result) {
               if (err) {
                 res.json({result:false , error:err})
               }
@@ -66,6 +67,16 @@ router.post('/edit_profile',[check("username","Please Input username").not().isE
                     });
                     res.json({result:true,error:""})
                 }
+                else if( (result.length == 1 && (result[0]._id).toString()==req.body.id)){
+                  console.log(result.length)
+                  dbo.collection("users").updateOne({_id:id},{$set:newvalues},function(err,res){
+                      if (err) {
+                        res.json({result:false , error:err})
+                      }
+                      db.close();
+                  });
+                  res.json({result:true,error:""})
+              }
                 else{
                     console.log(result.length)
                     res.json({result:false , error:"This username already exists"})
