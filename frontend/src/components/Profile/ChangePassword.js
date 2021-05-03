@@ -72,8 +72,13 @@ export default function ChangePassword() {
             new_password: passwordData.new_password,
         }).then(response => {
             console.log(response.data)
-            history.push("/profile");
-            window.location.reload();
+            if(response.data.result){
+                history.push("/profile");
+                window.location.reload();
+            }
+            else{
+                console.log('current password is false')
+            }
         }).catch(err => {
             console.error(err)
         })
