@@ -7,11 +7,13 @@ import { Player } from 'video-react';
 import FormComponents from "../FormComponents/FormComponents.js";
 import { Form, useForm } from "../useForm.js";
 import GetCourseData from "../../services/getCourseData";
+import Rating from '@material-ui/lab/Rating';
+
 
 
 const useStyles = makeStyles((theme) => ({
 
-    title: {
+    comment: {
         color: '#FFFFFF',
         marginTop: '1rem',
         marginBottom:'1rem'
@@ -44,6 +46,10 @@ const useStyles = makeStyles((theme) => ({
         background : '#4f4f4f',
         
         
+    },
+    rating: {
+        color:'#0EED0E',
+
     },
     dropdown: {
         marginBottom: 8,
@@ -218,8 +224,30 @@ export default function Lesson(props) {
             </Grid>
         </Grid>
 
-        {localStorage.getItem('role') === 'tutor' &&
-            <Typography className={classes.typography}>Enrolled students</Typography>
+        {localStorage.getItem('role') === 'Tutor' &&
+            <div>
+                <Typography className={classes.typography} variant='h6'>Enrolled students ( {course.student.length} )</Typography>
+                <Paper className={classes.paper}>
+                {course.student.map((student) => (
+                    <Grid container spacing={3}>
+                        <Grid item xs={4}>
+                            <Typography className={classes.typography} > {student} </Typography>
+                        </Grid>
+                       
+                    </Grid>
+                 ))} 
+                </Paper>
+                <Typography className={classes.typography} variant='h6'>Reviews ( {course.review} )</Typography>
+                {course.review.map((review,index) => (
+                    <Paper className={classes.paper}>
+                        <Rating name="half-rating " className={classes.rating} defaultValue={course.score[index]/2} precision={0.5} readOnly />
+                        <Typography className={classes.comment}>{review}</Typography>
+                    </Paper>
+            
+                ))}
+                
+            </div>
+            
         }
         
 

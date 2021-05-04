@@ -16,13 +16,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '1rem',
         marginBottom:'1rem'
     },
-    grid: {
-        height: '100%',
-
-    },
-    textFieldSmall: {
-        marginBottom: 8,
-    },
+ 
     gridList: {
         flexWrap: 'nowrap',
         transform: 'translateZ(0)',
@@ -49,9 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
         
     },
-    courseText:{
-        align: 'center'
-    },
+
     detailButton:{
         backgroundColor :'#212121',
         border:'1.5px solid',

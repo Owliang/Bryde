@@ -6,27 +6,20 @@ import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
 
-    title: {
-        color: '#FFFFFF',
-        marginTop: '1rem',
-        marginBottom:'1rem'
-    },
+
     typography: {
         color: '#FFFFFF',
+    },
+    coursetitle:{
+        color: '#FFFFFF',
+        marginLeft:'1rem'
     },
     coursedetail: {
         color: '#FFFFFF',
         marginLeft:'3rem',
         marginTop:'auto',
         marginBottom:'auto',
-        variant:'h6'
-    },
-    grid: {
-        height: '100%',
-        padding : '1rem',
-    },
-    textFieldSmall: {
-        marginBottom: 8,
+        variant:'h2'
     },
     ButtonBlock: {
         display:'flex',
@@ -34,45 +27,14 @@ const useStyles = makeStyles((theme) => ({
       },
     paper: {
         padding: theme.spacing(2),
-
         marginTop:'3rem',
         background : '#4f4f4f',
-        
-        
-    },
-    dropdown: {
-        marginBottom: 8,
-        height:40,
-        "& .MuiOutlinedInput-root": {
-            "& fieldset": { 
-                borderRadius: "10px",
-                borderColor: "primary",
-                height: 40,
-                marginTop: 5,
-            },
-            "&.Mui-focused fieldset": {
-                borderColor: "primary",
-                borderWidth: "2px",
-                height: 40,
-                marginTop: 5,
-            },
-        },
-        backgroundColor: '#FFFFFF',
-        borderRadius: 10,
     },
 
-    courseofweek: {
-        height: 'auto',
-        padding : theme.spacing(1),
-        background: '#9f9f9f',
-
-    },
     courseImage:{
         margin: 'auto',
         width:'90%',
         height:theme.spacing(25),
-
-        
     },
     qrcode:{
         marginTop: '2rem',
@@ -81,9 +43,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft:'auto',
         marginRight:'auto'
     },
-    courseText:{
-        align: 'center'
-    },
+
     margin:{
         marginTop:'2rem',
         marginBottom:'2rem',
@@ -163,7 +123,7 @@ export default function CourseScreen(props) {
       <Container fixed>
         <Paper className={classes.paper}>
             <Grid className={classes.margin} >
-                <Typography className={classes.typography} variant='h5'>Course Name : { course.name }</Typography>
+                <Typography className={classes.coursetitle} variant='h5'> Course Name : { course.name }</Typography>
             </Grid>
 
             <div className='row'padding='1rem'>
@@ -171,15 +131,15 @@ export default function CourseScreen(props) {
                     <Avatar src={'data:image/jpg;base64,'+ course.photo_buffer } variant='square' className={classes.courseImage} />
                 </div>
                 <div className='col'>
-                    <Typography className={classes.coursedetail} >By : { course.tutor }</Typography>
-                    <Typography className={classes.coursedetail} >Subject : { course.subject }</Typography>
-                    <Typography className={classes.coursedetail} >Price : { course.price } Baht</Typography>
-                    <Typography className={classes.coursedetail} >Rating : { course.rating }</Typography>
-                    <Typography className={classes.coursedetail} >Number of Video : { course.total_video }</Typography>
+                    <Typography className={classes.coursedetail} variant='h6' >By : { course.tutor }</Typography>
+                    <Typography className={classes.coursedetail} variant='h6'>Subject : { course.subject }</Typography>
+                    <Typography className={classes.coursedetail} variant='h6'>Price : { course.price } Baht</Typography>
+                    <Typography className={classes.coursedetail} variant='h6'>Rating : { course.rating }</Typography>
+                    <Typography className={classes.coursedetail} variant='h6'>Number of Video : { course.total_video }</Typography>
 
                 </div>
                 <div className={classes.margin} >
-                    <Typography className={classes.typography} variant='h6'>Description :</Typography>
+                    <Typography className={classes.coursetitle} variant='h6'>Description :</Typography>
                     
                 </div>
                     <Typography className={classes.coursedetail}  > {course.description} </Typography>

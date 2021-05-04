@@ -28,10 +28,7 @@ const useStyles = makeStyles((theme) => ({
     textFieldSmall: {
         marginBottom: 8,
     },
-    gridList: {
-        flexWrap: 'nowrap',
-        transform: 'translateZ(0)',
-      },
+
     paper: {
         padding: theme.spacing(2),
         margin: '1rem',
@@ -60,24 +57,14 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 10,
     },
 
-    courseofweek: {
-        height: 'auto',
-        padding : theme.spacing(1),
-        background: '#9f9f9f',
-
-    },
     courseImage:{
         margin: 'auto',
         width:'100%',
         height:theme.spacing(20),
         
     },
-    courseText:{
-        align: 'center'
-    },
-    margin:{
-        margin:theme.spacing(1)
-    },
+
+
     Button:{
         backgroundColor :'#212121',
         border:'1.5px solid',

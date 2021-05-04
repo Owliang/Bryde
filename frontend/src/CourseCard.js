@@ -41,11 +41,8 @@ const useStyles = makeStyles((theme) => ({
     media: {
       paddingTop: "30%"
     },
-    title: {
-      color: '#FFFFFF',
-      marginTop: '1rem',
-      marginBottom:'1rem'
-  },
+
+    
   typography: {
       color: '#FFFFFF',
   },
@@ -59,13 +56,7 @@ const useStyles = makeStyles((theme) => ({
   gridItem: {
       display:'flex',
   },
-  textFieldSmall: {
-      marginBottom: 8,
-  },
-  gridList: {
-      flexWrap: 'nowrap',
-      transform: 'translateZ(0)',
-    },
+
   paper: {
       padding: theme.spacing(2),
       borderRadius:'1rem',
@@ -74,45 +65,14 @@ const useStyles = makeStyles((theme) => ({
       
       
   },
-  dropdown: {
-      marginBottom: 8,
-      height:40,
-      "& .MuiOutlinedInput-root": {
-          "& fieldset": { 
-              borderRadius: "10px",
-              borderColor: "primary",
-              height: 40,
-              marginTop: 5,
-          },
-          "&.Mui-focused fieldset": {
-              borderColor: "primary",
-              borderWidth: "2px",
-              height: 40,
-              marginTop: 5,
-          },
-      },
-      backgroundColor: '#FFFFFF',
-      borderRadius: 10,
-  },
 
-  courseofweek: {
-      height: 'auto',
-      padding : theme.spacing(1),
-      background: '#9f9f9f',
-
-  },
   courseImage:{
     margin: 'auto',
     width:'100%',
     height:theme.spacing(20),
       
   },
-  courseText:{
-      align: 'center'
-  },
-  margin:{
-      margin:theme.spacing(1)
-  },
+
   Button:{
       backgroundColor :'#212121',
       border:'1.5px solid',
