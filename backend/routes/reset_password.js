@@ -2,17 +2,12 @@ var express = require('express');
 var mongo = require('mongodb');
 var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
-var passwordHash = require('password-hash');
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 var url = "mongodb://127.0.0.1:27017/";
 var data = require("./forget_password.js");
 const { body, validationResult, check } = require('express-validator');
-const { UnavailableForLegalReasons } = require('http-errors');
-router.get('/', function(req, res, next) {
-    res.render('reset_password');
-    //res.send("Response from forget password")
-});
+
 router.post('/',[check("fname","Please Input your fname").not().isEmpty(),
             check("lname","Please Input your lname").not().isEmpty(),
             check("username","Please Input your username").not().isEmpty(),

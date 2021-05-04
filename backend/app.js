@@ -29,7 +29,8 @@ var student_courseRouter = require('./routes/student_course');
 var tutor_courseRouter = require('./routes/tutor_course');
 var search_courseRouter = require('./routes/search_course');
 var paymentRouter = require('./routes/payment');
-
+var notificationRouter = require('./routes/notification');
+var profileRouter = require('./routes/profile');
 var app = express();
 app.use(cors());
 var fs = require('fs');
@@ -67,7 +68,8 @@ app.use('/student_course',student_courseRouter);
 app.use('/tutor_course',tutor_courseRouter);
 app.use('/search_course',search_courseRouter);
 app.use('/payment', paymentRouter);
-
+app.use('/notification', notificationRouter);
+app.use('/profile', profileRouter);
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
