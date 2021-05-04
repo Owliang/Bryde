@@ -163,13 +163,18 @@ router.post('/change_email',[check("id","Please Input course id").not().isEmpty(
                     if (err) {
                       res.json({result:false , error:err})
                     }
-                    else if( result.length == 0){
-                        console.log('aa')
+                    else if( (result.length == 0)){
                         code = Math.floor(Math.random() * Math.floor(99999)).toString();
                         new_email = req.body.email
                         send_email(req.body.email,code);
                         res.json({ result : true ,error:""})
                         //console.log(code,new_email)
+                    }
+                    else if( (result.length == 1) && ((result[0]._id).toString()==req.body.id) ){
+                        code = Math.floor(Math.random() * Math.floor(99999)).toString();
+                        new_email = req.body.email
+                        send_email(req.body.email,code);
+                        res.json({ result : true ,error:""})
                     }
                     else{
                         res.json({result:false , error:"Please try another email"})
