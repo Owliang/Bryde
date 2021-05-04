@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Container, Grid,Avatar, ListItem, Paper, Typography , Button , Select ,MenuItem ,FormControl,InputLabel,CircularProgress,} from '@material-ui/core'
 import axios from 'axios'
 import b64toBlob from "../../services/b64toBlob";
-import { Player } from 'video-react';
+
 import FormComponents from "../FormComponents/FormComponents.js";
 import { Form, useForm } from "../useForm.js";
 import MyVideoPlayer from "./MyVideoPlayer";
@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
+    marginTop:'3rem',
+    background : '#4f4f4f',
+  },
 
     comment: {
         color: '#FFFFFF',
@@ -74,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
         height: 40,
         marginTop: 5,
       },
-    },
+    
     rating: {
         color:'#0EED0E',
 

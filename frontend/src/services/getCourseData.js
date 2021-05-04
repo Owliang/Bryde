@@ -13,6 +13,9 @@ const initialCourseData = {
   link: "",
   attatch_photo: "",
   attatch_video: "",
+  student: [],
+  score: [],
+  review: [],
 };
 
 function GetCourseData(props) {
