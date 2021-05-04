@@ -8,6 +8,7 @@ import FormComponents from "../FormComponents/FormComponents.js";
 import { Form, useForm } from "../useForm.js";
 import GetCourseData from "../../services/getCourseData";
 import Rating from '@material-ui/lab/Rating';
+import { CourseData } from "./CourseData";
 
 
 
@@ -227,7 +228,7 @@ export default function Lesson(props) {
         {localStorage.getItem('role') === 'Tutor' &&
             <div>
                 <Typography className={classes.typography} variant='h6'>Enrolled students ( {course.student.length} )</Typography>
-                <Paper className={classes.paper}>
+                {course.student.length>0 && <Paper className={classes.paper}>
                 {course.student.map((student) => (
                     <Grid container spacing={3}>
                         <Grid item xs={4}>
@@ -236,8 +237,8 @@ export default function Lesson(props) {
                        
                     </Grid>
                  ))} 
-                </Paper>
-                <Typography className={classes.typography} variant='h6'>Reviews ( {course.review} )</Typography>
+                </Paper>}
+                <Typography className={classes.typography} variant='h6'>Reviews ( {course.review.length} )</Typography>
                 {course.review.map((review,index) => (
                     <Paper className={classes.paper}>
                         <Rating name="half-rating " className={classes.rating} defaultValue={course.score[index]/2} precision={0.5} readOnly />
