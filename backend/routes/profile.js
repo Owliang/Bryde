@@ -171,10 +171,7 @@ router.post('/change_email',[check("id","Please Input course id").not().isEmpty(
                         //console.log(code,new_email)
                     }
                     else if( (result.length == 1) && ((result[0]._id).toString()==req.body.id) ){
-                        code = Math.floor(Math.random() * Math.floor(99999)).toString();
-                        new_email = req.body.email
-                        send_email(req.body.email,code);
-                        res.json({ result : true ,error:""})
+                        res.json({ result : false ,error:"You already use this email"})
                     }
                     else{
                         res.json({result:false , error:"Please try another email"})
