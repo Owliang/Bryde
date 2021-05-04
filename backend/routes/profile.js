@@ -68,14 +68,7 @@ router.post('/edit_profile',[check("username","Please Input username").not().isE
                     res.json({result:true,error:""})
                 }
                 else if( (result.length == 1 && (result[0]._id).toString()==req.body.id)){
-                  console.log(result.length)
-                  dbo.collection("users").updateOne({_id:id},{$set:newvalues},function(err,res){
-                      if (err) {
-                        res.json({result:false , error:err})
-                      }
-                      db.close();
-                  });
-                  res.json({result:true,error:""})
+                  res.json({ result : false ,error:"You already use this email"})
               }
                 else{
                     console.log(result.length)

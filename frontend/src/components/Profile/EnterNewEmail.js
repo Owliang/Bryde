@@ -63,10 +63,15 @@ export default function EnterNewEmail(props) {
             email: emailData.email,
         }).then(response => {
             console.log(response.data)
+            const result = response.data.result
+                if (result) {
+                    props.setState(1)
+                } else {
+                    console.log("use same mail or empty")
+                }
         }).catch(err => {
             console.error(err)
         })
-        props.setState(1)
         // call backend
         // submit สำเร็จ ใส่ props.setState(1) ด้วย
     }
