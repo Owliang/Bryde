@@ -36,7 +36,7 @@ const subject = [
   { value: "Social Studies", label: "Social Studies" },
   { value: "Language", label: "Language" },
   { value: "Arts", label: "Arts" },
-  { value: "Other", label: "Other" },
+  { value: "Others", label: "Others" },
 ];
 
 const CourseForm = (props) => {
@@ -277,16 +277,17 @@ const CourseForm = (props) => {
               </IconButton>
             </Grid>
             <Grid item>
-              <FormComponents.TextInput
+              {errors.attatch_photo && 
+              (<Typography
                 className={classes.textRoot}
-                variant="outlined"
-                label={
-                  errors.attatch_photo ? "!!    Please Upload Image    !!" : ""
-                }
-                error={errors.attatch_photo}
-                disabled
+                variant="h6"
                 fullWidth
-              />
+                fontSize="large">
+               Please Upload Image.
+                <br/>
+                {errors.attatch_photo}
+              </Typography>
+              )}
             </Grid>
           </Grid>
         </Grid>

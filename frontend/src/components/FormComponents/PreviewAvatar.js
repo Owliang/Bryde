@@ -11,13 +11,14 @@ const useStyles = makeStyles(theme => ({
 
 
 const PreviewAvatar = (props) => {
-    const {className, src, onChange, alter, defaultSrc, ...others} = props
+    const {className, src, onChange, alter, defaultSrc, variant, ...others} = props
     const classes = useStyles();
     const rootSrc = "https://martialartsplusinc.com/wp-content/uploads/2017/04/default-image-620x600.jpg"
 
     return (
         <Avatar 
             className = {className || classes.root}
+            variant= {variant ||"rounded"}
             src = {src || defaultSrc || rootSrc} 
             alt = { alter || "preview" }
             {...others}/>
