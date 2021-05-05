@@ -14,10 +14,12 @@ router.post('/',[check("email","Please Input your email").not().isEmpty()], func
         res.json({result:false,error:errors})
     }
     else {
+        var email = req.body.email
         var code = Math.floor(Math.random() * Math.floor(99999)).toString();
         send_email(req.body.email,code);
         module.exports.code = code;
         module.exports.email = req.body.email;
+        res.json({result:true,error:""})
     }
 });
 module.exports = router;
