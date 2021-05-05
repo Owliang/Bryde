@@ -55,13 +55,13 @@ export default function Profile() {
         'isTutor': '',
     })
 
+
     useEffect(() => {
         const fecthProfileData = async () => {
             axios.get('http://localhost:4000/profile',{params:{
                 username : localStorage.getItem('username')
             }    
             }).then(response => {
-                console.log(response.data["data"][0])
                 setProfileData(response.data["data"][0])
             });
             //setProfileData( data.data );
@@ -99,7 +99,7 @@ export default function Profile() {
                                 {profileData['username']}
                             </Typography>
                             <Typography variant="h6" className={classes.typography}>
-                                ({profileData['isTutor']})
+                                ({localStorage.getItem('role')})
                             </Typography>
                         </Box>
                     </Grid>
