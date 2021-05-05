@@ -18,12 +18,14 @@ const initialCourseData = {
   review: [],
 };
 
-function GetCourseData(props) {
+function GetCourseData(props) { 
   console.log("Calling GetCoureData");
-  const { CID, mode, setAlert, setData, student } = props;
+  const { CID, mode, setAlert, setData } = props;
+  const student =localStorage.getItem('username');
   return new Promise((resolve, reject) => {
     if (mode == "edit" || mode == "read") {
-      console.log(`CID from getData`, CID == 'undefined');
+      console.log("get course edit or read mode from user: ",student)
+      console.log(`CID from getData is null:`, CID == 'undefined');
       console.log(`CID from getData`, CID);
       if (CID == 'undefined') {
         setAlert({
@@ -37,7 +39,7 @@ function GetCourseData(props) {
         });
         resolve({ name: "error CID" });
       } else {
-        let apiURL = mode == "edit" ? `http://localhost:4000/course?id=${CID}` : `http://localhost:4000/course?id=${CID}&student_name=${student}`
+        let apiURL = `http://localhost:4000/course?id=${CID}&student_name=${student}`
         axios
           .get(apiURL, { crossdomain: true })
           .then((response) => {

@@ -34,7 +34,7 @@ export default function CreateCourse(props) {
   const [initialCourseData, setinitialCourseData] = useState("");
 
   useEffect(async () => {
-    console.log("begin Init");
+    console.log("begin Init| mode: ",mode);
     getInitialCourseData().then((initData) => {
       console.log(`initialCourseData from useEffect`, initData);
       setinitialCourseData({...initData,id:CID});

@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         color: '#FFFFFF',
         marginLeft:'1rem'
     },
-    coursedetail: {
+    coursedetail:  {
         color: '#FFFFFF',
         marginLeft:'3rem',
         marginTop:'auto',
@@ -83,7 +83,7 @@ export default function CourseScreen(props) {
         review: [],
         score: []
     });
-    const [CountReview,setCountReview] = useState(0);
+    const [listener,setListener] = useState(false);
     const [QRcode,setQRcode] = useState([]);
     const [showQRcode,setShowQRcode] = useState(false);
     const zip = (a, b) => a.map((k, i) => [k, b[i]]);
@@ -96,8 +96,7 @@ export default function CourseScreen(props) {
             }    
             });
             setCourse( data.data );
-            setShowQRcode(false);
-            console.log(showQRcode)
+            
         
         };
         fecthCourse();
@@ -114,10 +113,16 @@ export default function CourseScreen(props) {
         };
         
     const enroll = async () => {
-        await axios.post('/payment/done',{
-            id: props.match.params.id,
-            username: localStorage.getItem('username')
-            });  
+        if (listener === false){
+            setListener(true)
+            await axios.post('/payment/done',{
+                id: props.match.params.id,
+                username: localStorage.getItem('username')
+                });  
+            
+        }
+            
+        
         };
 
 
@@ -175,7 +180,7 @@ export default function CourseScreen(props) {
                     
                     <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={handleQRcode} >enroll</Button>
                     :
-                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={enroll} href='/' >done</Button>
+                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={enroll()} href='/mycourses' >done</Button>
                 }
         <Button variant="outlined" align='end' color="primary" className={classes.Button}  href='/' >back</Button>
 

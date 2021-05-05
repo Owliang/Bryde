@@ -76,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
     width: 1000,
     height: 500,
   },
+  iconBox:{
+    display:"flex"
+  }
 }));
 
 const humanFileSize = (size) => {
@@ -276,7 +279,7 @@ const CourseVideo = (props) => {
                           <span>size: {humanFileSize(video.size)}</span>
                         }
                         actionIcon={
-                          <Box>
+                          <Box className={classes.iconBox}>
                             <GridIcon
                               id={index}
                               aria-label={`rename id ${index}`}

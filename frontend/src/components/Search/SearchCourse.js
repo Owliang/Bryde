@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
         margin: 'auto',
         width:'100%',
         height:theme.spacing(20),
+        display:'flex'
         
     },
 

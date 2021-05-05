@@ -5,7 +5,7 @@ import { Box, Button, Link, TextareaAutosize } from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import CustomSnackbar from '../CustomSnackbar'
+import CustomSnackbar from '../CustomSnackbar';
 
 export default function Login(props) {
 

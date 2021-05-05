@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box,Button, Container, Grid,Avatar, Paper, Typography ,CircularProgress,} from '@material-ui/core'
 import axios from 'axios'
 import b64toBlob from "../../services/b64toBlob";
-
+import MyDialog from "../MyDialog";
 import FormComponents from "../FormComponents/FormComponents.js";
 import { useForm } from "../useForm.js";
 import MyVideoPlayer from "./MyVideoPlayer";
@@ -205,12 +205,15 @@ export default function Lesson(props) {
     status: "loading",
   });
   const [videos, setVideos] = useState([]);
+  const zip = (a, b) => a.map((k, i) => [k, b[i]]);
   const [VIDs, setVIDs] = useState([]);
+  const [dialog, setDialog] = useState("");
   const getInitialCourseData = () =>
     GetCourseData({
       CID: props.match.params.id,
       mode: "read",
       student: props.match.params.student,
+      setAlert: setDialog,
     });
 
   useEffect(() => {
@@ -258,6 +261,10 @@ export default function Lesson(props) {
     );
   }
 
+  const handleClose = () => {
+    setDialog({ open: false });
+  };
+
   return (
     <div>
       {course.status == "loading" ? (
@@ -269,6 +276,19 @@ export default function Lesson(props) {
               <Typography className={classes.typography} variant="h5">
                 Course Name : {course.name}
               </Typography>
+              <MyDialog
+                title={dialog.title}
+                open={dialog.open}
+                handleClose={dialog.handleClose || handleClose}
+                message={dialog.message}
+                buttonOneRefTo={dialog.mainRefTo}
+                buttonOneMessage={dialog.mainMessage}
+                buttonTOneOnClick={dialog.mainOnClick}
+                buttonTwoRefTo={dialog.optionRefTo}
+                buttonTwoMessage={dialog.optionMessage}
+                buttonTwoOnClick={dialog.optionOnClick}
+                submessage={dialog.submessage}
+              />
             </Grid>
 
             <div className='row'padding='1rem'>
@@ -310,7 +330,7 @@ export default function Lesson(props) {
                 fullWidth
                 className={classes.detailButton}
                 target="_blank"
-                href={course.link}
+                href={course.link} 
               >
                 {" "}
                 Download course material{" "}
@@ -338,14 +358,17 @@ export default function Lesson(props) {
                  ))} 
                  </Grid>
                 </Paper>}
-                <Typography className={classes.typography} variant='h6'>Reviews ( {course.review.length} )</Typography>
-                {course.review.map((review,index) => (
+                <Typography className={classes.typography} variant='h6'>Reviews ( {course.score.filter((score)=> score >- 1).length} )</Typography>
+                
+                {zip(course.review,course.score).filter((review) => review[1] > -1  ).map((review) => 
+                    
                     <Paper className={classes.paper}>
-                        <Rating name="half-rating " className={classes.rating} defaultValue={course.score[index]/2} precision={0.5} readOnly />
-                        <Typography className={classes.comment}>{review}</Typography>
+                        <Rating name="half-rating " className={classes.rating} defaultValue={parseInt(review[1],10)/2} precision={0.5} readOnly />
+                        <Typography className={classes.comment}>{review[0]}</Typography>
                     </Paper>
+                    
             
-                ))}
+                )} 
                 
             </div>
             
@@ -363,7 +386,10 @@ export default function Lesson(props) {
                 component="div"
                 elevation={3}
               >
-                <RatingForm></RatingForm>
+                <RatingForm
+                  CID = {props.match.params.id}
+                  student_name = {props.match.params.student}
+                />
               </Paper>
             </Box>
           )}
