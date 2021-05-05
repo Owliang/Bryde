@@ -30,6 +30,7 @@ router.post('/',[check("username","Please enter username").not().isEmpty(),
                     if(result.length===0){
                         res.json({ result : false , error : "Invalid username or password" })
                     }
+                    else{
                     bcrypt.compare(passwd,result[0].password, function(err, isMatch) {
                         if (err) {
                             res.json({result:false , error:err})
@@ -47,6 +48,7 @@ router.post('/',[check("username","Please enter username").not().isEmpty(),
                             });
                         }
                     })
+                    }
                 });
             }
         });
