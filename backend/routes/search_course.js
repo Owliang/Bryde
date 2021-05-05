@@ -8,9 +8,8 @@ var Binary = require('mongodb').Binary;
 const { query,param,body, validationResult, check } = require('express-validator');
 var fs = require('fs');
 /* GET home page. */
-router.post('/',[check("course_name","Please enter course_name").not().isEmpty(),
-                check("tutor_name","Please enter tutor_name").not().isEmpty(),
-                check("subject","Please enter subject").not().isEmpty()],function(req, res, next) {
+router.post('/',[check("minprice","Please enter minprice"),
+                check("maxprice","Please enter maxprice").not().isEmpty()],function(req, res, next) {
     /*var course_name = ((req.body.course_name=="") ? /^/ : req.body.course_name )
     var tutor_name = ((req.body.tutor_name=="") ? /^/ : req.body.tutor_name )*/
     const result = validationResult(req);
