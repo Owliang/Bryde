@@ -18,6 +18,7 @@ import QuestionInfo from './components/Question/QuestionInfo'
 import SearchCourse from './components/Search/SearchCourse'
 import CourseScreen from './components/Search/CourseScreen'
 import Lesson from './components/Course/Lesson'
+import CustomSnackbar from './components/CustomSnackbar'
 
 
 function App() {

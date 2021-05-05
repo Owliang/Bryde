@@ -13,13 +13,16 @@ const initialCourseData = {
   link: "",
   attatch_photo: "",
   attatch_video: "",
+  student: [],
+  score: [],
+  review: [],
 };
 
 function GetCourseData(props) {
   console.log("Calling GetCoureData");
-  const { CID, mode, setAlert, setData } = props;
+  const { CID, mode, setAlert, setData, student } = props;
   return new Promise((resolve, reject) => {
-    if (mode == "edit") {
+    if (mode == "edit" || mode == "read") {
       console.log(`CID from getData`, CID == 'undefined');
       console.log(`CID from getData`, CID);
       if (CID == 'undefined') {
@@ -34,8 +37,9 @@ function GetCourseData(props) {
         });
         resolve({ name: "error CID" });
       } else {
+        let apiURL = mode == "edit" ? `http://localhost:4000/course?id=${CID}` : `http://localhost:4000/course?id=${CID}&student_name=${student}`
         axios
-          .get(`http://localhost:4000/course?id=${CID}`, { crossdomain: true })
+          .get(apiURL, { crossdomain: true })
           .then((response) => {
             console.log("response: ", response);
             var isSuccess = response.data.result;
