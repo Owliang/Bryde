@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { makeStyles, AppBar, Toolbar, Typography, Button, IconButton, Box, Drawer, List, ListItem, ListItemText, Badge, Menu, MenuItem, Link } from '@material-ui/core'
 import { useHistory } from "react-router-dom";
 import MenuIcon from '@material-ui/icons/Menu'
@@ -7,6 +7,7 @@ import MailIcon from '@material-ui/icons/Mail'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import ButtonLink from './ButtonLink'
 import DropDownMenu from './DropDownMenu'
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,7 +54,30 @@ export default function Navbar() {
     const notify = 3
     const profile = 0
     const [isDrawerOpen, setDrawerOpen] = useState(false)
+    const [notifyText, setNotifyText] = useState([])
+    const [notifyNumber, setNotifyNumber] = useState(0)
     const history = useHistory()
+
+    useEffect(() => {
+        axios.get("/notification", {
+            params: {
+                status: 'unread',
+                username: localStorage.getItem("username")
+            }
+        }).then(response => {
+                // console.log(response.data.data)
+                var notifyText = (response.data.data).map(noti => {
+                    return {
+                        topic: (noti.topic).substring(0,20),
+                        comment: (noti.comment).substring(0,20)
+                    }
+                })
+                setNotifyText(notifyText)
+                setNotifyNumber(notifyText.length)
+            }).catch(err => {
+                console.error(err)
+            })
+    }, []);
 
     const toggleDrawer = (state) => () => {
         setDrawerOpen(state)
@@ -112,13 +136,19 @@ export default function Navbar() {
         window.location.reload();
     }
 
-    const inboxContent = ['inbox1','inbox2','inbox3','inbox4'].map(content => (
-        <Box onClick={handleLogout}>{content}</Box>
-    ))
+    // const inboxContent = ['inbox1','inbox2','inbox3','inbox4'].map(content => (
+    //     <Box onClick={handleLogout}>{content}</Box>
+    // ))
 
-    const notifyContent = ['notify1','notify2'].map(content => (
-        <Box onClick={handleLogout}>{content}</Box>
-    ))
+    const notifyContent = notifyText.map(content => {
+        var text = `Topic : ${content.topic}
+        Detail : ${content.comment}`
+        return (
+            <Box onClick={handleLogout}>
+                {text}
+            </Box>
+        )
+    })
 
     const profileContent = [1,2,3].map(num => (
         <>
@@ -186,7 +216,7 @@ export default function Navbar() {
                     <DropDownMenu
                         title={
                             <Badge
-                                badgeContent={notify}
+                                badgeContent={notifyNumber}
                                 color="primary"
                                 children={<NotificationsIcon color="secondary"/>}
                                 max={99}
