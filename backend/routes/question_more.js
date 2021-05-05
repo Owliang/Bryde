@@ -27,7 +27,7 @@ router.get('/',[query('id').notEmpty().exists().isMongoId(),query('student_name'
                     if (err) {
                         res.json({result:false,error:err})
                     }
-                    follow = result.follower.findIndex(student => student == req.query.student_name);
+                    follow = result[0].follower.findIndex(student => student == req.query.student_name);
                     isFollow = (follow == -1) ? false:true;
                     res.json({result:result,isFollow:isFollow});
                     db.close();
