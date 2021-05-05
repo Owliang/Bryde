@@ -99,7 +99,7 @@ function send_email(email,code){
     to: email,//,fairphare@gmail.com,owliang1234@gmail.com', // อีเมลผู้รับ สามารถกำหนดได้มากกว่า 1 อีเมล โดยขั้นด้วย ,(Comma)
     subject: 'Hello ✔', // หัวข้ออีเมล
     text: 'ส่งmailได้เเล้วววว', // plain text body
-    html: '<b>ALMOST DONE!!</b><p>To complete your registration as a OffDemand user, please use the verification code below.</p><b>VERIFICATION CODE:</b><p>'+code+'</p><p>If u dont get an email, please allow less security apps first</p><a href="https://myaccount.google.com/u/4/lesssecureapps">here</a>' // html body
+    html: '<b>ALMOST DONE!!</b><p>To complete your registration as a OffDemand user, please use the verification code below.</p><b>VERIFICATION CODE:</b><p>'+code+'</p>'
     });
     // log ข้อมูลการส่งว่าส่งได้-ไม่ได้
     console.log('Message sent: %s', info.messageId);

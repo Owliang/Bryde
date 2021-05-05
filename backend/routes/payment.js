@@ -48,10 +48,12 @@ router.post('/',[check("tutor","Please Input tutor"),check("price","Please Input
       }
       else{
           var dbo = db.db("BrydeTech");
+          console.log(req.body.tutor)
           dbo.collection("users").find({"username":req.body.tutor}, { projection: { _id: 0, ppnumber:1} }).toArray(function(err, result) {
             if (err) {
               res.json({result:false , error:err})
             }
+            console.log(result)
             const amount = parseFloat(req.body.price)
             const payload = generatePayload(result[0].ppnumber, { amount }) //First parameter : mobileNumber || IDCardNumber
             var name = './qr/'+req.body.tutor +'_' + result[0].ppnumber+'_'+amount+'.jpg'
@@ -60,10 +62,10 @@ router.post('/',[check("tutor","Please Input tutor"),check("price","Please Input
                 res.json({result:false,error:err})
               }
               img = fs.readFileSync(name)
-              console.log(img)
+              //console.log(img)
               data = {qr:img.toString('base64')}
-              res.json({data:data})
-              res.render('payment',{param:img})
+              res.json({result:true,error:"",data:data})
+              //res.render('payment',{param:img})
             })
             db.close();
           });
@@ -72,4 +74,7 @@ router.post('/',[check("tutor","Please Input tutor"),check("price","Please Input
   }
 });
 
+router.get('/', function(req, res, next) {
+  res.render('payment_detail')
+});
 module.exports = router;
