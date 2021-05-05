@@ -6,10 +6,8 @@ import {
   Grid,
   IconButton,
   Typography,
-  Box,
   InputAdornment,
   makeStyles,
-  Dialog,
 } from "@material-ui/core";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import axios from "axios";
