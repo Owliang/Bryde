@@ -1,32 +1,26 @@
 import React, { useEffect, useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Grid, Paper, Typography , Button } from '@material-ui/core'
+import { Container, Grid, Paper, Typography , Button ,Avatar} from '@material-ui/core'
 import axios from 'axios'
+import Rating from '@material-ui/lab/Rating';
 
 
 const useStyles = makeStyles((theme) => ({
 
-    title: {
-        color: '#FFFFFF',
-        marginTop: '1rem',
-        marginBottom:'1rem'
-    },
+
     typography: {
         color: '#FFFFFF',
+    },
+    coursetitle:{
+        color: '#FFFFFF',
+        marginLeft:'1rem'
     },
     coursedetail: {
         color: '#FFFFFF',
         marginLeft:'3rem',
         marginTop:'auto',
         marginBottom:'auto',
-        variant:'h6'
-    },
-    grid: {
-        height: '100%',
-        padding : '1rem',
-    },
-    textFieldSmall: {
-        marginBottom: 8,
+        variant:'h2'
     },
     ButtonBlock: {
         display:'flex',
@@ -34,45 +28,14 @@ const useStyles = makeStyles((theme) => ({
       },
     paper: {
         padding: theme.spacing(2),
-
         marginTop:'3rem',
         background : '#4f4f4f',
-        
-        
-    },
-    dropdown: {
-        marginBottom: 8,
-        height:40,
-        "& .MuiOutlinedInput-root": {
-            "& fieldset": { 
-                borderRadius: "10px",
-                borderColor: "primary",
-                height: 40,
-                marginTop: 5,
-            },
-            "&.Mui-focused fieldset": {
-                borderColor: "primary",
-                borderWidth: "2px",
-                height: 40,
-                marginTop: 5,
-            },
-        },
-        backgroundColor: '#FFFFFF',
-        borderRadius: 10,
     },
 
-    courseofweek: {
-        height: 'auto',
-        padding : theme.spacing(1),
-        background: '#9f9f9f',
-
-    },
     courseImage:{
         margin: 'auto',
-
-        maxWidth: '100%',
-
-        
+        width:'90%',
+        height:theme.spacing(25),
     },
     qrcode:{
         marginTop: '2rem',
@@ -81,9 +44,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft:'auto',
         marginRight:'auto'
     },
-    courseText:{
-        align: 'center'
-    },
+
     margin:{
         marginTop:'2rem',
         marginBottom:'2rem',
@@ -121,10 +82,10 @@ export default function CourseScreen(props) {
             }    
             });
             setCourse( data.data );
-
-            
+        
         };
         fecthCourse();
+        
     },[]);
 
     const fecthQRcode = async () => {
@@ -133,20 +94,22 @@ export default function CourseScreen(props) {
             price : course.price
             });
         setQRcode( data.data );    
+        
         };
         
     const enroll = async () => {
-        const {data} = await axios.post('/payment/done',{
+        await axios.post('/payment/done',{
             id: props.match.params.id,
             username: localStorage.getItem('username')
             });  
         };
 
 
-    const handleEnroll = () => {
+    const handleQRcode = () => {
         fecthQRcode();
         setShowQRcode(true);
         console.log(QRcode);
+        
         
       };
     
@@ -159,27 +122,27 @@ export default function CourseScreen(props) {
     }
 
     return (
-        
       <Container fixed>
         <Paper className={classes.paper}>
             <Grid className={classes.margin} >
-                <Typography className={classes.typography} variant='h5'>Course Name : { course.name }</Typography>
+                <Typography className={classes.coursetitle} variant='h5'> Course Name : { course.name }</Typography>
             </Grid>
 
             <div className='row'padding='1rem'>
                 <div className='col'>
-                    <img src={'data:image/jpg;base64,'+ course.photo_buffer } className={classes.courseImage} />
+                    <Avatar src={'data:image/jpg;base64,'+ course.photo_buffer } variant='square' className={classes.courseImage} />
                 </div>
                 <div className='col'>
-                    <Typography className={classes.coursedetail} >By : { course.tutor }</Typography>
-                    <Typography className={classes.coursedetail} >Subject : { course.subject }</Typography>
-                    <Typography className={classes.coursedetail} >Price : { course.price } Baht</Typography>
-                    <Typography className={classes.coursedetail} >Rating : { course.rating }</Typography>
-                    <Typography className={classes.coursedetail} >Number of Video : { course.total_video }</Typography>
+                    <Typography className={classes.coursedetail} variant='h6' >By : { course.tutor }</Typography>
+                    <Typography className={classes.coursedetail} variant='h6'>Subject : { course.subject }</Typography>
+                    <Typography className={classes.coursedetail} variant='h6'>Price : { course.price } Baht</Typography>
+                    <Typography className={classes.coursedetail} variant='h6'>Rating : { course.rating }</Typography>
+                    <Typography className={classes.coursedetail} variant='h6'>Number of Video : { course.total_video }</Typography>
+                    
 
                 </div>
                 <div className={classes.margin} >
-                    <Typography className={classes.typography} variant='h6'>Description :</Typography>
+                    <Typography className={classes.coursetitle} variant='h6'>Description :</Typography>
                     
                 </div>
                     <Typography className={classes.coursedetail}  > {course.description} </Typography>
@@ -193,7 +156,7 @@ export default function CourseScreen(props) {
             :
             course.Isenroll === true ? <br/> : showQRcode === false ?
                     
-                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={() => {handleEnroll()}} >enroll</Button>
+                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={handleQRcode()} >enroll</Button>
                     :
                     <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={enroll()} href='/' >done</Button>
                 }
@@ -217,6 +180,14 @@ export default function CourseScreen(props) {
                 
             </div>
                     }
+        {/* <Typography className={classes.typography} variant='h6'>Reviews ( {course.review.length} )</Typography>
+                {course.review.map((review,index) => (
+                    <Paper className={classes.paper}>
+                        <Rating name="half-rating " className={classes.rating} defaultValue={course.score[index]/2} precision={0.5} readOnly />
+                        <Typography className={classes.comment}>{review}</Typography>
+                    </Paper>
+            
+                ))} */}
         
 
       </Container>

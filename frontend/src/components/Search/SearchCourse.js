@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Grid, Paper, Typography , Button , Select ,MenuItem } from '@material-ui/core'
+import { Container, Grid, Paper, Typography , Button , Select ,MenuItem,Avatar } from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
 import axios from 'axios';
 
@@ -28,10 +28,7 @@ const useStyles = makeStyles((theme) => ({
     textFieldSmall: {
         marginBottom: 8,
     },
-    gridList: {
-        flexWrap: 'nowrap',
-        transform: 'translateZ(0)',
-      },
+
     paper: {
         padding: theme.spacing(2),
         margin: '1rem',
@@ -60,24 +57,14 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 10,
     },
 
-    courseofweek: {
-        height: 'auto',
-        padding : theme.spacing(1),
-        background: '#9f9f9f',
-
-    },
     courseImage:{
         margin: 'auto',
-        display: 'block',
-        maxWidth: '100%',
+        width:'100%',
+        height:theme.spacing(20),
         
     },
-    courseText:{
-        align: 'center'
-    },
-    margin:{
-        margin:theme.spacing(1)
-    },
+
+
     Button:{
         backgroundColor :'#212121',
         border:'1.5px solid',
@@ -105,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchCourse() {
 
-    const [result,setResult] = React.useState(false);
+    const [result,setResult] = useState(false);
     const [searchData, setSearchData] = useState({
         course_name:'',
         tutor_name: '',
@@ -126,7 +113,7 @@ export default function SearchCourse() {
     const handleClick = () => {
       search();
       handleResult();
-      console.log(courses);
+      console.log( courses);
     };
     const search = async () => {
         
@@ -139,6 +126,7 @@ export default function SearchCourse() {
             maxprice : searchData.maxprice==='' ? '9999':searchData.maxprice 
             });
         setCourses( data.result );    
+        console.log( data.err);
         };
 
       
@@ -149,7 +137,7 @@ export default function SearchCourse() {
 
     const classes = useStyles();
 
-
+    console.log( courses);
     return (
       <Container fixed>
         <Typography variant="h4" className={classes.title}>Search Course </Typography>
@@ -179,7 +167,7 @@ export default function SearchCourse() {
                     <Typography variant = 'h5' className = {classes.typography}> Subject : </Typography>
                 </Grid>
                 <Grid item xs={9}>
-                <Select fullWidth className={classes.dropdown} onChange={handleChangeSearch('subject')} >
+                <Select fullWidth className={classes.dropdown} defaultValue='' onChange={handleChangeSearch('subject')} >
                     <MenuItem value={''} >
                         <em>None</em>
                     </MenuItem>
@@ -223,7 +211,7 @@ export default function SearchCourse() {
                 <Paper className = {classes.paper}>
                     <Grid container spacing={3}>
                         <Grid item xs={4}>
-                            <img src= {'data:image/jpg;base64,'+ course.photo_buffer } className={classes.courseImage}/>
+                            <Avatar src= {'data:image/jpg;base64,'+ course.photo_buffer } variant='square' className={classes.courseImage}/>
                         </Grid>
                         <Grid item xs={4} className={classes.gridItem} direction='column' justify='flex-start' alignContent='flex-start' >
                             <Typography variant="h4" className={classes.coursedetail}> {course.name} </Typography>

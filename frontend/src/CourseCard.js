@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
-import { Button ,Box, withStyles, CardHeader, CardContent, Grid ,Paper} from '@material-ui/core';
+import { Button ,Box, withStyles, CardHeader, CardContent, Grid ,Paper,Avatar} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,11 +41,8 @@ const useStyles = makeStyles((theme) => ({
     media: {
       paddingTop: "30%"
     },
-    title: {
-      color: '#FFFFFF',
-      marginTop: '1rem',
-      marginBottom:'1rem'
-  },
+
+    
   typography: {
       color: '#FFFFFF',
   },
@@ -59,13 +56,7 @@ const useStyles = makeStyles((theme) => ({
   gridItem: {
       display:'flex',
   },
-  textFieldSmall: {
-      marginBottom: 8,
-  },
-  gridList: {
-      flexWrap: 'nowrap',
-      transform: 'translateZ(0)',
-    },
+
   paper: {
       padding: theme.spacing(2),
       borderRadius:'1rem',
@@ -74,45 +65,14 @@ const useStyles = makeStyles((theme) => ({
       
       
   },
-  dropdown: {
-      marginBottom: 8,
-      height:40,
-      "& .MuiOutlinedInput-root": {
-          "& fieldset": { 
-              borderRadius: "10px",
-              borderColor: "primary",
-              height: 40,
-              marginTop: 5,
-          },
-          "&.Mui-focused fieldset": {
-              borderColor: "primary",
-              borderWidth: "2px",
-              height: 40,
-              marginTop: 5,
-          },
-      },
-      backgroundColor: '#FFFFFF',
-      borderRadius: 10,
-  },
 
-  courseofweek: {
-      height: 'auto',
-      padding : theme.spacing(1),
-      background: '#9f9f9f',
-
-  },
   courseImage:{
-      margin: 'auto',
-      display: 'block',
-      maxWidth: '100%',
+    margin: 'auto',
+    width:'100%',
+    height:theme.spacing(20),
       
   },
-  courseText:{
-      align: 'center'
-  },
-  margin:{
-      margin:theme.spacing(1)
-  },
+
   Button:{
       backgroundColor :'#212121',
       border:'1.5px solid',
@@ -224,7 +184,7 @@ export default function CourseCard(props){
         <Paper className = {classes.paper}>
         <Grid container spacing={3}>
             <Grid item xs={4}>
-                <img src= {'data:image/jpg;base64,'+ props.course.photo_buffer } className={classes.courseImage}/>
+                <Avatar src= {'data:image/jpg;base64,'+ props.course.photo_buffer } variant='square' className={classes.courseImage}/>
             </Grid>
             <Grid item xs={4} className={classes.gridItem} direction='column' justify='flex-start' alignContent='flex-start' >
                 <Typography variant="h4" className={classes.coursedetail}> {props.course.name} </Typography>

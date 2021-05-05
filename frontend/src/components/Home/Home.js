@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Container, Grid, Paper, Typography , Button } from '@material-ui/core'
+import { Box, Container, Grid, Paper, Typography , Button , Avatar } from '@material-ui/core'
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -16,13 +16,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '1rem',
         marginBottom:'1rem'
     },
-    grid: {
-        height: '100%',
-
-    },
-    textFieldSmall: {
-        marginBottom: 8,
-    },
+ 
     gridList: {
         flexWrap: 'nowrap',
         transform: 'translateZ(0)',
@@ -43,17 +37,13 @@ const useStyles = makeStyles((theme) => ({
 
     courseImage:{
         margin: 'auto',
-        display: 'block',
-        minHeight: '150px',
-        maxHeight: '150px',
-        maxWidth: '100%',
+        width:'100%',
+        height:theme.spacing(20),
 
 
         
     },
-    courseText:{
-        align: 'center'
-    },
+
     detailButton:{
         backgroundColor :'#212121',
         border:'1.5px solid',
@@ -125,7 +115,7 @@ export default function Home() {
                     {courseOfTheWeek.map((course) => (
                         <Grid item xs={3}>
                         <Paper className={classes.courseofweek} key = {course._id}>
-                        <img src= {'data:image/jpg;base64,'+course.photo_buffer.toString('base64')} className={classes.courseImage}/>
+                        <Avatar src= {'data:image/jpg;base64,'+course.photo_buffer.toString('base64')} variant='square' fullWidth className={classes.courseImage}/>
                         <Typography align='center' variant="subtitle1" className={classes.typography}> {course.name} </Typography>
                         <Button variant="outlined" color="primary" fullWidth className={classes.detailButton} href={'/course/'+course._id} > see detail </Button>
                         </Paper>
