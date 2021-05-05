@@ -113,7 +113,7 @@ export default function SearchCourse() {
     const handleClick = () => {
       search();
       handleResult();
-      console.log(courses);
+      console.log( courses);
     };
     const search = async () => {
         
@@ -126,6 +126,7 @@ export default function SearchCourse() {
             maxprice : searchData.maxprice==='' ? '9999':searchData.maxprice 
             });
         setCourses( data.result );    
+        console.log( data.result);
         };
 
       

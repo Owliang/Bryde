@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Grid, Paper, Typography , Button ,Avatar} from '@material-ui/core'
 import axios from 'axios'
+import Rating from '@material-ui/lab/Rating';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -81,6 +82,7 @@ export default function CourseScreen(props) {
             }    
             });
             setCourse( data.data );
+            
 
             
         };
@@ -108,6 +110,7 @@ export default function CourseScreen(props) {
         setShowQRcode(true);
         console.log(QRcode);
         
+        
       };
     
 
@@ -119,7 +122,6 @@ export default function CourseScreen(props) {
     }
 
     return (
-        
       <Container fixed>
         <Paper className={classes.paper}>
             <Grid className={classes.margin} >
@@ -136,6 +138,7 @@ export default function CourseScreen(props) {
                     <Typography className={classes.coursedetail} variant='h6'>Price : { course.price } Baht</Typography>
                     <Typography className={classes.coursedetail} variant='h6'>Rating : { course.rating }</Typography>
                     <Typography className={classes.coursedetail} variant='h6'>Number of Video : { course.total_video }</Typography>
+                    
 
                 </div>
                 <div className={classes.margin} >
@@ -177,6 +180,14 @@ export default function CourseScreen(props) {
                 
             </div>
                     }
+        <Typography className={classes.typography} variant='h6'>Reviews ( {course.review.length} )</Typography>
+                {course.review.map((review,index) => (
+                    <Paper className={classes.paper}>
+                        <Rating name="half-rating " className={classes.rating} defaultValue={course.score[index]/2} precision={0.5} readOnly />
+                        <Typography className={classes.comment}>{review}</Typography>
+                    </Paper>
+            
+                ))}
         
 
       </Container>
