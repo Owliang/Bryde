@@ -1,7 +1,6 @@
 import React, { Component, createContext, useState, useContext, useEffect, useCallback } from "react"
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom"
 import { Container, Box } from '@material-ui/core'
-import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
 import CreateCourse from './CreateCourse'
@@ -57,7 +56,7 @@ function App() {
                             <PrivateRoute path='/create_question' component={CreateQuestion} />
                             <PrivateRoute path='/edit_course' component={EditCourse} />
                             <PrivateRoute path='/course_video' component={CourseVideo} />
-                            <PrivateRoute path='/courses' component={CourseList} />
+                            
                             <PrivateRoute path='/home' component={Home}/>
 
                             <PrivateRoute path='/qanda/follow' component={QuestionFollow}/>
@@ -69,7 +68,7 @@ function App() {
                             <PrivateRoute path='/course/:id' component ={CourseScreen}/>
                             <PrivateRoute path='/lesson/:id' component ={Lesson}/>
                             <LoginRoute path="/" component={Landing} />
-                            <Route path='/courses' component={CourseList} />
+                            
                         </Switch>
                     </Router>
                 </Box>

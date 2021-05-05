@@ -1,14 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-import { Button ,Box, withStyles, CardHeader, CardContent, Grid ,Paper,Avatar} from '@material-ui/core';
+import { Button , Grid ,Paper,Avatar} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -98,88 +91,7 @@ export default function CourseCard(props){
     const defaultImage = 
         "https://martialartsplusinc.com/wp-content/uploads/2017/04/default-image-620x600.jpg"
 
-    /*const [hasError, setError] = useState(false)
-    const [items, setItems] = useState({})
-
-
-    useEffect(() =>{
-      async function fetchData(){
-        const res = await fetch('https://randomuser.me/api/')
-        res
-          .json()
-          .then(res => setItems(res))
-          .catch(err => setErrors(err));
-      }
-      fetchData();
-      })
-    
-
-      return <div>
-        {JSON.stringify(items)}
-      </div>*/
-    
-    
-
-
-
     return (
-        // <Card className={classes.root}>
-        //   <div className={classes.details}>
-
-        //     <Grid container className={classes.root} justify="space-between" alignItems="center">
-        //       <Grid item xs={12}>
-        //         <Typography component="h5" variant="headline">
-        //             {name}
-        //         </Typography>
-        //       </Grid>
-              
-        //       <Grid item xs={4}>
-        //         <CardMedia className={classes.media}>
-        //           <img src={'data:image/jpg;base64,'+ props.course.photo_buffer } width ="160px" hight="160px" />
-        //         </CardMedia>
-                
-        //       </Grid>
-              
-        //       <Grid item xs={4}>
-        //         <CardContent className={classes.content}>
-        //           <Typography className={classes.content} variant="subtitle1" color="textSecondary">
-        //             {`By Tutor: ${tutor}`}
-        //           </Typography>
-
-        //           <Typography className={classes.content} variant="subtitle1" color="textSecondary">
-        //             {`Price: ${price}`}
-        //           </Typography>
-
-        //           <Typography className={classes.content} variant="subtitle1" color="textSecondary">
-        //             {`Subject: ${subject}`}
-        //           </Typography>
-
-        //           <Typography className={classes.content} variant="subtitle1" color="textSecondary">
-        //             {`Rating: ${rating}`}
-        //           </Typography>
-
-        //           <Typography className={classes.content} variant="subtitle1" color="textSecondary">
-        //             {`Enrollment: ${student}`}
-        //           </Typography>
-      
-        //         </CardContent>
-        //       </Grid>
-              
-        //       <Grid item xs={4}>
-        //         <CardActions>
-        //           <Button className={classes.button} size="small" color="primary" href={'/Lesson/'+props.course._id}>
-        //             Go to lesson
-        //           </Button>
-        //           <Button className={classes.button} size="small" color="primary" href={'/create_course/?cid='+props.course._id+ '&mode=edit'} >
-        //             Edit Course
-        //           </Button>
-        //         </CardActions>
-        //       </Grid>
-
-        //     </Grid>
-            
-        //   </div>
-        // </Card>
 
         <Paper className = {classes.paper}>
         <Grid container spacing={3}>

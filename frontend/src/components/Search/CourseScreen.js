@@ -13,8 +13,9 @@ const useStyles = makeStyles((theme) => ({
         color: '#FFFFFF',
     },
     comment: {
-        
         color: '#FFFFFF',
+        marginTop: '1rem',
+        marginBottom:'1rem'
     },
     coursetitle:{
         color: '#FFFFFF',
@@ -82,8 +83,10 @@ export default function CourseScreen(props) {
         review: [],
         score: []
     });
+    const [CountReview,setCountReview] = useState(0);
     const [QRcode,setQRcode] = useState([]);
     const [showQRcode,setShowQRcode] = useState(false);
+    const zip = (a, b) => a.map((k, i) => [k, b[i]]);
 
     useEffect(() => {
         const fecthCourse = async () => {
@@ -195,14 +198,18 @@ export default function CourseScreen(props) {
                 
             </div>
                     }
-        <Typography className={classes.typography} variant='h6'>Reviews ( 3 )</Typography>
-                {course.review.map((review,index) => (
+
+            <Typography className={classes.typography} variant='h6'>Reviews ( {course.score.filter((score)=> score >- 1).length} )</Typography>
+                
+                {zip(course.review,course.score).filter((review) => review[1] > -1  ).map((review) => 
+                    
                     <Paper className={classes.paper}>
-                        <Rating name="half-rating " className={classes.rating} defaultValue={course.score[index]/2} precision={0.5} readOnly />
-                        <Typography className={classes.comment}>{review}</Typography>
+                        <Rating name="half-rating " className={classes.rating} defaultValue={parseInt(review[1],10)/2} precision={0.5} readOnly />
+                        <Typography className={classes.comment}>{review[0]}</Typography>
                     </Paper>
+                    
             
-                ))}
+                )} 
         
 
       </Container>

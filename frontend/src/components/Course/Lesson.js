@@ -5,11 +5,10 @@ import axios from 'axios'
 import b64toBlob from "../../services/b64toBlob";
 
 import FormComponents from "../FormComponents/FormComponents.js";
-import { Form, useForm } from "../useForm.js";
+import { useForm } from "../useForm.js";
 import MyVideoPlayer from "./MyVideoPlayer";
 import GetCourseData from "../../services/getCourseData";
 import Rating from '@material-ui/lab/Rating';
-import { CourseData } from "./CourseData";
 import RatingForm from "./RatingForm.js";
 
 const useStyles = makeStyles((theme) => ({
@@ -340,28 +339,20 @@ export default function Lesson(props) {
                  </Grid>
                 </Paper>}
                 <Typography className={classes.typography} variant='h6'>Reviews ( {course.review.length} )</Typography>
-                <Paper className={classes.paper}>
-                        <Rating name="half-rating " className={classes.rating} defaultValue={8/2} precision={0.5} readOnly />
-                        <Typography className={classes.comment}>best course ever</Typography>
-                    </Paper>
-                    <Paper className={classes.paper}>
-                        <Rating name="half-rating " className={classes.rating} defaultValue={7/2} precision={0.5} readOnly />
-                        <Typography className={classes.comment}>good</Typography>
-                    </Paper>
-                {/* {course.review.map((review,index) => (
+                {course.review.map((review,index) => (
                     <Paper className={classes.paper}>
                         <Rating name="half-rating " className={classes.rating} defaultValue={course.score[index]/2} precision={0.5} readOnly />
                         <Typography className={classes.comment}>{review}</Typography>
                     </Paper>
             
-                ))} */}
+                ))}
                 
             </div>
             
         }
         
 
-          {localStorage.getItem("role") === "student" && (
+          {localStorage.getItem("role") === "Student" && (
             <Box>
               <Typography className={classes.typography} variant="h6">
                 Rate This Course

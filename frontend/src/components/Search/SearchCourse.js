@@ -8,9 +8,10 @@ import axios from 'axios';
 const useStyles = makeStyles((theme) => ({
 
     title: {
-        color: '#FFFFFF',
+        color: '#0EED0E',
         marginTop: '1rem',
-        marginBottom:'1rem'
+        marginBottom:'1rem',
+        fontWeight:700
     },
     typography: {
         color: '#FFFFFF',
@@ -140,7 +141,7 @@ export default function SearchCourse() {
     console.log( courses);
     return (
       <Container fixed>
-        <Typography variant="h4" className={classes.title}>Search Course </Typography>
+        <Typography variant="h4"  className={classes.title}>Search Course </Typography>
         <Paper className={classes.paper}>
             <Grid container spacing={3} className={classes.grid}>
             <Grid item xs={3}>

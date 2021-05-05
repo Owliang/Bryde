@@ -29,6 +29,9 @@ const useStyles = makeStyles({
     marginTop: "auto",
     marginBottom: "auto",
   },
+  star:{
+    color:'#0EED0E'
+  }
 });
 
 const RatingStar = (props) => {
@@ -43,6 +46,7 @@ const RatingStar = (props) => {
         name="star"
         value={star}
         precision={0.5}
+        className={classes.star}
         onChange={handleInputChange}
         onChangeActive={(event, newHover) => {
           setHover(newHover);
