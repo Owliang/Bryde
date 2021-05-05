@@ -143,18 +143,15 @@ router.post('/change_email',[check("id","Please Input course id").not().isEmpty(
                             ,check("email","Please Input email").not().isEmpty()], function(req, res, next) {
     const result = validationResult(req);
     var errors = result.errors;
-    console.log('sdfdsf')
     if (!result.isEmpty()) {
         res.json({result:false,error:errors})
     }
     else{
-      console.log('asdasd')
         MongoClient.connect(url, function(err, db) {
             if (err) {
               res.json({result:false,error:err})
             }
             else{
-                console.log('asd')
                 var dbo = db.db("BrydeTech");
                 var id = new mongo.ObjectID(req.body.id)
                 dbo.collection("users").find({email:req.body.email}).toArray(function(err, result) {

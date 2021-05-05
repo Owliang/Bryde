@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { makeStyles, Box, Button, Typography, TextField } from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
 import axios from 'axios'
+import CustomSnackbar from '../CustomSnackbar'
 
 const useStyles = makeStyles((theme) => ({
     typography: {
@@ -14,6 +15,7 @@ export default function Verify(props) {
     
     const classes = useStyles()
     const [code, setCode] = useState('')
+    const [alert, setAlert] = useState(false)
 
     const handleChangeCode = (event) => {
         setCode(event.target.value)

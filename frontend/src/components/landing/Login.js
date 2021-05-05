@@ -1,8 +1,11 @@
 import React, { useState } from "react"
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
-import { Box, Button, Link } from '@material-ui/core'
+import { Box, Button, Link, TextareaAutosize } from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import CustomSnackbar from '../CustomSnackbar';
 
 export default function Login(props) {
 
@@ -11,6 +14,8 @@ export default function Login(props) {
         username: '',
         password: '',
     })
+    const [alert, setAlert] = useState(false)
+    const [alert2, setAlert2] = useState(false)
 
     const handleChangeLogin = (key) => (event) => {
         setLoginData({
@@ -28,20 +33,22 @@ export default function Login(props) {
                     username: loginData.username
                 }
             }).then(response => {
-                console.log(response.data)
                 const result = response.data.result
                 if (result) {
+                    setAlert(true)
+                    setAlert2(false)
                     localStorage.setItem('username', loginData.username)
                     localStorage.setItem('auth', true)
                     localStorage.setItem('role', response.data.isTutor == "on" ? "Tutor" : "Student")
                     history.push("/home")
-                    window.location.reload();
-                    console.log(response.data)
+                    window.location.reload()
                 } else {
+                    setAlert(false)
+                    setAlert2(false)
+                    setAlert2(true)
                     localStorage.setItem('username', '')
                     localStorage.setItem('auth', false)
                     localStorage.setItem('role','')
-                    console.log(response.data)
                 }
             }).catch(err => {
                 console.error(err)
@@ -86,6 +93,8 @@ export default function Login(props) {
             >
                 Register
             </Button>
+            <CustomSnackbar makeOpen={alert} severity="success" text='Login Success - redirect to homepage'/>
+            <CustomSnackbar makeOpen={alert2} severity="error" text='Login Fail - The username or password is incorrect'/>
         </Box>
     )
 }

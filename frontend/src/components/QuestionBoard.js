@@ -14,38 +14,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function QuestionBoard() {
 
-    // const questionList = [
-    //     {
-    //         "_id": "6052b4f4ff4b284d740d0c2d",
-    //         "topic": "บวกเลขไม่เป็นงับบบ",
-    //         "subject": "math",
-    //         "follower": [],
-    //         "creator": "a"
-    //     },
-    //     {
-    //         "_id": "604f27851e813a34881f9656",
-    //         "topic": "บวกเลขไม่เป็นงับ",
-    //         "subject": "math",
-    //         "follower": [
-    //             "aa",
-    //             "bb"
-    //         ],
-    //         "creator": "a"
-    //     },
-    //     {
-    //         "_id": "604f26a4995de24b207a3766",
-    //         "topic": "ant เเปลว่าอะไรอ่ะ",
-    //         "subject": "english",
-    //         "follower": [
-    //             "bbbb",
-    //             "aaaa",
-    //             "aa",
-    //             "owliang"
-    //         ],
-    //         "creator": "b"
-    //     }
-    // ]
-
     const classes = useStyles()
     const subjectList = ['All Subject', 'Mathematics', 'Sciences', 'Social Studies', 'Languages', 'Arts', 'Others']
 

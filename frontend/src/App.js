@@ -1,7 +1,6 @@
 import React, { Component, createContext, useState, useContext, useEffect, useCallback } from "react"
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom"
 import { Container, Box } from '@material-ui/core'
-import CourseList from './components/Course/CourseList'
 import Navbar from './components/Navbar'
 import Landing from './components/Landing'
 import CreateCourse from './CreateCourse'
@@ -22,6 +21,7 @@ import Profile from './components/Profile/Profile'
 import EditProfile from './components/Profile/EditProfile'
 import ChangeEmail from './components/Profile/ChangeEmail'
 import ChangePassword from './components/Profile/ChangePassword'
+import CustomSnackbar from './components/CustomSnackbar'
 
 
 function App() {
@@ -60,7 +60,6 @@ function App() {
                             <PrivateRoute path='/create_question' component={CreateQuestion} />
                             <PrivateRoute path='/edit_course' component={EditCourse} />
                             <PrivateRoute path='/course_video' component={CourseVideo} />
-                            <PrivateRoute path='/courses' component={CourseList} />
                             <PrivateRoute path='/edit_profile' component={EditProfile}/>
                             <PrivateRoute path='/changeemail' component={ChangeEmail}/>
                             <PrivateRoute path='/changepassword' component={ChangePassword}/>
@@ -79,7 +78,7 @@ function App() {
                             <PrivateRoute path='/course/:id' component ={CourseScreen}/>
                             <PrivateRoute path='/lesson/:id' component ={Lesson}/>
                             <LoginRoute path="/" component={Landing} />
-                            <Route path='/courses' component={CourseList} />
+                            
                         </Switch>
                     </Router>
                 </Box>

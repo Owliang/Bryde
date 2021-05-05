@@ -11,6 +11,13 @@ import MyDialog from "./components/MyDialog";
 import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
+    button : {
+        padding: '10px',
+        paddingLeft: '50px',
+        paddingRight: '50px',
+        marginButtom: '1rem',
+        marginTop:'1rem',
+      }
 
 }));
 
