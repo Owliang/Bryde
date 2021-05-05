@@ -82,11 +82,10 @@ export default function CourseScreen(props) {
             }    
             });
             setCourse( data.data );
-            
-
-            
+        
         };
         fecthCourse();
+        
     },[]);
 
     const fecthQRcode = async () => {
@@ -95,6 +94,7 @@ export default function CourseScreen(props) {
             price : course.price
             });
         setQRcode( data.data );    
+        
         };
         
     const enroll = async () => {
@@ -180,14 +180,14 @@ export default function CourseScreen(props) {
                 
             </div>
                     }
-        <Typography className={classes.typography} variant='h6'>Reviews ( {course.review.length} )</Typography>
+        {/* <Typography className={classes.typography} variant='h6'>Reviews ( {course.review.length} )</Typography>
                 {course.review.map((review,index) => (
                     <Paper className={classes.paper}>
                         <Rating name="half-rating " className={classes.rating} defaultValue={course.score[index]/2} precision={0.5} readOnly />
                         <Typography className={classes.comment}>{review}</Typography>
                     </Paper>
             
-                ))}
+                ))} */}
         
 
       </Container>

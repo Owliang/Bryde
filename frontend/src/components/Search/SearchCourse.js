@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Grid, Paper, Typography , Button , Select ,MenuItem,Avatar } from '@material-ui/core'
 import TextFieldSmall from '../TextFieldSmall'
@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchCourse() {
 
-    const [result,setResult] = React.useState(false);
+    const [result,setResult] = useState(false);
     const [searchData, setSearchData] = useState({
         course_name:'',
         tutor_name: '',
@@ -126,7 +126,7 @@ export default function SearchCourse() {
             maxprice : searchData.maxprice==='' ? '9999':searchData.maxprice 
             });
         setCourses( data.result );    
-        console.log( data.result);
+        console.log( data.err);
         };
 
       
@@ -137,7 +137,7 @@ export default function SearchCourse() {
 
     const classes = useStyles();
 
-
+    console.log( courses);
     return (
       <Container fixed>
         <Typography variant="h4" className={classes.title}>Search Course </Typography>
@@ -167,7 +167,7 @@ export default function SearchCourse() {
                     <Typography variant = 'h5' className = {classes.typography}> Subject : </Typography>
                 </Grid>
                 <Grid item xs={9}>
-                <Select fullWidth className={classes.dropdown} onChange={handleChangeSearch('subject')} >
+                <Select fullWidth className={classes.dropdown} defaultValue='' onChange={handleChangeSearch('subject')} >
                     <MenuItem value={''} >
                         <em>None</em>
                     </MenuItem>

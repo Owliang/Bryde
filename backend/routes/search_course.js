@@ -34,6 +34,7 @@ router.post('/',[check("minprice","Please enter minprice").notEmpty().exists(),
                         res.json({result:false , error:err})
                     }
                     res.json({result:result});
+                    console.log(result)
                     db.close();
                 })
             }
