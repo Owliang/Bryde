@@ -53,12 +53,11 @@ router.post('/edit_profile',[check("username","Please Input username").not().isE
             var dbo = db.db("BrydeTech");
             var id = new mongo.ObjectID(req.body.id)
             var newvalues = {username:req.body.username,fname:req.body.fname,lname:req.body.lname,ppnumber:req.body.ppnumber}
-            dbo.collection("users").find({username:req.body.username}).toArray(function(err, result) {
+            dbo.collection("users").find({$or:[{username:req.body.username},{ppnumber:req.body.ppnumber}]}).toArray(function(err, result) {
                 if (err) {
                   res.json({result:false , error:err})
                 }
                 else if( (result.length == 0)){
-                    console.log(result.length)
                     dbo.collection("users").updateOne({_id:id},{$set:newvalues},function(err,res){
                         if (err) {
                           res.json({result:false , error:err})
@@ -68,7 +67,6 @@ router.post('/edit_profile',[check("username","Please Input username").not().isE
                     res.json({result:true,error:""})
                 }
                 else if( (result.length == 1) && ((result[0]._id).toString()==req.body.id) ){
-                  console.log(result.length)
                   dbo.collection("users").updateOne({_id:id},{$set:newvalues},function(err,res){
                       if (err) {
                         res.json({result:false , error:err})
@@ -78,7 +76,6 @@ router.post('/edit_profile',[check("username","Please Input username").not().isE
                   res.json({result:true,error:""})
                 }
                 else{
-                    console.log(result.length)
                     res.json({result:false , error:"This username already exists"})
                 }
             });

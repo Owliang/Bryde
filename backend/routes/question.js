@@ -7,7 +7,7 @@ const { query,body, validationResult, check } = require('express-validator');
 var fs = require('fs');
 const { abort } = require('process');
 
-router.get('/',[query('topic').notEmpty().exists(),query('subject').notEmpty().exists(),query('username').notEmpty().exists()],function(req, res, next) {
+router.get('/',[query('topic').exists(),query('subject').exists(),query('username').exists()],function(req, res, next) {
     // var topic = ((req.query.topic=="") ? /^/ : req.query.topic )
     // var creator = ((req.query.username=="") ? /^/ : req.query.username )
     const result = validationResult(req);
@@ -58,7 +58,7 @@ router.get('/suggestion',[query('student_name').notEmpty().exists()], function(r
                 "size":{"$size":"$follower"},
                 "follower":1
                 }
-            },
+            },  
             {
                 "$sort":{"size":-1}
             }
@@ -71,7 +71,7 @@ router.get('/suggestion',[query('student_name').notEmpty().exists()], function(r
                         follow = result[i].follower.findIndex(student => student == req.query.student_name);
                         isFollow[i] = (follow == -1) ? false:true;
                     }
-                    res.json({result:result , error:"",isFollow:isFollow})
+                    res.json({result:true , error:"",data:result,isFollow:isFollow})
                 }
                 //console.log(JSON.stringify(result));
             db.close();
