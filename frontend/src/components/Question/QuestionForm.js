@@ -76,6 +76,8 @@ const QuestionForm = (props) => {
             temp.username = fieldValues.username != "" ? "" : "Please Login First";
         if ("subject" in fieldValues)
             temp.subject = fieldValues.subject != "" ? "" : "This field is required.";
+        if ("photo" in fieldValues) 
+            temp.photo = fieldValues.photo ? "" : "Question's Image is required.";
         setErrors((errors) => ({
             ...temp,
         }));

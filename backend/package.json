@@ -35,7 +35,7 @@
     "password-hash": "^1.2.2",
     "promptpay-qr": "^0.4.4",
     "swagger-ui-express": "^4.1.6",
-    "yamljs": "^0.3.0"
+    "yamljs": "^0.3.0",
     "qrcode": "^1.4.4"
   },
   "devDependencies": {
