@@ -9,6 +9,11 @@ const useStyles = makeStyles((theme) => ({
 
 
     typography: {
+        marginTop: '1rem',
+        color: '#FFFFFF',
+    },
+    comment: {
+        
         color: '#FFFFFF',
     },
     coursetitle:{
@@ -44,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
         marginLeft:'auto',
         marginRight:'auto'
     },
+    rating:{
+        color:'#0EEd0E'
+    },
 
     margin:{
         marginTop:'2rem',
@@ -70,7 +78,10 @@ const useStyles = makeStyles((theme) => ({
 export default function CourseScreen(props) {
 
     const classes = useStyles();
-    const [course,setCourse] = useState([]);
+    const [course,setCourse] = useState({
+        review: [],
+        score: []
+    });
     const [QRcode,setQRcode] = useState([]);
     const [showQRcode,setShowQRcode] = useState(false);
 
@@ -82,6 +93,8 @@ export default function CourseScreen(props) {
             }    
             });
             setCourse( data.data );
+            setShowQRcode(false);
+            console.log(showQRcode)
         
         };
         fecthCourse();
@@ -105,7 +118,7 @@ export default function CourseScreen(props) {
         };
 
 
-    const handleQRcode = () => {
+    const handleQRcode =  () => {
         fecthQRcode();
         setShowQRcode(true);
         console.log(QRcode);
@@ -151,14 +164,15 @@ export default function CourseScreen(props) {
         </Paper>
     
         <div className={classes.ButtonBlock} >
+        
         {localStorage.getItem('role') === 'Tutor' ? 
             <br/>
             :
             course.Isenroll === true ? <br/> : showQRcode === false ?
                     
-                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={handleQRcode()} >enroll</Button>
+                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={handleQRcode} >enroll</Button>
                     :
-                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={enroll()} href='/' >done</Button>
+                    <Button variant="outlined" align='end' color="primary" className={classes.Button} onClick={enroll} href='/' >done</Button>
                 }
         <Button variant="outlined" align='end' color="primary" className={classes.Button}  href='/' >back</Button>
 
@@ -170,6 +184,7 @@ export default function CourseScreen(props) {
         }
         {localStorage.getItem('role') === 'Tutor' &&
             <Typography className={classes.typography} >Tutor cannot enroll to any course </Typography>
+            
         }
 
 
@@ -180,14 +195,14 @@ export default function CourseScreen(props) {
                 
             </div>
                     }
-        {/* <Typography className={classes.typography} variant='h6'>Reviews ( {course.review.length} )</Typography>
+        <Typography className={classes.typography} variant='h6'>Reviews ( 3 )</Typography>
                 {course.review.map((review,index) => (
                     <Paper className={classes.paper}>
                         <Rating name="half-rating " className={classes.rating} defaultValue={course.score[index]/2} precision={0.5} readOnly />
                         <Typography className={classes.comment}>{review}</Typography>
                     </Paper>
             
-                ))} */}
+                ))}
         
 
       </Container>

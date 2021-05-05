@@ -328,23 +328,33 @@ export default function Lesson(props) {
             <div>
                 <Typography className={classes.typography} variant='h6'>Enrolled students ( {course.student.length} )</Typography>
                 {course.student.length>0 && <Paper className={classes.paper}>
+                <Grid container spacing={3}>
                 {course.student.map((student) => (
-                    <Grid container spacing={3}>
+                    
                         <Grid item xs={4}>
-                            <Typography className={classes.typography} > {student} </Typography>
+                            <Typography className={classes.typography} > - {student} </Typography>
                         </Grid>
                        
-                    </Grid>
+                    
                  ))} 
+                 </Grid>
                 </Paper>}
                 <Typography className={classes.typography} variant='h6'>Reviews ( {course.review.length} )</Typography>
-                {course.review.map((review,index) => (
+                <Paper className={classes.paper}>
+                        <Rating name="half-rating " className={classes.rating} defaultValue={8/2} precision={0.5} readOnly />
+                        <Typography className={classes.comment}>best course ever</Typography>
+                    </Paper>
+                    <Paper className={classes.paper}>
+                        <Rating name="half-rating " className={classes.rating} defaultValue={7/2} precision={0.5} readOnly />
+                        <Typography className={classes.comment}>good</Typography>
+                    </Paper>
+                {/* {course.review.map((review,index) => (
                     <Paper className={classes.paper}>
                         <Rating name="half-rating " className={classes.rating} defaultValue={course.score[index]/2} precision={0.5} readOnly />
                         <Typography className={classes.comment}>{review}</Typography>
                     </Paper>
             
-                ))}
+                ))} */}
                 
             </div>
             
