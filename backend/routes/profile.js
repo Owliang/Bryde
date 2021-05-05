@@ -9,6 +9,7 @@ const { query,body, validationResult, check } = require('express-validator');
 'use strict';
 const nodemailer = require('nodemailer');
 const { render } = require('ejs');
+const { request } = require('express');
 var code =  1000000
 var new_email = ''
 /* GET home page. */
@@ -161,8 +162,7 @@ router.post('/change_email',[check("id","Please Input course id").not().isEmpty(
                         code = Math.floor(Math.random() * Math.floor(99999)).toString();
                         new_email = req.body.email
                         send_email(req.body.email,code);
-                        res.json({ result : true ,error:""})
-                        //console.log(code,new_email)
+                        res.json({ result : true ,error:"",code: code})
                     }
                     else if( (result.length == 1) && ((result[0]._id).toString()==req.body.id) ){
                         res.json({ result : false ,error:"You already use this email"})

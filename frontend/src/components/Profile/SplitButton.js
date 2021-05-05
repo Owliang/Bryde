@@ -8,22 +8,37 @@ import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import EditIcon from '@material-ui/icons/Edit';
-import 'fontsource-roboto';
+import { useHistory } from "react-router-dom";
+import "@fontsource/roboto";
 
 const options = ['Edit Profile', 'Change Password', 'Change E-mail'];
 
 export default function SplitButton() {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  //const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const history = useHistory()
 
-  const handleClick = () => {
+  /*const handleClick = () => {
     console.info(`You clicked ${options[selectedIndex]}`);
   };
-
+  */
   const handleMenuItemClick = (event, index) => {
-    setSelectedIndex(index);
-    setOpen(false);
+    //console.log(index);
+    //setSelectedIndex(index);
+    //console.log(selectedIndex);
+    if (index == 0) {
+      history.push("/edit_profile");
+      window.location.reload();
+    }
+    else if (index == 1) {
+      history.push("/changepassword");
+      window.location.reload();
+    }
+    else if (index == 2) {
+      history.push("/changeemail");
+      window.location.reload();
+    }
   };
 
   const handleToggle = () => {
@@ -71,7 +86,7 @@ export default function SplitButton() {
                     {options.map((option, index) => (
                       <MenuItem
                         key={option}
-                        selected={index === selectedIndex}
+                        //selected={index === selectedIndex}
                         style={{
                             fontSize: 16,
                         }}

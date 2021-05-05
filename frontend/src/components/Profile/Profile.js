@@ -1,7 +1,8 @@
-import React , { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core'
 import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp';
 import SplitButton from './SplitButton';
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     typography: {
@@ -36,7 +37,7 @@ function FormRow(props) {
 export default function Profile() {
 
     const classes = useStyles()
-    const [profileData, setProfileData] = useState({
+    /*const [profileData, setProfileData] = useState({
         'firstname': 'Korapin',
         'lastname': 'Thongpud',
         'username': 'phare',
@@ -44,6 +45,30 @@ export default function Profile() {
         'promptpay': '0614139956',
         'role': 'Student',
     })
+    */
+    const [profileData, setProfileData] = useState({
+        'fname': '',
+        'lname': '',
+        'username': '',
+        'email': '',
+        'ppnumber': '',
+        'isTutor': '',
+    })
+
+
+    useEffect(() => {
+        const fecthProfileData = async () => {
+            axios.get('http://localhost:4000/profile',{params:{
+                username : localStorage.getItem('username')
+            }    
+            }).then(response => {
+                setProfileData(response.data["data"][0])
+            });
+            //setProfileData( data.data );
+        };
+        fecthProfileData();
+    },[]);
+    
     return (
             <Grid
                 container
@@ -74,22 +99,22 @@ export default function Profile() {
                                 {profileData['username']}
                             </Typography>
                             <Typography variant="h6" className={classes.typography}>
-                                ({profileData['role']})
+                                ({localStorage.getItem('role')})
                             </Typography>
                         </Box>
                     </Grid>
                     <Grid container spacing={3} direction='column' justify='center' style={{width:500, paddingLeft:'4%' }}>
                         <Grid container item>
-                            <FormRow label='First Name' value={profileData['firstname']}/>
+                            <FormRow label='First Name' value={profileData['fname']}/>
                         </Grid>
                         <Grid container item>
-                            <FormRow label='Last Name' value={profileData['lastname']}/>
+                            <FormRow label='Last Name' value={profileData['lname']}/>
                         </Grid>
                         <Grid container item>
                             <FormRow label='E-mail' value={profileData['email']}/>
                         </Grid>
                         <Grid container item>
-                            <FormRow label='Promptpay Number' value={profileData['promptpay']}/>
+                            <FormRow label='Promptpay Number' value={profileData['ppnumber']}/>
                         </Grid>
                     </Grid>
                 </Grid>

@@ -1,6 +1,8 @@
-import React , { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import EditTextField from './EditTextField'
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     typography: {
@@ -30,12 +32,30 @@ const useStyles = makeStyles((theme) => ({
 export default function EditProfile() {
 
     const classes = useStyles()
-    const [editProfileData, setEditProfileData] = useState({
-        'firstname': 'Korapin',
-        'lastname': 'Thongpud',
-        'username': 'phare',
-        'promptpay': '0614139956',
+    const history = useHistory()
+    /*const [editProfileData, setEditProfileData] = useState({
+        _id:'',
+        fname: '',
+        lname: '',
+        username: '',
+        ppnumber: '',
     })
+    */
+    const [editProfileData, setEditProfileData] = useState({});
+    useEffect(() => {
+        const fecthEditProfileData = async () => {
+            axios.get('http://localhost:4000/profile',{params:{
+                username : localStorage.getItem('username')
+            }    
+            }).then(response => {
+                console.log(response.data["data"][0])
+                setEditProfileData(response.data["data"][0])
+            });
+            //setProfileData( data.data );
+        };
+        fecthEditProfileData();
+        console.log(editProfileData._id)
+    },[]);
 
     const handleChangeEdit = (key) => (event) => {
         setEditProfileData({
@@ -45,8 +65,31 @@ export default function EditProfile() {
         
     }
     const handleEditProfile = () => {
-        // call backend
+        console.log(editProfileData)
+        axios.post("http://localhost:4000/profile/edit_profile", {
+            fname: editProfileData.fname,
+            lname: editProfileData.lname,
+            ppnumber: editProfileData.ppnumber,
+            id: editProfileData._id,
+            username: editProfileData.username,
+        }).then(response => {
+            console.log(response.data)
+            if(response.data.result)
+            {
+            localStorage.setItem('username',editProfileData.username)
+            history.push("/profile");
+            window.location.reload();
+            }
+        }).catch(err => {
+            console.error(err)
+        })
     }
+    const handleCancel = () => {
+        
+          history.push("/profile");
+          window.location.reload();
+        
+    };
     return (
             <Grid
                 container
@@ -72,16 +115,16 @@ export default function EditProfile() {
                             <EditTextField
                                 display='First Name'
                                 type='tel'
-                                value={editProfileData['firstname']}
-                                onChange={handleChangeEdit('firstname')}
+                                value={editProfileData['fname']}
+                                onChange={handleChangeEdit('fname')}
                             />
                         </Grid>
                         <Grid container item>
                             <EditTextField
                                 display='Last Name'
                                 type='tel'
-                                value={editProfileData['lastname']}
-                                onChange={handleChangeEdit('lastname')}
+                                value={editProfileData['lname']}
+                                onChange={handleChangeEdit('lname')}
                             />
                         </Grid>
                         <Grid container item>
@@ -96,8 +139,8 @@ export default function EditProfile() {
                             <EditTextField
                                 display='Promptpay Number'
                                 type='tel'
-                                value={editProfileData['promptpay']}
-                                onChange={handleChangeEdit('promptpay')}
+                                value={editProfileData['ppnumber']}
+                                onChange={handleChangeEdit('ppnumber')}
                             />
                         </Grid>
                         <Grid container item justify='space-between' style={{paddingTop:'5%'}}>
@@ -113,6 +156,7 @@ export default function EditProfile() {
                                 variant= "contained"
                                 color="primary"
                                 className={classes.roleButton}
+                                onClick={() => {handleCancel()}}
                             >
                                 Cancel
                             </Button>

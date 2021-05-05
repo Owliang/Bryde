@@ -17,6 +17,10 @@ import QuestionInfo from './components/Question/QuestionInfo'
 import SearchCourse from './components/Search/SearchCourse'
 import CourseScreen from './components/Search/CourseScreen'
 import Lesson from './components/Course/Lesson'
+import Profile from './components/Profile/Profile'
+import EditProfile from './components/Profile/EditProfile'
+import ChangeEmail from './components/Profile/ChangeEmail'
+import ChangePassword from './components/Profile/ChangePassword'
 import CustomSnackbar from './components/CustomSnackbar'
 
 
@@ -56,8 +60,14 @@ function App() {
                             <PrivateRoute path='/create_question' component={CreateQuestion} />
                             <PrivateRoute path='/edit_course' component={EditCourse} />
                             <PrivateRoute path='/course_video' component={CourseVideo} />
-                            
+                            <PrivateRoute path='/edit_profile' component={EditProfile}/>
+                            <PrivateRoute path='/changeemail' component={ChangeEmail}/>
+                            <PrivateRoute path='/changepassword' component={ChangePassword}/>
                             <PrivateRoute path='/home' component={Home}/>
+                            
+                            <PrivateRoute path='/profile' component={Profile}/>
+                            
+
 
                             <PrivateRoute path='/qanda/follow' component={QuestionFollow}/>
                             <PrivateRoute path='/qanda/info' component={QuestionInfo}/>
