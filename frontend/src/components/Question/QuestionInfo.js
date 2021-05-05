@@ -58,6 +58,7 @@ export default function QuestionMore(props) {
     useEffect(() => {
         axios.get("http://localhost:4000/question_more", {
             params: {
+                student_name: localStorage.getItem('username'),
                 id: props.location.search.split('=')[1],
             },
         }).then(response => {
@@ -84,11 +85,10 @@ export default function QuestionMore(props) {
     }
 
     const answerCardList = (Array.from(Array(result.comment.length).keys())).map(index => {
-        return (
-            <AnswerCard content={result.comment[index]} username={result.writer[index]} mb={3}/>
-        )
+       return (
+          <AnswerCard content={result.comment[index]} username={result.writer[index]} mb={3}/>
+       )
     })
-
     return (
         <>
             <Box mt={4} mb={1}>
