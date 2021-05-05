@@ -161,6 +161,7 @@ router.post('/change_email',[check("id","Please Input course id").not().isEmpty(
                     else if( (result.length == 0)){
                         code = Math.floor(Math.random() * Math.floor(99999)).toString();
                         new_email = req.body.email
+                        console.log(new_email,code)
                         send_email(req.body.email,code);
                         res.json({ result : true ,error:"",code: code})
                     }
@@ -184,7 +185,6 @@ router.post('/verify_email',[check("id","Please Input course id").not().isEmpty(
         res.json({result:false,error:errors})
     }
     else{
-        console.log(code,new_email)
         MongoClient.connect(url, function(err, db) {
             if (err) {
               res.json({result:false,error:err})
