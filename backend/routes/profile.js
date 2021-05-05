@@ -26,7 +26,7 @@ router.get('/',[query('username').notEmpty().exists()], function(req, res, next)
           }
           else {
             var dbo = db.db("BrydeTech");
-            dbo.collection("users").find({username:req.query.username},{ projection: {_id:1,fname:1,lname:1,username:1,email:1,ppnumber:1,role:1} }).toArray(function(err, result) {
+            dbo.collection("users").find({username:req.query.username},{ projection: {_id:1,fname:1,lname:1,username:1,email:1,ppnumber:1,isTutor:1} }).toArray(function(err, result) {
               if (err) {
                 res.json({result:false , error:err})
               }
@@ -52,12 +52,11 @@ router.post('/edit_profile',[check("username","Please Input username").not().isE
             var dbo = db.db("BrydeTech");
             var id = new mongo.ObjectID(req.body.id)
             var newvalues = {username:req.body.username,fname:req.body.fname,lname:req.body.lname,ppnumber:req.body.ppnumber}
-            dbo.collection("users").find({username:req.body.username}).toArray(function(err, result) {
+            dbo.collection("users").find({$or:[{username:req.body.username},{ppnumber:req.body.ppnumber}]}).toArray(function(err, result) {
                 if (err) {
                   res.json({result:false , error:err})
                 }
                 else if( (result.length == 0)){
-                    console.log(result.length)
                     dbo.collection("users").updateOne({_id:id},{$set:newvalues},function(err,res){
                         if (err) {
                           res.json({result:false , error:err})
@@ -66,8 +65,16 @@ router.post('/edit_profile',[check("username","Please Input username").not().isE
                     });
                     res.json({result:true,error:""})
                 }
+                else if( (result.length == 1) && ((result[0]._id).toString()==req.body.id) ){
+                  dbo.collection("users").updateOne({_id:id},{$set:newvalues},function(err,res){
+                      if (err) {
+                        res.json({result:false , error:err})
+                      }
+                      db.close();
+                  });
+                  res.json({result:true,error:""})
+                }
                 else{
-                    console.log(result.length)
                     res.json({result:false , error:"This username already exists"})
                 }
             });
@@ -135,27 +142,33 @@ router.post('/change_email',[check("id","Please Input course id").not().isEmpty(
                             ,check("email","Please Input email").not().isEmpty()], function(req, res, next) {
     const result = validationResult(req);
     var errors = result.errors;
+    console.log('sdfdsf')
     if (!result.isEmpty()) {
         res.json({result:false,error:errors})
     }
     else{
+      console.log('asdasd')
         MongoClient.connect(url, function(err, db) {
             if (err) {
               res.json({result:false,error:err})
             }
             else{
+                console.log('asd')
                 var dbo = db.db("BrydeTech");
                 var id = new mongo.ObjectID(req.body.id)
                 dbo.collection("users").find({email:req.body.email}).toArray(function(err, result) {
                     if (err) {
                       res.json({result:false , error:err})
                     }
-                    else if( result.length == 0){
+                    else if( (result.length == 0)){
                         code = Math.floor(Math.random() * Math.floor(99999)).toString();
                         new_email = req.body.email
                         send_email(req.body.email,code);
                         res.json({ result : true ,error:""})
                         //console.log(code,new_email)
+                    }
+                    else if( (result.length == 1) && ((result[0]._id).toString()==req.body.id) ){
+                        res.json({ result : false ,error:"You already use this email"})
                     }
                     else{
                         res.json({result:false , error:"Please try another email"})
@@ -174,7 +187,7 @@ router.post('/verify_email',[check("id","Please Input course id").not().isEmpty(
         res.json({result:false,error:errors})
     }
     else{
-        //console.log(code,new_email)
+        console.log(code,new_email)
         MongoClient.connect(url, function(err, db) {
             if (err) {
               res.json({result:false,error:err})
