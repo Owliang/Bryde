@@ -170,7 +170,7 @@ export default function Navbar() {
 
                     <div className={classes.grow} />
 
-                    <DropDownMenu
+                    {/* <DropDownMenu
                         title={
                             <Badge
                                 badgeContent={inbox}
@@ -181,7 +181,7 @@ export default function Navbar() {
                         }
                     >
                         {inboxContent}
-                    </DropDownMenu>
+                    </DropDownMenu> */}
 
                     <DropDownMenu
                         title={
