@@ -7,11 +7,12 @@ const useStyles = makeStyles((theme) => ({
             "& fieldset": { 
                 borderRadius: "10px",
                 borderColor: "primary",
-
+                marginTop: 5,
             },
             "&.Mui-focused fieldset": {
                 borderColor: "primary",
                 borderWidth: "2px",
+                marginTop: 5,
             },
         },
     },

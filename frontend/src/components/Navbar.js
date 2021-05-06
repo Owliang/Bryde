@@ -65,9 +65,11 @@ export default function Navbar() {
                 username: localStorage.getItem("username")
             }
         }).then(response => {
-                // console.log(response.data.data)
+                console.log(response.data.data)
                 var notifyText = (response.data.data).map(noti => {
                     return {
+                        notifyid: noti._id,
+                        topic_id: noti.topic_id,
                         topic: (noti.topic).substring(0,20),
                         comment: (noti.comment).substring(0,20)
                     }
@@ -136,24 +138,35 @@ export default function Navbar() {
         window.location.reload();
     }
 
-    // const inboxContent = ['inbox1','inbox2','inbox3','inbox4'].map(content => (
-    //     <Box onClick={handleLogout}>{content}</Box>
-    // ))
+    const handleNotify = (topicid, notifyid) => {
+        history.push("/qanda/info?id=" + topicid)
+        axios.post("http://localhost:4000/notification", {
+                id: notifyid
+            }).then(response => {
+                console.log(response)
+            }).catch(err => {
+                console.error(err)
+            })
+        window.location.reload();
+    }
 
-    const notifyContent = notifyText.map(content => {
-        var text = `Topic : ${content.topic}
-        Detail : ${content.comment}`
+    const notifyContent = () => {
+        if (notifyText.length == 0) {
+            return [<Box>You're all caught up!</Box>]
+        }
         return (
-            <Box onClick={handleLogout}>
-                {text}
-            </Box>
+            notifyText.map(content => (
+                <div>
+                    <Box onClick={() => handleNotify(content.topic_id, content.notifyid)}>
+                        Topic : {content.topic}
+                    </Box>
+                    <Box onClick={() => handleNotify(content.topic_id, content.notifyid)}>
+                       Detail : {content.comment}
+                    </Box>
+                </div>
+            ))
         )
-    })
-
-    const profileContent = [1,2,3].map(num => (
-        <>
-        </>
-    ))
+    }
 
     return (
         <div className={classes.root}>
@@ -223,7 +236,7 @@ export default function Navbar() {
                             />
                         }
                     >
-                        {notifyContent}
+                        {notifyContent()}
                     </DropDownMenu>
 
                     <DropDownMenu
