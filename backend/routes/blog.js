@@ -2,7 +2,7 @@ var mongo = require('mongodb');
 var express = require('express');
 const db = require('monk')("localhost:27017/TutorialDB");
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://127.0.0.1:27017/";
+var url = "mongodb://13.213.61.131:27017/";
 var router = express.Router();
 const { body, validationResult, check } = require('express-validator');
 
